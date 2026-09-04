@@ -22,7 +22,7 @@
 
 ### Path Supports
 
-Path supports 
+[Path](#path) supports 
 
 #### Line
 
@@ -41,17 +41,32 @@ All examples start from this point.
 ![Round Base with Three Supports](../assets/img/RoundBase-3Supports.png)
 
 
-#### Polyfill
+#### Polygon Fill
+
+![Polygon Fill button](../assets/img/LPanel-PolygonFill.png){height="200"}
+
+
+Polygon Fill takes three or more selected supports as the corners of a polygon and fills the area inside it with supports.
+
 
 ![Poly fill](../assets/img/RoundBase-3Supports-PolyFill.png)
 
-#### Polyfill + Boundary
+
+#### Perimeter and Fill
+
+Perimeter & Fill does the same but also lays supports along the outline itself, which is the difference the highlighted border in the icon is showing.
+
 
 ![Poly fill with border](../assets/img/RoundBase-3Supports-PolyFillBorder.png)
 
+
 #### Circle Fill
 
+
+Circle Fill takes exactly three supports, builds the circle that passes through their contact points, and fills that.
+
 ![Circle fill](../assets/img/RoundBase-3Supports-CircleFill.png)
+
 
 ## Triangle Painting
 
