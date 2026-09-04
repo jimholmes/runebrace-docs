@@ -26,3 +26,6 @@
 	
 5. [Hollowing](guides/Hollowing.md)
 6. [Printing and Slicing](guides/PrintingAndSlicing.md)
+
+# Glossary
+See the [Glossary](guides/Glossary.md) for a list of commonly used terms and definitions.
