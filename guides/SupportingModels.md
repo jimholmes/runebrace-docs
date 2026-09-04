@@ -44,14 +44,21 @@ All examples start from this point.
 
 #### Polygon Fill
 
-![Polygon Fill button](../assets/img/LPanel-PolygonFill.png){height="200"}
+Fill an area defined by three or more supports. Select three or more supports using F3 + LMB.
 
+**Where:** ![Polygon Fill button](../assets/img/LPanel-PolygonFill.png){height="200"}
 
-Polygon Fill takes three or more selected supports as the corners of a polygon and fills the area inside it with supports.
+Also the Fill Space button from the right menu (see below).
 
+The image below shows the result.
 
 ![Poly fill](../assets/img/RoundBase-3Supports-PolyFill.png)
 
+**Why:** EDIT: ADD USE CASE
+
+**Controlling:** Adjust the spacing of the fill under Right Menu => Advanced Placement => Line and Fill => Fill Space
+
+![Menu for adjusting Polygon Fill spacing](RMenu-AdvancedPlacement-LineAndFill-FillSpace.png){height="200"}
 
 #### Perimeter and Fill
 
