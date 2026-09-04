@@ -5,7 +5,7 @@ This project holds documentation for Runebrace, a 3D support, mesh manipulation,
 
 You can find current releases at [the Runebrace site](https://www.tarabella.it/Runebrace/index.html).
 
-Support, as well as access to current beta releases, can be had on the Runebrace and Runebrace Slicer Beta channels on the [Artisan Guild Discord server](https://discord.gg/mMFpyWAuP).
+Support, as well as access to current beta releases, can be had on the Runebrace and Runebrace Slicer Beta channels on the [Artisan Guild Discord server](https://discord.gg/VTNVEksdje)
 
 ## Contributing
 
