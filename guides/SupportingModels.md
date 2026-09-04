@@ -35,48 +35,62 @@
 
 ### Fill Basics
 
-We'll start with a basic example, then show a more complex, practical example after. Triangle Fills will be covered in a separate section below.
+We'll start with a basic example, then show a more complex, practical example after. Triangle Fills are covered separately below.
 
-All examples start from this point.
+All examples in this section start from this figure, a round base with three supports selected in the order they're labeled.
 
 ![Round Base with Three Supports](../assets/img/RoundBase-3Supports.png)
 
+Each feature below will show results starting from the above figure.
 
 #### Polygon Fill
 
-Fill an area defined by three or more supports. Select three or more supports using F3 + LMB.
+Fill an area defined by three or more supports. 
 
-**Where:** ![Polygon Fill button](../assets/img/LPanel-PolygonFill.png){height="200"}
+Select three or more supports using F3 + LMB, then use   the Poly Fill button on the left menu.
 
-Also the Fill Space button from the right menu (see below).
+![Polygon Fill button](../assets/img/LPanel-PolygonFill.png){height="200"}
 
-The image below shows the result.
+You can also use the Fill Space button from the right menu (see below).
+
+Using Poly Fill/Fill Space from our starting point results in this:
 
 ![Poly fill](../assets/img/RoundBase-3Supports-PolyFill.png)
 
 **Why:** EDIT: ADD USE CASE
 
-**Controlling:** Adjust the spacing of the fill under Right Menu => Advanced Placement => Line and Fill => Fill Space
+Adjust the spacing of the fill under Right Menu => Advanced Placement => Line and Fill => Fill Space
 
 ![Menu for adjusting Polygon Fill spacing](RMenu-AdvancedPlacement-LineAndFill-FillSpace.png){height="200"}
 
 #### Perimeter and Fill
 
+Perimeter & Fill does the same but also lays supports along the outline itself. Note the menu button's icon shows this via the yellow outline.
+
+Select three or more supports, then press the Perimeter and Fill button (there's no alternative from the right menu). One action creates the perimeter and inside area supports.
+
 ![Polygon Fill button](../assets/img/LPanel-PerimiterAndFill.png){height="200"}
 
+Using Perimeter and Fill from our starting point results in this:
 
-Perimeter & Fill does the same but also lays supports along the outline itself, which is the difference the highlighted border in the icon is showing.
+![Poly fill with Perimeter](../assets/img/RoundBase-3Supports-PolyFillPerimeter.png)
 
+Perimeter and Fill has two separate adjustments:
 
-![Poly fill with border](../assets/img/RoundBase-3Supports-PolyFillBorder.png)
+* **Line:** Spacing between supports on the lines of the outer perimeter
+* **Fill Space:** Spacing between supports in the grid that fills the area
 
+These settings are demonstrated in the example below. The perimeter supports are denoted by the red hash lines and were configured with a spacing of 5.0. The inside area was configured with a spacing of 1.5.
+
+![Poly fill with perimeter as seen from underneath](../assets/img/RoundBase-3Supports-PolyFillPerimeter.png)
 
 #### Circle Fill
+Circle Fill takes exactly three supports, builds the circle that passes through their contact points, and fills that.
+
 
 ![Polygon Fill button](../assets/img/LPanel-CircleFill.png){height="200"}
 
-
-Circle Fill takes exactly three supports, builds the circle that passes through their contact points, and fills that.
+Using Circle Fill from our starting point results in this:
 
 ![Circle fill](../assets/img/RoundBase-3Supports-CircleFill.png)
 
