@@ -1,3 +1,7 @@
+#!/bin/zsh
+
+cd ~/workspaces/runebrace-docs
+
 pandoc Index.md \
   guides/Overview.md \
   guides/GettingStarted.md \
