@@ -5,8 +5,17 @@ Here are common terms and phrases used in Runebrace.
 <!--
 Keep this list manually organized alphabetically.
 
+This is **PANDOC SPECIFIC**
+
+Use 
+   [Term]{#ID}
+   : Definition...
+
+IDs must be unique as they're all collapsed into one doc before rendering into the PDF.
+
 Reference a term here the first time it's used in the docs:
-   [Rim](guides/Glossary.md#Rim)
+   [Rim](#Rim)
+
 -->
 
 
