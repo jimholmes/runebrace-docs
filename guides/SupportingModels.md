@@ -24,9 +24,23 @@
 
 [Path](#path) supports 
 
+Settings controlling spacing of supports for the following features are located in the right menu under Advanced Placement => Line and Fill.
+
+![Right menu with line and fill highlighted](assets/img/RMenu-AdvancedPlacement-TopLevel.png)
+
 #### Line
 
 "What happens when you draw support lines or arcs is that it simulates a mouse clicking on various points along this line (depending on the set distance) and performs a mouse raycast on the model. If the raycast hits the geometry and the face is not parallel to the build plate or tilted upwards, a support is placed. It is likely that there are some raycast misses, so the support cannot be placed and is skipped.  It's not a matter of whether the surface is flat... the geometry must be under the ray cast by the mouse and be a valid point for a support."
+
+Runebrace does its best to place supports equally along the line per the above paragraph.
+
+Spacing for supports along the line is controlled by the right menu under Advanced Placement => Line & Fill => Line.
+
+![Menu for adjusting Polygon Fill spacing](RMenu-AdvancedPlacement-LineAndFill-Line.png)
+
+Note that there will be a gap or compression of supports along a line that isn't evenly divisible by the spacing setting.
+
+For example, two supports 13 mm apart are selected, and Line spacing is 5.0. 13 isn't evenly divisible by 5, so the algorithm will start at the first support and place supports at five and ten mm away. There will be a gap of 3mm from the 
 
 #### Arc
 
@@ -59,7 +73,7 @@ Using Poly Fill/Fill Space from our starting point results in this:
 
 **Why:** EDIT: ADD USE CASE
 
-Adjust the spacing of the fill under Right Menu => Advanced Placement => Line and Fill => Fill Space
+Adjust the spacing of the filled supports under Right Menu => Advanced Placement => Line and Fill => Fill Space
 
 ![Menu for adjusting Polygon Fill spacing](RMenu-AdvancedPlacement-LineAndFill-FillSpace.png){height="200"}
 
@@ -80,9 +94,11 @@ Perimeter and Fill has two separate adjustments:
 * **Line:** Spacing between supports on the lines of the outer perimeter
 * **Fill Space:** Spacing between supports in the grid that fills the area
 
+![Menu for adjusting both Polygon Fill and Line spacing](RMenu-AdvancedPlacement-LineAndFill-LineAndFillBoth.png){height="200"}
+
 These settings are demonstrated in the example below. The perimeter supports are denoted by the red hash lines and were configured with a spacing of 5.0. The inside area was configured with a spacing of 1.5.
 
-![Poly fill with perimeter as seen from underneath](../assets/img/RoundBase-3Supports-PolyFillPerimeter.png)
+![Poly fill with perimeter as seen from underneath](../assets/img/RoundBase-3Supports-PolyFillPerimeter-Below.png)
 
 #### Circle Fill
 Circle Fill takes exactly three supports, builds the circle that passes through their contact points, and fills that.
@@ -98,5 +114,16 @@ Using Circle Fill from our starting point results in this:
 ## Triangle Painting
 
 [Rim](guides/Glossary.md#rim)
+
+## Deeper Dive on Placement
+
+" Five details worth having in the docs. The perimeter walks the supports in selection order and closes the loop back to the first one, so the last segment is support N to support 1. The fill plane is defined by the first three supports only, not by all of them: any support beyond the third is flattened onto that plane, so a selection that is not roughly planar will not fill the way it looks. The grid covers the bounding box of the polygon in that plane and keeps the points that fall inside it, with one axis along support 1 to support 2 and the other perpendicular to it. Each grid point is then projected onto the model along the average tip direction of the selected supports, so the fill follows the surface, and where that ray misses the mesh no support appears, which is why gaps show up over holes or steep overhangs. Finally, Line and Fill Space are multipliers, not distances, and they multiply different reference diameters: Line multiplies the Base diameter, Fill Space multiplies the Top diameter. The same number on both sliders does not give the same spacing on the outline and on the fill. One more practical note: the operation records two undo steps, the perimeter and the fill, so undoing it takes two presses."
+
+"very small values stop having an effect below a certain point, and a segment too short to fit anything simply gets no supports in between. Happy to give you the exact arithmetic if you want a footnote."
+
+## More Complex Examples
+
+You should now understand the basics of creating supports with the various tools. The example above is very simplistic, so let's use more complex 
+
 
 ## Presets
