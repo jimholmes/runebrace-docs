@@ -9,4 +9,4 @@ Support, as well as access to current beta releases, can be had on the Runebrace
 
 ## Contributing
 
-Contributions to the documentation are welcome. Feel free to submit a pull request. Contact [Jim directly](mailto:Jim@GuidePostSystems.com) if you can't do that.
+Contributions to the documentation are welcome. Feel free to submit a pull request. Contact [Jim directly](mailto:Jim@GuidePostSystems.com?subject=Runebrace%20Documentation) if you can't do that.
