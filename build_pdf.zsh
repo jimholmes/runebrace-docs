@@ -13,4 +13,5 @@ pandoc Index.md \
 -f markdown-implicit_figures \
 -H header.tex \
 -o output/RuneBraceManual.pdf \
+--pdf-engine=/Library/TeX/texbin/pdflatex \
 --resource-path=.:./assets/img:./guides
