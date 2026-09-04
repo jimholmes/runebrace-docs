@@ -2,8 +2,19 @@
 
 Here are common terms and phrases used in Runebrace.
 
+<!--
+Keep this list manually organized alphabetically.
+
+Reference a term here the first time it's used in the docs:
+   [Rim](guides/Glossary.md#Rim)
+-->
+
+## Path
+Path applies to Line, Arc, and Circle. For two selected supports, Runebrace builds a path using a raycast between two points. For three selected supports, Runebrace will build a path by creating a curve that passes through all three supports' contact points.
+
 ## Rim
 
 In triangle mode, "Rim" denotes the border of a painted triangle selection. It is determined from the mesh edges, and can have both an outer border *plus* the borders of any holes inside that particular selection.
 
 See also: "Outer Rim Only" and "All boundaries" options in the Triangle Paint panel.
+
