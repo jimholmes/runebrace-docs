@@ -121,6 +121,10 @@ Using Circle Fill from our starting point results in this:
 
 "very small values stop having an effect below a certain point, and a segment too short to fit anything simply gets no supports in between. Happy to give you the exact arithmetic if you want a footnote."
 
+
+**Math on Determining Placement**
+"step = Base diameter × Line (or Top diameter × Fill Space). Gaps = segment length ÷ step, rounded down. Supports added = gaps − 1, spread evenly, so the real spacing is segment length ÷ gaps. Because the count rounds down, the spacing is always at least the step and can reach almost double it. Yours: 26.73 mm ÷ 4 gaps = 6.68 mm, the 6.64 you measured."
+
 ## More Complex Examples
 
 You should now understand the basics of creating supports with the various tools. The example above is very simplistic, so let's use more complex 
