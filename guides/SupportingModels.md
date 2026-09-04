@@ -38,6 +38,7 @@
 We'll start with a basic example, then show a more complex, practical example after. Triangle Fills will be covered in a separate section below.
 
 All examples start from this point.
+
 ![Round Base with Three Supports](../assets/img/RoundBase-3Supports.png)
 
 
@@ -54,6 +55,9 @@ Polygon Fill takes three or more selected supports as the corners of a polygon a
 
 #### Perimeter and Fill
 
+![Polygon Fill button](../assets/img/LPanel-PerimiterAndFill.png){height="200"}
+
+
 Perimeter & Fill does the same but also lays supports along the outline itself, which is the difference the highlighted border in the icon is showing.
 
 
@@ -61,6 +65,8 @@ Perimeter & Fill does the same but also lays supports along the outline itself, 
 
 
 #### Circle Fill
+
+![Polygon Fill button](../assets/img/LPanel-CircleFill.png){height="200"}
 
 
 Circle Fill takes exactly three supports, builds the circle that passes through their contact points, and fills that.
