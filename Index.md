@@ -9,8 +9,8 @@
 2. [Getting Started](guides/GettingStarted.md)
 	* Downloading and Installing
 	* UI Overview
-	* Your first project
-	* File types and how/where they're stored
+	* Your First Project
+	* Understanding File Types
 
 3. [Supporting Models](guides/SupportingModels.md)
 	* Basic workflow
