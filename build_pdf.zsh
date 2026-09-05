@@ -12,6 +12,7 @@ pandoc Index.md \
   guides/Hollowing.md \
   guides/PrintingAndSlicing.md \
   guides/Glossary.md \
+-F pandoc-crossref \
 -H header.tex \
 -o output/RuneBraceManual.pdf \
 --pdf-engine=/Library/TeX/texbin/pdflatex \
