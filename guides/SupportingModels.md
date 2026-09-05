@@ -26,7 +26,7 @@
 
 The left icon panel controls many support options.
 
-![Left panel icons](../assets/img/LPanel.png){#fig:LPanel}
+![Left panel icons](../assets/img/SupportingModels/LPanel.png){#fig:LPanel}
 
 ### Symmetry
 
@@ -36,11 +36,11 @@ The left icon panel controls many support options.
 
 [Path](#path) supports are created on a line between two or more supports. A path is drawn from the tip of each support in the order they were selected. (Use F3 + LMB when selecting multiple supports.)
 
-![Round Base with Three Supports](../assets/img/RoundBase-3Supports.png){#fig:InitialBaseExample}
+![Round Base with Three Supports](../assets/img/SupportingModels/RoundBase-3Supports.png){#fig:InitialBaseExample}
 
 Settings controlling spacing of supports for the following features are located in the right menu under Advanced Placement => Line and Fill.
 
-![Right menu with line and fill highlighted](../assets/img/RMenu-AdvancedPlacement-TopLevel.png){height="400"}
+![Right menu with line and fill highlighted](../assets/img/SupportingModels/RMenu-AdvancedPlacement-TopLevel.png){height="400"}
 
 > **Important Considerations**
 
@@ -58,11 +58,11 @@ Line placement is available through the right menu and the left button menu ([@f
 
 Spacing for supports along the line is controlled by the right menu under Advanced Placement => Line & Fill => Line.
 
-![Menu for adjusting Polygon Fill spacing](../assets/img/RMenu-AdvancedPlacement-LineAndFill-Line.png)
+![Menu for adjusting Polygon Fill spacing](../assets/img/SupportingModels/RMenu-AdvancedPlacement-LineAndFill-Line.png)
 
 Selecting support #1, then #2, then creating Line supports results in this:
 
-![Supports created via line](../assets/img/RoundBase-2Supports-CreateLine.png)
+![Supports created via line](../assets/img/SupportingModels/RoundBase-2Supports-CreateLine.png)
 
 
 #### Arc
@@ -73,11 +73,11 @@ Arc placement is available through the right menu and the left button menu ([@fi
 
 Configure using the settings in the right menu Advanced Placement => Line & Fill => Arc.
 
-![Settings for Arcs](../assets/img/RMenu-AdvancedPlacement-LineAndFill-Arc.png){#fig:ArcSettings}
+![Settings for Arcs](../assets/img/SupportingModels/RMenu-AdvancedPlacement-LineAndFill-Arc.png){#fig:ArcSettings}
 
 Selecting support #1, then #2, then #3, then creating Arc supports results in this:
 
-![Supports created via Arc](../assets/img/RoundBase-3Supports-CreateArc.png)
+![Supports created via Arc](../assets/img/SupportingModels/RoundBase-3Supports-CreateArc.png)
 
 Note the double supports appearing at callout #2. This is due to the spacing along the arc, with one added support being in close proximity to the original #2.
 
@@ -92,7 +92,7 @@ Configure using the settings in the right menu Advanced Placement => Line & Fill
 
 Selecting support #1, then #2, then #3, then creating Circle supports results in this:
 
-![Supports created via Circle](../assets/img/RoundBase-3Supports-CreateCircle.png)
+![Supports created via Circle](../assets/img/SupportingModels/RoundBase-3Supports-CreateCircle.png)
 
 Again, note the doubled supports, this time at #2 and #3.
 
@@ -115,13 +115,13 @@ You can also use the Fill Space button from the right menu (see below).
 
 Using Poly Fill/Fill Space from our starting point results in this:
 
-![Poly fill](../assets/img/RoundBase-3Supports-PolyFill.png)
+![Poly fill](../assets/img/SupportingModels/RoundBase-3Supports-PolyFill.png)
 
 **Why:** EDIT: ADD USE CASE
 
 Adjust the spacing of the filled supports under Right Menu => Advanced Placement => Line and Fill => Fill Space
 
-![Menu for adjusting Polygon Fill spacing](RMenu-AdvancedPlacement-LineAndFill-FillSpace.png){height="200"}
+![Menu for adjusting Polygon Fill spacing](../assets/img/SupportingModels/RMenu-AdvancedPlacement-LineAndFill-FillSpace.png){height="200"}
 
 #### Perimeter and Fill
 
@@ -133,18 +133,18 @@ Select three or more supports, then press the Perimeter and Fill button (there's
 
 Using Perimeter and Fill from our starting point results in this:
 
-![Poly fill with Perimeter](../assets/img/RoundBase-3Supports-PolyFillPerimeter.png)
+![Poly fill with Perimeter](../assets/img/SupportingModels/RoundBase-3Supports-PolyFillPerimeter.png)
 
 Perimeter and Fill has two separate adjustments:
 
 * **Line:** Spacing between supports on the lines of the outer perimeter
 * **Fill Space:** Spacing between supports in the grid that fills the area
 
-![Menu for adjusting both Polygon Fill and Line spacing](RMenu-AdvancedPlacement-LineAndFill-LineAndFillBoth.png){height="200"}
+![Menu for adjusting both Polygon Fill and Line spacing](../assets/img/SupportingModels/RMenu-AdvancedPlacement-LineAndFill-LineAndFillBoth.png){height="200"}
 
 These settings are demonstrated in the example below. The perimeter supports are denoted by the red hash lines and were configured with a spacing of 5.0. The inside area was configured with a spacing of 1.5.
 
-![Poly fill with perimeter as seen from underneath](../assets/img/RoundBase-3Supports-PolyFillPerimeter-Below.png)
+![Poly fill with perimeter as seen from underneath](../assets/img/SupportingModels/RoundBase-3Supports-PolyFillPerimeter-Below.png)
 
 #### Circle Fill
 Circle Fill takes exactly three supports, builds a circular path that passes through their contact points, and fills that. No path supports are created.
@@ -154,17 +154,21 @@ Circle Fill is available **only** through the corresponding button on the left b
 
 Using Circle Fill from our starting point results in this:
 
-![Circle fill](../assets/img/RoundBase-3Supports-CircleFill.png)
+![Circle fill](../assets/img/SupportingModels/RoundBase-3Supports-CircleFill.png)
 
 From below, the result looks like:
 
-![Circle fill viewed from below](../assets/img/RoundBase-3Supports-CircleFill-Below.png)
+![Circle fill viewed from below](../assets/img/SupportingModels/RoundBase-3Supports-CircleFill-Below.png)
 
 ## Triangle Painting
 
 [Rim](guides/Glossary.md#rim)
 
 ## Deeper Dive on Placement
+
+The sections below provide a more advanced discussion of how specific placement features work.
+
+### 
 
 **lines**
 "What happens when you draw support lines or arcs is that it simulates a mouse clicking on various points along this line (depending on the set distance) and performs a mouse raycast on the model. If the raycast hits the geometry and the face is not parallel to the build plate or tilted upwards, a support is placed. It is likely that there are some raycast misses, so the support cannot be placed and is skipped.  It's not a matter of whether the surface is flat... the geometry must be under the ray cast by the mouse and be a valid point for a support."
