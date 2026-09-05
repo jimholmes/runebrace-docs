@@ -13,3 +13,13 @@
 \makeatletter
 \def\fps@figure{H}
 \makeatother
+
+% Force underlining of links in PDF
+\AtBeginDocument{%
+  \hypersetup{
+    colorlinks=false,
+    pdfborder={0 0 1},
+    linkbordercolor=0 0 1,
+    urlbordercolor=0 0 1
+  }%
+}
