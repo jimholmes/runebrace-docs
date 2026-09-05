@@ -1,6 +1,15 @@
+% Treat H4 (####) as header, not Normal
 \usepackage{titlesec}
 \titleformat{\paragraph}[hang]
   {\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
 \titlespacing*{\paragraph}{0pt}{2.5ex plus .5ex minus .2ex}{1ex}
+
+% Support use of Unicode 2212 minus char
 \usepackage[utf8]{inputenc}
 \DeclareUnicodeCharacter{2212}{\textminus}
+
+% Lock images in place when implicit_figures is enabled
+\usepackage{float}
+\makeatletter
+\def\fps@figure{H}
+\makeatother
