@@ -49,6 +49,8 @@ These docs are written in Markdown. There are also several bits specific to pand
     H4 elements ("####") :  Configured in Latex to act 
        as headers, not Normal text
 
+Note that these pandoc/Latex specific features may not render properly in your Markdown editor. Only make changes to pandoc or Latex configurations based on issues identified in the output, ***not*** your editor!
+
 Index.md in the root and lists all chapter guides, which live in the "guides" folder. build_pdf.zsh consolidates each separate file in the guides folder. Edit the script to add any new Markdown files **IN ORDER**.
 
 ### Examples
