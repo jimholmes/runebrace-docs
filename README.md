@@ -21,6 +21,10 @@ At the moment this is built locally on a Mac. The script and tools all have Wind
 
     `brew install pandoc`
     
+* **pandoc crossref:** Provides cross-reference support. See below for examples.
+
+    `brew install pandoc-crossref`
+    
 * **Mactex:** Provides PDF Latex support. Basictex might work, but is missing some key pieces which require separate installation. Install via Homebrew:
 
     `brew install --cask mactex`
@@ -47,4 +51,27 @@ These docs are written in Markdown. There are also several bits specific to pand
 
 Index.md in the root and lists all chapter guides, which live in the "guides" folder. build_pdf.zsh consolidates each separate file in the guides folder. Edit the script to add any new Markdown files **IN ORDER**.
 
-Look at existing files to see patterns for referencing other assets (images, e.g.), using Glossary terms, etc.
+### Examples
+
+**Glossary**
+
+To define a term in the Glossary:
+
+    [Term]{#ID}
+    : Definition...
+
+IDs must be unique as they're all collapsed into one doc before rendering into the PDF.
+
+Reference a term here the first time it's used in the docs. This will create a link to the definition:
+
+    [Rim](#Rim)
+    
+**Figures and References**
+
+Use standard Markdown image elements. Add an ID tag following the markup to create a reference, e.g.
+
+    ![caption](image_path){#fig:ID_TAG}
+    
+Link to that figure as desired:
+
+    See [@fig:ID_TAG]
