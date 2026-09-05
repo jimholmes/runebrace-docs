@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+#export PATH="/Library/TeX/texbin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
+
 cd ~/workspaces/runebrace-docs
 
 pandoc Index.md \
