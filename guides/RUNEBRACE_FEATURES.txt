@@ -1,0 +1,610 @@
+RUNEBRACE - FEATURE REFERENCE
+Written for Jim, as raw material for the manual. Version 1.8.9.35b.
+
+This lists what a user can reach from the interface, in the order the interface is
+organised, so a chapter can be built per section. It says what exists and what each
+control does. It is not a tutorial and it does not say what settings to choose.
+
+Names in this document are the exact labels shown on screen.
+
+
+-------------------------------------------------------------------------------
+0. TWO ROOMS
+-------------------------------------------------------------------------------
+
+Runebrace has two rooms, and they are not the same program with a different view.
+
+  THE EDITOR is where one model is prepared: oriented, repaired, hollowed,
+  supported, checked and sliced.
+
+  THE PRINT ROOM, also called the plate, is where several already supported pieces
+  are laid out on one build plate and exported together.
+
+They share the camera, the slice preview and the printer presets. They do not share
+the toolbars, the undo, or the print parameters. A feature that exists in one is not
+automatically in the other. The buttons at the bottom centre of the screen switch
+between them.
+
+
+-------------------------------------------------------------------------------
+1. THE SCREEN
+-------------------------------------------------------------------------------
+
+TOP BAR
+  Print            opens the export window (see section 8)
+  Mesh Repair      opens the repair window (see section 6)
+  New              empties the scene
+  Revert           reloads the file from disk, discarding changes
+  Load             opens a project or a model, with a Recent list
+  Save Project     saves in place; a menu also offers Save Project As
+  Export Mesh      the mesh export menu (see section 3)
+  About            version, graphics card in use, links, and a donation button
+
+  There are two styles of file bar. Global Settings has a switch, "Use Standard
+  File Buttons", that chooses between them.
+
+LEFT TOOLBAR
+  A column of icon buttons for the support tools. From top to bottom they are:
+  auto branching, manual branching, unbranch, inclination, apply changes, grid
+  snap, symmetry, arc, line, circle of supports, fill, perimeter fill, circle
+  fill, and the triangle paint tool.
+
+RIGHT PANEL
+  Everything else, in collapsible sections. The sections are listed in this
+  document in the order they appear.
+
+BOTTOM LEFT
+  The list of mouse and keyboard actions available right now. It changes with the
+  active tool, so it is the fastest place to learn what a tool does.
+
+BOTTOM CENTRE
+  Four small buttons: the editor, the print room, and the display modes.
+
+WINDOW TITLE
+  Runebrace reports the outcome of an action in the window title, not in a popup.
+  "Holes applied", "31 supports shown", "Model swapped", errors, and timings all
+  appear there. A reader of the manual should be told to look at it, because
+  several actions give no other feedback.
+
+  There are no tooltips anywhere. They were removed on purpose, because they
+  covered the controls underneath. Whatever a control does is written on the
+  control itself or in the panel around it.
+
+
+-------------------------------------------------------------------------------
+2. THE CAMERA
+-------------------------------------------------------------------------------
+
+  Rotate                          right mouse button, drag
+  Pan                             middle mouse button, drag
+  Zoom                            mouse wheel
+  Focus on what is under cursor   F
+  Orthographic / perspective      KeyPad 0
+  View from back                  KeyPad 1
+  View from front                 KeyPad 2
+  View from left                  KeyPad 3
+  View from right                 KeyPad 4
+  View from top                   KeyPad 5
+  View from bottom                KeyPad 6
+  Undo the camera move            Undo Cam button
+  Redo the camera move            Redo Cam button
+  Reset the view                  Reset View / Reset Camera button
+
+F frames whatever is under the cursor. It works in both rooms: in the print room
+it looks for pieces instead of the model, and on empty space it falls back to the
+plate surface, so pressing F on nothing still centres you sensibly.
+
+Orthographic view removes perspective distortion, which is what you want when
+checking that something is vertical or comparing two heights. Zooming in
+orthographic clips away whatever is in front of the point you are looking at, so
+the build plate stops blocking the view.
+
+The camera has its own undo, separate from the scene undo. Undoing a camera move
+does not undo an edit.
+
+A 3Dconnexion space mouse is supported and has its own settings section.
+
+
+-------------------------------------------------------------------------------
+3. FILES
+-------------------------------------------------------------------------------
+
+PROJECTS
+  A project is an .ags file. It carries the mesh inside it, so it is self
+  contained: moving the .ags to another machine moves the model with it.
+  It stores the supports, the holes, the hollow settings and the voxel mask, the
+  organic cut waypoints, the printer preset and the print parameters.
+
+  Save Project      saves over the current file
+  Save Project As   asks for a name
+  Load / Recent     opens a project or a model
+  Revert            goes back to what is on disk
+  New               starts an empty scene
+
+  Auto-Save System, in General Settings, saves at an interval you choose, keeping
+  a number of backups you choose. Interval in minutes, and a maximum backup count.
+
+MODELS IN
+  STL, OBJ and 3MF. Dropping a file onto the window loads it.
+
+  On loading, Runebrace checks the mesh and reports how many separate bodies it
+  found. If there is more than one it offers to keep them as they are, split them,
+  or merge them into one body, in one click.
+
+  OBJ files do not record which axis is up: some programs write Z up and some Y
+  up. Runebrace measures the flat base of the model to decide, so most OBJ files
+  arrive standing correctly.
+
+MESHES OUT
+  Export STL / Export OBJ / Export 3MF
+      the scene as it is: model, supports, bracings, raft and internal lattice.
+  Export Modified STL / OBJ / 3MF
+      the same, with the mesh modifications baked in.
+  Split STL
+      writes three separate files, one for the mesh, one for the supports and
+      bracings, one for the raft.
+
+  Supports that you have hidden are still exported. Hiding is a working
+  convenience, not a decision about what gets printed.
+
+PRINT FILES OUT
+  Export Print File writes the sliced layers. The supported extensions are
+  .sl1s, .ctb, .goo, .prz, .pp1m, .pwsz and .jxs.
+
+  The user does not choose the format from a list of file types: the printer
+  preset decides both the format and the mirroring. Pick the machine and the
+  correct file comes out. This is worth stating plainly in the manual, because
+  people coming from other slicers expect to choose the format themselves.
+
+
+-------------------------------------------------------------------------------
+4. SUPPORTS
+-------------------------------------------------------------------------------
+
+WHAT A SUPPORT IS MADE OF
+  A support is a chain of control points with a radius at each one: the tip that
+  touches the model, the top of the shaft, the middle, and the base on the plate.
+  Between them are cones. Every diameter is editable.
+
+  Variants:
+    GROUNDED       tip on the model, base on the plate
+    BRANCHING      joins onto another support instead of reaching the plate
+    COLUMN         a thick pillar, with its own end diameter and height
+    DOUBLE TIP     connects two points of the model, mesh to mesh, with no base
+    REINFORCEMENT  a ground reinforcement added to an existing support
+
+PLACING
+  Place a support                   left click on the model
+  Place and add to selection        hold F3 and left click
+  Place a vertical support          hold F4 and left click
+  Automatic branching from a point  hold F1 and left click
+  Manual branching                  hold F2 and drag
+  Column support                    hold Ctrl and drag
+  Double tip, mesh to mesh          hold Alt and drag
+
+  Holding F1 and turning the wheel cycles through alternative branch paths before
+  you commit to one.
+
+SELECTING
+  Select                            left click on a support
+  Add to or remove from selection   hold F3 and click
+  Rubber band selection             drag on empty space
+  Select all                        Ctrl+A
+  Select the children of a support  Ctrl+W
+  Select similar supports           Ctrl+Q
+  Select overlapping supports       M
+  Deselect all                      D
+  Delete                            X, or Delete, or Backspace
+
+  X is the single delete of the whole program. The same key removes supports,
+  drainage holes, organic cut waypoints, and in the print room the selected piece.
+  On macOS it is often remapped to Backspace, and that is one of the reasons the
+  shortcut editor exists.
+
+EDITING THE SELECTED SUPPORT
+  Diameters, in millimetres:  Tip, Top, Mid, Base, and End for columns.
+  Structure, in millimetres:  Tip Len, Tip Inset, End Inset, Cut Ht., Col Ht.
+  Use Tip Sphere              rounds the contact point instead of a cone point
+
+  Copy a support              Ctrl+C
+  Make a support vertical     Alt+S
+  Straighten a support        Alt+V
+
+  Hide Sel.      hides the selected supports
+  Hide Unsel.    hides everything except the selection
+  Show All       brings them all back
+  Show Errors    steps through the supports that have a problem
+
+  Measured collisions, with a clearance in millimetres: a support that comes
+  closer to the model than the clearance is drawn in red. In line view it is also
+  drawn with a thicker stroke, so it can be told apart without relying on colour.
+
+PRESETS
+  Eight presets ship with the program, from thinnest to thickest:
+  Nano, Micro, Mini, M-Light, Light, M-Medium, Medium, Heavy.
+  A new installation starts on Medium.
+
+  Keys 1 to 8                  select preset 1 to 8
+  Ctrl and wheel               cycle through the presets
+  Mouse side buttons           apply the previous or next preset to the selection
+
+  Presets can be edited, added and deleted from the panel. They are shown in banks
+  of eight, with arrows to move between banks. A preset stores the four diameters,
+  the tip length, the tip penetration and the column radii.
+
+AUTOMATIC PLACEMENT
+  ADD SUPPORTS
+      generates supports over the whole model in one pass.
+
+  SUPPORT ENHANCEMENTS, three sub sections, each with its own on/off switch in
+  front of the header so it can be toggled without opening the section:
+
+      Base Station
+          a wider foot where the support meets the plate.
+          Shape: Cone. Base Radius as a percentage, 100 to 200 percent.
+          Height in millimetres, 0.5 to 2.
+      Shaft Fluting
+          a cross shaped shaft section instead of a round one, so the support
+          uses less resin and snaps off more easily.
+          Min diameter, 0.5 to 4 mm: shafts thinner than this stay round.
+          Arm width as a fraction of the radius, 0.20 to 0.70.
+          This affects the print file only: mesh exports keep round shafts.
+      Sphere Tip
+          a ball at the contact point instead of a point.
+          Radius Multiplier, 1.0 to 2.5 times the tip radius.
+
+  ADVANCED PLACEMENT, four sub sections:
+
+      Symmetry
+          Enable Symmetry, key Y. Create Symmetry Plane, then Symmetry on X, on Y
+          or on Z, and Reset Plane. With it on, a support placed on one side is
+          mirrored to the other.
+      Line & Fill
+          Create Arc from 3, key F5: three selected supports define an arc and
+              supports are spread along it.
+          Create Line from 2, key F6: two selected supports define a line.
+          Create Fill from 3+, key F7: three or more supports define an area that
+              gets filled.
+          Each has its own spacing multiplier, from 1.0 to 10.0.
+      Grid Optimization
+          Enable editor grid snap, key J, with a grid spacing in millimetres, and
+          Optimize Supports on Grid, which moves existing supports onto the grid.
+      Cluster Optimization
+          Reduction percent, 10 to 90, and Cluster & Reduce, which converts that
+          share of ground supports into branches landing on the survivors.
+
+  SMART SELECTION
+      selects supports by criteria rather than by clicking: minimum and maximum
+      height, tip similarity, support similarity, and a preset tolerance.
+
+  RELATIVE SCALING
+      a master scale for all supports, plus relative changes to Tip, Top, Mid and
+      Base, so a whole tree can be made thicker without editing each one.
+
+  BRACING SETTINGS
+      automatic cross bracing between neighbouring supports, to stop them
+      vibrating during peel. Parameters: minimum length, angle, maximum
+      connections per support, maximum length, radius percentage, separation in
+      millimetres, and Crossed Bracings, an X pattern instead of a single strut.
+
+  RAFT SETTINGS
+      the base under the whole print. Thickness in millimetres, and a Type:
+      Basic, or Networked. Networked has its own parameters: island margin,
+      bridge thickness and maximum bridge length.
+
+
+-------------------------------------------------------------------------------
+5. ORIENTING AND SCALING THE MODEL
+-------------------------------------------------------------------------------
+
+ORIENTATION TOOLS
+  Rotation sliders on X, Y and Z, in degrees.
+  A rotation gizmo, key R. On the ring the rotation snaps to 45 degrees; off the
+  ring it is free.
+  Mirror X, Mirror Z.
+  Center Model on BBox, which centres the model over the plate.
+  Scale in percent.
+
+AUTO-ORIENT
+  Searches orientations and reports what it found. Two criteria, each with its own
+  range in degrees, number of steps and precision:
+      By Overhangs   fewest overhanging surfaces
+      By Islands     fewest printing islands
+  There is also an option to stay close to the current orientation, so the result
+  is a refinement rather than a completely different pose.
+
+
+-------------------------------------------------------------------------------
+6. CHANGING THE MESH
+-------------------------------------------------------------------------------
+
+MESH REPAIR
+  A separate window, opened from the top bar. Three presets, in bold at the top of
+  the list: Light, Medium, Strong.
+
+  All three run the same five steps: stitching coincident points, non manifold
+  edges, degenerate faces, self intersections, and hole filling. They differ in
+  how aggressive the stitching and the tolerances are, Light being the most
+  conservative.
+
+  Three further steps exist but are off in all three presets, because they
+  retessellate the surface and lose sculpted detail by their nature: voxel
+  reconstruction, isotropic remesh, and decimation. They can still be run by hand.
+
+  The window analyses first and reports what it found, and the analysis can be
+  cancelled while it runs.
+
+  Batch Repair runs the same over a folder, with an option to include subfolders.
+  Select Folder & Start Batch, and Stop Batch.
+
+HOLLOW SETTINGS
+  Thickness of the shell in millimetres, and Voxel Size, with an Auto button for
+  each. Smooth, 0 to 10 iterations. Generate Final Hollow produces the cavity.
+
+  The hollow is procedural: what the project stores is the voxel mask plus the
+  settings, not a finished cavity, so it can be rebuilt at any time and survives a
+  change of model.
+
+  Enter Voxel Edit Mode lets you paint on the voxels directly, adding or removing
+  material from the cavity by hand. The status line shows the voxel count.
+
+INTERNAL REINFORCEMENT (LATTICE)
+  Inside the Hollow section. Add Lattice builds a grid of crossed bars inside the
+  cavity, Remove Lattice takes it out. Two parameters: bar diameter and spacing.
+
+  The bars are analytic cylinders, the same kind of shape as a support, so what is
+  drawn on screen and what is printed are the same object.
+
+  Bars that would end inside a drainage hole are not created at all, because a bar
+  that starts in mid air is an island when printing. The report says how many were
+  dropped for that reason.
+
+DRAINAGE HOLES
+  Hold H and click on the model to place a hole. Hold Space and H and the hole
+  centres itself on the area under the cursor, showing the area before you commit.
+  The wheel changes the radius while the tool is held.
+
+  Per hole: Rad 1, Rad 2, Hole Len, Offset, Subd. Two radii allow a stepped hole,
+  which is what a magnet seat needs.
+
+  Holes stay as objects until Apply Holes & View subtracts them from the mesh.
+  Until then they are drawn as cylinders and can still be moved, resized or
+  deleted. Edit Holes goes back to that state. Delete & Close Hole removes one.
+
+RESIN VOID FIXER
+  Finds closed pockets that would trap resin, and fixes them. Start Preview shows
+  what it would do, Recalculate runs it again after changing the parameters, Apply
+  commits, Cancel Calculation stops a long run. Smooth Iterations, 0 to 10.
+
+SMOOTHING BRUSH
+  Hold S and paint on the model. The wheel changes the brush radius. There is a
+  settings section for its strength and behaviour.
+
+TRIANGLE SELECTION BRUSH (marked experimental)
+  Q                toggles the selection mode
+  left drag        select
+  Alt and drag     deselect
+  A                select connected triangles
+  G                grow the selection
+  Shift and G      shrink the selection
+  C                clear the selection
+  P                place supports on the rim of the selection
+  T                place supports over the area of the selection
+
+  With a selection made: Delete Selected Triangles, Delete & Close Hole, and a
+  rebuild face option. There is a brush diameter slider.
+
+REPLACING THE MODEL
+  Replace Model asks for a file, loads it, and only then asks what to keep from
+  the current scene: drainage holes, hollowing, or both. The question appears only
+  when there is something to keep, and both boxes start ticked.
+
+  The hollow is not carried over as geometry, it is rebuilt on the new mesh from
+  the stored voxel mask and settings. Voxel brush edits have to be redone, and the
+  dialog says so.
+
+  Update Model From Source reloads the model from the file it came from,
+  discarding modifications.
+
+MATCH ORIENTATION (ALIGNMENT)
+  For replacing a model with a different version of the same sculpt, when the two
+  are not in the same pose.
+
+  Import Mesh to Align       loads a second mesh, drawn in a different colour
+  Enable Alignment Mode      lets you move and rotate that second mesh
+  Calculate Alignment (ICP)  aligns it to the first automatically
+  Apply & Swap               makes the aligned mesh the model
+  Cancel Import              removes the imported mesh and frees it
+
+  Apply & Swap asks the same keep question as Replace Model, so an alignment can
+  keep the holes and the cavity. Kept holes are applied to the new mesh
+  automatically.
+
+THE ORGANIC CUT
+  Cuts a model along a seam you draw, instead of along a flat plane, so the join
+  can be hidden in a natural line of the sculpt.
+
+  Click on the model to add waypoints, click the first waypoint to close the loop.
+  The panel reports the number of waypoints and whether the loop is closed.
+
+  Four tabs: Seam, Membrane, Graft, Cut.
+
+  The membrane is the surface that caps the seam, the shape the cut will follow.
+  Show membrane draws it; Wireframe shows its triangulation, which is how you
+  check it is a sheet and not a funnel. Cut softness, 0 to 200, decides whether
+  the membrane is a flat patch across the seam or a soap film: at 0 it is flat, as
+  it rises it relaxes towards a minimal surface. Membrane density controls how
+  fine it is, as a multiple of the seam step.
+
+  The panel reports, for the current seam: the number of triangles, the rim count,
+  the area in square millimetres, the wall thickness of the model along the seam,
+  and the worst tilt in degrees. The wall thickness is the number that decides
+  whether the cut is possible at all.
+
+  The Graft tab adds a peg so the two halves locate into each other, with an
+  option for which half carries it and an option to place it by clicking.
+
+  Save both pieces writes the two halves as separate files, warning first if the
+  files already exist, naming them with their size and date.
+
+
+-------------------------------------------------------------------------------
+7. CHECKING THE PRINT
+-------------------------------------------------------------------------------
+
+ISLANDS
+  Parts of a layer that would begin printing with nothing underneath them. They
+  are detected and listed with a counter and a "Go to" navigator that walks
+  through them one by one. The Islands display toggle highlights them on the
+  model.
+
+THE SLICE LINE
+  Hold Tab and turn the wheel to move the cutting height. The arrow keys move it
+  by one layer, PageUp and PageDown by ten. There are also vertical sliders at the
+  side of the screen.
+
+  The white slice drawn on the cutting line is not a sketch: it is rasterised at
+  the printer resolution, with the same pixels that will be in the print file,
+  including supports, bracings, raft and internal lattice.
+
+  One thing worth saying in the manual: the slice preview describes the SCENE. If
+  you hide supports, their sections disappear from the preview too. The print file
+  is not affected, and always contains everything.
+
+DISPLAY MODES
+  Interior      Ctrl+I, look inside the cavity, showing only the supports that are
+                inside it
+  Lines         supports as a polyline with a dot on each joint. An invalid
+                support is red and thicker
+  Wire          wireframe
+  Raw Normals   flat shading from the triangle normals
+  Islands       highlights the islands
+  AutoHide      hides things that would get in the way
+  SDF           the signed distance field view
+  Cross section a cutaway of the model
+
+MEASUREMENT TOOLS
+  Enable Ruler Tool, then click on the model to measure. Two modes: Spatial, from
+  point A to point B, and Vertical, which measures height. Clear All removes the
+  measurements, and the button shows how many there are.
+
+PEEL STATS
+  In the export window, the button "Peel stats (report in the console)". It
+  estimates how hard each layer will pull off the film, and whether the supports
+  there can hold it.
+
+  Under the button appears "Peel zones (N)", a list of the zones sorted by how
+  overloaded they are, worst first. Clicking a zone takes the camera to it. The
+  panel also shows a single figure for the whole plate, computed from the peak
+  load rather than the sum, because on one model all the zones usually pull
+  through the same path.
+
+
+-------------------------------------------------------------------------------
+8. THE EXPORT WINDOW
+-------------------------------------------------------------------------------
+
+Opened with Print. It is laid out like UVtools, deliberately, so the fields are
+where a resin printer user expects them.
+
+  Output format       the layer format; comes from the printer preset
+  Preset              save, update and delete named parameter sets
+  Printer             read from the active preset, showing the pixel size in
+                      microns
+  Layers              layer height in millimetres, and the estimated layer count
+  Material name       written into the file
+  Image               anti-aliasing, off or a level, plus Mirror X and Mirror Y
+  Include supports    on by default. With it off the internal lattice still goes
+                      in, because the lattice is not a support, it is the
+                      reinforcement of the part itself
+  Bracing joints      and a bracing joint ball option
+  CPU / RAM           Performance, Economy, Standard, High: how much memory and
+                      how many threads the export is allowed to use
+
+  Print parameters: exposure time, bottom and transition layers, wait before cure,
+  wait after cure, lift height, lift speed, retract height, retract speed, and a
+  second lift and retract for machines that have two. Bottom layers can differ
+  from normal layers.
+
+  A progress bar with a Cancel while the export runs, and the elapsed time when it
+  finishes.
+
+
+-------------------------------------------------------------------------------
+9. THE PRINT ROOM
+-------------------------------------------------------------------------------
+
+  Add piece          puts a supported project onto the plate
+  Add Current        puts the piece currently in the editor onto the plate
+  Open Plate         opens a plate file
+  Save Plate         saves it, with Save As for a new name
+  Recent Plates      the last plates opened
+  Clear Plate        empties it
+  Arrange            lays the pieces out automatically
+  Let Arrange rotate pieces   allows Arrange to turn pieces to fit more in
+  Raft overlap       allows rafts to overlap
+  Reset View         frames the whole plate
+  Export Print File  slices everything on the plate into one file
+
+  Edit the piece sends one piece back to the editor to be changed, and Back to
+  print room returns it, so a fix does not mean rebuilding the plate.
+
+  A plate carries its own printer preset and its own print parameters, valid
+  inside that room only. Leaving the room gives you back the ones you had.
+
+  The slice preview works here as well, over all the pieces at once.
+
+  The print room has no undo. This is deliberate, not an omission.
+
+
+-------------------------------------------------------------------------------
+10. SETTINGS
+-------------------------------------------------------------------------------
+
+GENERAL SETTINGS
+  Global Settings       interface scale, Use Slider/Wheel, Parameter Names on the
+                        Left, Use Standard File Buttons, AppData Folder button
+  Auto-Save System      Enable Auto-Save, Interval in minutes, Max Backups
+  Printer Settings      the machine presets, and Request support for my printer
+  Theme & Color Editor  colour presets for the scene, editable, savable, with
+                        Reset to Runebrace
+  Shader Settings       lighting and material settings
+  3Dconnexion Settings  space mouse axes and speeds
+
+KEYBOARD SHORTCUTS
+  A window listing every action, in two groups: tools and modifiers, which are
+  keys you hold, and global commands, which are keys you press. Any action can be
+  rebound. Conflicts are detected, and when the key you want is taken the program
+  offers to swap the two. Actions moved by a swap are marked with a red asterisk
+  until you deal with them. There is a Reset to Defaults.
+
+  The design rule is that a key is a key: there are no reserved modifiers, and
+  Shift or Alt can carry an action like any other key.
+
+
+-------------------------------------------------------------------------------
+11. NOTES THAT ARE EASY TO GET WRONG IN A MANUAL
+-------------------------------------------------------------------------------
+
+  1. The window title is the report. Many actions say nothing else.
+
+  2. There are no tooltips, on purpose. Do not write "hover to see what it does".
+
+  3. The printer preset decides the output format and the mirroring. The user does
+     not pick the file type.
+
+  4. Hiding supports affects the screen and the slice preview, never the print
+     file or the mesh export.
+
+  5. The hollow is stored as a recipe, not as a shape: the voxel mask plus the
+     settings. That is why it can be rebuilt on a different mesh, and why voxel
+     brush edits do not survive a model change.
+
+  6. Holes exist in two states, placed and applied. Until Apply Holes & View they
+     are still objects you can move.
+
+  7. Undo covers the scene, and separately the camera. The print room has none.
+
+  8. Colour carries meaning, so one hue means one thing only, and warnings are
+     also distinguished by brightness or thickness, not by hue alone. Anything the
+     manual describes as "the red one" should also mention the other cue.
