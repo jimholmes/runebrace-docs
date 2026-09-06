@@ -23,18 +23,18 @@ cd ~/workspaces/runebrace-docs
 ##### Build HTML
 
 # purge existing to ensure clean build
-rm -rf site/*
+rm -rf docs/*
 
-# copy assets to site folder
-rsync -a content/assets site
+# copy assets to docs folder
+rsync -a content/assets docs
 
 # create HTML, use lua filters for fixing links
 ## Root index file
-pandoc content/Index.md -o site/Index.html \
+pandoc content/Index.md -o docs/Index.html \
     --standalone --lua-filter=md-links.lua
 
 ## files in guides
 for f in content/guides/*.md; do
-  pandoc "$f" -o "site/guides/${f:t:r}.html" \
+  pandoc "$f" -o "docs/guides/${f:t:r}.html" \
     --standalone --lua-filter=md-links.lua
 done
