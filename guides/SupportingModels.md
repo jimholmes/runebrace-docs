@@ -12,6 +12,28 @@
 
 ### Support Basics
 
+A support is a chain of control points with a radius at each one: the tip that touches the model, the top of the shaft, the middle, and the base on the plate. Between them are cones. Every diameter is editable.
+
+#### Support Variants
+
+[Grounded]{#GroundedSupport}
+: The support's tip is on the model, and the base is on the plate
+
+[Branching]{#BranchingSupport}
+: The support joins another support instead of reaching the plate
+
+[Column]{#ColumnSupport}
+: A thick pillar with its own end diameter and height
+
+[Double Tip]{#DoubleTipSupport}
+: Connects two points of the model, mesh-to-mesh, with no base
+
+[Reinforcement]{#ReinforcementSupport}
+: A ground reinforcement added to an existing brace
+
+[Bracing]{#BracingSupport}
+: Lateral support between the mid-sections of supports
+
 **CONTENT NEEDED**
 
 * Horizontal line of layers
@@ -22,11 +44,11 @@
 
 **CONTENT NEEDED**
 
-#### Left Menu (REWORD)
+#### Left Toolbar (REWORD)
 
-The left icon panel controls many support options.
+The left toolbar controls many support options.
 
-![Left panel icons](../assets/img/SupportingModels/LPanel.png){#fig:LPanel}
+![Left toolbar icons](../assets/img/SupportingModels/LPanel.png){#fig:LPanel}
 
 ### Symmetry
 
@@ -38,9 +60,9 @@ The left icon panel controls many support options.
 
 ![Round Base with Three Supports](../assets/img/SupportingModels/RoundBase-3Supports.png){#fig:InitialBaseExample}
 
-Settings controlling spacing of supports for the following features are located in the right menu under Advanced Placement => Line and Fill.
+Settings controlling spacing of supports for the following features are located in the right panel under Advanced Placement => Line and Fill.
 
-![Right menu with line and fill highlighted](../assets/img/SupportingModels/RMenu-AdvancedPlacement-TopLevel.png){height="400"}
+![right panel with line and fill highlighted](../assets/img/SupportingModels/RMenu-AdvancedPlacement-TopLevel.png){height="400"}
 
 > **Important Considerations**
 
@@ -54,9 +76,9 @@ Settings controlling spacing of supports for the following features are located 
 
 Adds support along a line between two and only two supports. 
 
-Line placement is available through the right menu and the left button menu ([@fig:LPanel]).
+Line placement is available through the right panel and the left toolbar ([@fig:LPanel]).
 
-Spacing for supports along the line is controlled by the right menu under Advanced Placement => Line & Fill => Line.
+Spacing for supports along the line is controlled by the right panel under Advanced Placement => Line & Fill => Line.
 
 ![Menu for adjusting Polygon Fill spacing](../assets/img/SupportingModels/RMenu-AdvancedPlacement-LineAndFill-Line.png)
 
@@ -70,9 +92,9 @@ For more details on how lines work, see the [deep dive on lines](#MoreAboutLines
 
 Using Arc adds supports along three selected supports&mdash;no more, no fewer.
 
-Arc placement is available through the right menu and the left button menu ([@fig:LPanel]).
+Arc placement is available through the right panel and the left toolbar ([@fig:LPanel]).
 
-Configure using the settings in the right menu Advanced Placement => Line & Fill => Arc.
+Configure using the settings in the right panel Advanced Placement => Line & Fill => Arc.
 
 ![Settings for Arcs](../assets/img/SupportingModels/RMenu-AdvancedPlacement-LineAndFill-Arc.png){#fig:ArcSettings}
 
@@ -87,9 +109,9 @@ Note the double supports appearing at callout #2. This is due to the spacing alo
 
 Using Circle adds supports along a circle path drawn through three supports&mdash;no more, no fewer.
 
-Circle placement is available **only** through the left button menu ([@fig:LPanel]).
+Circle placement is available **only** through the left toolbar ([@fig:LPanel]).
  
-Configure using the settings in the right menu Advanced Placement => Line & Fill => Arc as shown above in [@fig:ArcSettings].
+Configure using the settings in the right panel Advanced Placement => Line & Fill => Arc as shown above in [@fig:ArcSettings].
 
 Selecting support #1, then #2, then #3, then creating Circle supports results in this:
 
@@ -110,9 +132,9 @@ Each feature below will show results starting from the above figure [@fig:Initia
 
 Polygon Fill, commonly referred to as Poly Fill, fills an area defined by three or more supports. No rim support is created.
 
-Poly Fill is available through the Fill Space option in the right menu and the corresponding button on the left button menu ([@fig:LPanel]).
+Poly Fill is available through the Fill Space option in the right panel and the corresponding button on the left toolbar ([@fig:LPanel]).
 
-You can also use the Fill Space button from the right menu (see below).
+You can also use the Fill Space button from the right panel (see below).
 
 Using Poly Fill/Fill Space from our starting point results in this:
 
@@ -120,7 +142,7 @@ Using Poly Fill/Fill Space from our starting point results in this:
 
 **Why:** EDIT: ADD USE CASE
 
-Adjust the spacing of the filled supports under Right Menu => Advanced Placement => Line and Fill => Fill Space
+Adjust the spacing of the filled supports under right panel => Advanced Placement => Line and Fill => Fill Space
 
 ![Menu for adjusting Polygon Fill spacing](../assets/img/SupportingModels/RMenu-AdvancedPlacement-LineAndFill-FillSpace.png){height="200"}
 
@@ -128,9 +150,9 @@ Adjust the spacing of the filled supports under Right Menu => Advanced Placement
 
 Perimeter & Fill does the same as Poly Fill but also lays supports along the area's bordering path itself. Note the menu button's icon shows this via the yellow outline.
 
-Poly Fill is available **only** through the corresponding button on the left button menu ([@fig:LPanel]).
+Poly Fill is available **only** through the corresponding button on the left toolbar ([@fig:LPanel]).
 
-Select three or more supports, then press the Perimeter and Fill button (there's no alternative from the right menu). One action creates the perimeter and inside area supports.
+Select three or more supports, then press the Perimeter and Fill button (there's no alternative from the right panel). One action creates the perimeter and inside area supports.
 
 Using Perimeter and Fill from our starting point results in this:
 
@@ -150,7 +172,7 @@ These settings are demonstrated in the example below. The perimeter supports are
 #### Circle Fill
 Circle Fill takes exactly three supports, builds a circular path that passes through their contact points, and fills that. No path supports are created.
 
-Circle Fill is available **only** through the corresponding button on the left button menu ([@fig:LPanel]).
+Circle Fill is available **only** through the corresponding button on the left toolbar ([@fig:LPanel]).
 
 
 Using Circle Fill from our starting point results in this:
@@ -206,7 +228,7 @@ Using Perimeter and Fill, the result is
 
 It's easy to see the area between supports 1 and 3, marked with the light red scribble, got no supports. This is because the rim path didn't connect those supports, so there wasn't an area to fill.
 
-####Understanding Support Impacts on Fill Planes
+#### Understanding Support Impacts on Fill Planes
 Area fills are performed on a planar basis. The plane is defined by the first three selected supports, not all selected supports. Additional supports are flattened onto the plane defined by the first.
 
 This results in selected areas not filling the way one might expect.
