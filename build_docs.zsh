@@ -30,7 +30,7 @@ rsync -a content/assets docs
 
 # create HTML, use lua filters for fixing links
 ## Root index file
-pandoc content/Index.md -o docs/Index.html \
+pandoc content/Index.md -o docs/index.html \
     --standalone --lua-filter=md-links.lua
 
 ## files in guides
