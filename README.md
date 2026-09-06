@@ -43,7 +43,7 @@ At the moment this is built locally on a Mac. The script and tools all have Wind
            --img : images. Duh.
         --guides : Markdown text files
         --output : Generated PDF
-        --site : HTML files
+        --docs : HTML files
   
   
 ## Authoring Content
