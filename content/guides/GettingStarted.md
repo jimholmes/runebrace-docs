@@ -95,7 +95,8 @@ Controls on this panel are:
 [Detect]
 : Detect islands on the model
 
-**NEED INFO ON '0'**
+[Island Filter]
+: Filters islands below this size in pixels from being displayed, counted, or resolved by the "Add Supports" command. **Islands are not eliminated, just hidden.**
 
 [Add Supports]
 : Automatically add supports to islands. Some may be skipped due to mesh complexities.
@@ -104,13 +105,15 @@ Controls on this panel are:
 : Rotate model to show the current island
 
 [Hide]
-: Hide the current model from the display and count
+: Hide the current island from the display and count
 
 [+]
 : Add a support to the current island
 
 [->]
 : Move to next island
+
+The scroll area below the buttons displays a current count of the number of islands, as well as an index of which island you're currently working on. Next and Previous increment/decrement that count as expected. You can also drag the scroll marker to move quickly through supports.
 
 WINDOW TITLE
   Runebrace reports the outcome of an action in the window title, not in a popup.
@@ -119,9 +122,14 @@ WINDOW TITLE
   several actions give no other feedback.
 
 
-### Scaling
+### A Note on Display Scaling
 
-"the whole UI scales with the window width, against a 3840 pixel reference. A window 3840 wide renders at scale 1.0, and a window 1280 wide renders everything, fonts included, at one third of that. Nothing is tied to the display DPI. If you work in a small window, raise UI Scale and Font Scale in Settings to compensate; they multiply on top of the automatic factor."
+Runebrace's entire UI scales with the window width, starting from a 3840 pixel reference. I.e., a 3840-wide window renders at a scale of 1.0, while a window 1280 wide renders at one third.
+
+Fonts and every aspect of the display scales as well, with nothing being tied to the display DPI.
+
+If you work in a small window, raise the UI Scale and Font Scale settings under Right Panel => General Settings => Global Settings. Both of these multiply on top of the automatic factor.
+
 
 ## Your First Project
 

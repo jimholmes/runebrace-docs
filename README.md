@@ -13,6 +13,10 @@ Contributions to the documentation are welcome. Feel free to submit a pull reque
 
 ## Building the Docs
 
+At the moment, HTML is the primary target, but as of the current commit, it's quite rough.
+
+A consolidated PDF can also be generated. (See the build script.)
+
 **Tools**
 
 At the moment this is built locally on a Mac. The script and tools all have Windows and Linux variations, but you'll need to figure out how to get them running if you want to build on those platforms. If you do, please consider doing a PR with updated instructions, and include your build script as a separate file.
@@ -38,7 +42,8 @@ At the moment this is built locally on a Mac. The script and tools all have Wind
            --files : any support files needed
            --img : images. Duh.
         --guides : Markdown text files
-        --output : Generated files
+        --output : Generated PDF
+        --site : HTML files
   
   
 ## Authoring Content
@@ -77,3 +82,4 @@ Use standard Markdown image elements. Add an ID tag following the markup to crea
 Link to that figure as desired:
 
     See [@fig:ID_TAG]
+    

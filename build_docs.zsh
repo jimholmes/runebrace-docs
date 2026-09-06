@@ -4,7 +4,7 @@ export PATH="/Library/TeX/texbin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:
 
 cd ~/workspaces/runebrace-docs
 
-# Build PDF
+##### Build PDF
 # pandoc Index.md \
 #   guides/Overview.md \
 #   guides/GettingStarted.md \
@@ -20,9 +20,21 @@ cd ~/workspaces/runebrace-docs
 # --resource-path=.:./assets/img:./guides
 
 
-# Build HTML
-for f in guides/*.md; do
-  pandoc "$f" -o "site/${f:t:r}.html" \
+##### Build HTML
+
+# purge existing to ensure clean build
+rm -rf site/*
+
+# copy assets to site folder
+rsync -a content/assets site
+
+# create HTML, use lua filters for fixing links
+## Root index file
+pandoc content/Index.md -o site/Index.html \
+    --standalone --lua-filter=md-links.lua
+
+## files in guides
+for f in content/guides/*.md; do
+  pandoc "$f" -o "site/guides/${f:t:r}.html" \
     --standalone --lua-filter=md-links.lua
 done
-# -f markdown-implicit_figures \
