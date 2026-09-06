@@ -1,0 +1,2157 @@
+RUNEBRACE 2.0
+=============
+
+This release brings a new slicing engine, written from scratch: the print file
+comes out three to six times faster, and raising the anti-aliasing costs almost
+nothing now. The rest is the fixes and improvements accumulated since 1.6.1b,
+including the multi model plate.
+
+One changelog this time: the plate entries used to live in a separate file
+because two people were using it, and that is no longer the case.
+
+
+THE EXPORT IS THREE TO SIX TIMES FASTER
+
+- The engine that slices the model has been rewritten. Before, for every pixel
+  row of every layer, it fired a ray at the model and sorted the intersections:
+  the cost grew with the resolution AND with the anti-aliasing, which is why
+  raising the anti-aliasing was so expensive. Now the plane intersects the
+  triangles of that layer ONCE, and the rows are walked one after another.
+
+- A plate with six pieces, 3913 layers at 0.05 mm, 3840x2160 with 4x
+  anti-aliasing: the .ctb export goes from 20.2 to 3.2 seconds, that is from 193
+  to 1213 layers per second. In .sl1s from 21.4 to 6.2, where most of the time
+  is taken by the PNG compression, which is unchanged.
+
+- RAISING THE ANTI-ALIASING COSTS MUCH LESS. From 1x to 8x the time used to grow
+  seven and a half times, now less than two: the supersampled grid, fifteen
+  megabytes per layer in progress at 4x and sixty three at 8x, is no longer
+  built, so raising the factor no longer adds memory to fill and read back.
+
+- THE .ctb IS WRITTEN ALMOST FOR FREE. That format stores each row as runs of
+  equal grey, which is exactly the form the new engine works in: it is now handed
+  over as it is, instead of building the whole image and letting the writer break
+  it apart again. Writing a layer goes from 6.3 milliseconds to 0.15.
+
+- AND THE PREPARATION NO LONGER WAITS ON ONE PROCESSOR. Before slicing the first
+  layer the program prepares the triangles and the index that says which ones to
+  look at at each height: on a full plate that is seven million triangles, and
+  that work ran on one processor while all the others watched. It is now split
+  between them all. On the test plate the preparation goes from 0.42 to 0.09
+  seconds and the .ctb export from 3.12 to 2.81. On a single piece you do not
+  notice, because that time grows with the triangle count: it shows on full
+  plates.
+
+- The ISLAND SEARCH benefits too. Besides the slicing, the cropping of a slice to
+  its bounding box has changed: before it read eight million pixels for every
+  layer just to find out where the drawing was, now it already knows.
+
+- THE IMAGES CHANGE VERY SLIGHTLY, and that is deliberate. The old engine sampled
+  the rows at heights it then rounded to the nearest pixel row, so some rows got
+  two samples and others none; the new one samples once per row, at its centre.
+  On slanted outlines the edge can move by a pixel or two, and on a flat, almost
+  horizontal surface, such as the bottom of a raft, a whole row can appear or
+  disappear. The rule that decides which pixels to turn on is identical ON
+  PURPOSE, so the exposure times of already tuned pieces do not change.
+
+PRINT PARAMETERS NO LONGER HAVE TO BE RETYPED IN UVTOOLS
+
+- .CTB FILES ARE NOW ENCRYPTED. An Elegoo Saturn refuses a .ctb with the layer
+  data in the clear, and ours were: two files of the same piece, one of ours that
+  would not start and one from another program that printed, were identical in
+  everything except the key field. The layer data is now encrypted the way every
+  other program does it. The structure of the file does not change by one byte,
+  and anyone who was opening our .ctb files in UVtools still can.
+
+- The export window has a new grid, with the NAMES AND THE ORDER of the "Edit
+  print parameters" window in UVtools: bottom and transition layers, wait before
+  and after the exposure, exposure, lift height and speed, retract speed, and the
+  full second stage (TSMC) with its heights. Bottom layers on the left column,
+  normal layers on the right.
+
+- They are saved in the preset and they travel inside the file: in the .ctb in
+  the fields the format already has, in the .sl1s in the printer notes, which is
+  where UVtools reads them back from. Open the file and you find them already
+  filled in.
+
+- The rows a CTB v2 cannot hold are greyed out when you choose that format,
+  instead of making you believe the value goes somewhere.
+
+
+.ctb FIXES
+
+- THE .ctb FILE NOW OPENS. UVtools rejected it with an absurd memory error,
+  "Failed to allocate 3342922069221310464 bytes", because the file header was
+  four bytes short. Whoever read it looked for the preview where the layer table
+  is, and took the height of the first layer and its exposure for the width and
+  height of an image. The .ctb files written by earlier versions do not open and
+  have to be exported again.
+
+- TWO MORE .ctb FIELDS WERE IN THE WRONG PLACE, and the second test brought them
+  out: the printer resolution was written as a floating point number instead of
+  an integer, and whoever opened the file tried to allocate an image of billions
+  of pixels for every layer. In the same round the block that holds the machine
+  name was fixed too, where the fields sat twelve bytes too early: the file
+  declared itself encrypted with a method that does not exist. Here too: anyone
+  with .ctb files exported before should redo them.
+
+- THE .ctb ALWAYS DECLARED A PRINTER 200 mm TALL, whatever it was. The usable
+  height field was written with a fixed value instead of the one from the preset:
+  on a Saturn 3 Ultra, which reaches 260, that is simply false. The .goo already
+  wrote it correctly, the .ctb had been left behind. It now comes from the preset
+  like everything else.
+
+  It does not change a pixel and it does not change how it prints, but it is what
+  a viewer reads to tell you which machine the file was sliced for, and until now
+  it answered 200 to everybody. If you want the right number in files already
+  exported, export them again.
+
+- THE LAYER HEIGHT CAME OUT WITH TOO MANY DECIMALS and the file was rejected:
+  "The layer height (0.039999988mm) have more decimal digits than the supported
+  (3) digits". The slider shows three decimals but dragging it returns any number
+  at all, 0.03999998 reads as "0.040", and nobody brought it back onto the
+  thousandths grid. It is now rounded where you choose it and where it is written.
+
+- AND THE .ctb CHECKS ITSELF BEFORE GOING OUT. As soon as the export finishes,
+  the file just written is read back and verified: header, resolution,
+  heights and times, previews, and the layer runs, which have to cover the
+  resolution exactly. If something does not add up, instead of "Done" you get a
+  warning telling you not to send it to print. From the command line there is the
+  full check, on every layer: "Runebrace.Console --ctb-lint <file.ctb>".
+
+- AUTO-ORIENT "BY ISLANDS" WAS MEASURING THE WRONG ORIENTATION. It counted the
+  islands of the previous position and kept the following one, so the result was
+  off by one step from what it had measured; the first step counted the model
+  upright and the last one was counted by nobody. The "By Overhangs" method was
+  not affected.
+
+
+.sl1s FIXES
+
+- THE LAST LAYERS OF THE PIECE COULD DISAPPEAR in the conversion: the declared
+  layer total was lower than the real one by as many layers as there were
+  transition layers, and the top of the piece was not printed.
+
+- The number of bottom layers ended up in a field UVtools reads for something
+  else: every time bottom and transition differed, the conversion started with
+  the wrong count.
+
+- Transition layers now arrive at their destination: the .ctb writes the exposure
+  ramp layer by layer, the .sl1s declares it in a way UVtools rebuilds the same.
+
+
+THE .goo, FOR THE ELEGOO SATURNS
+
+- RUNEBRACE ALSO WRITES .goo, the format the Elegoo Saturn 3 Ultra and 4 Ultra
+  read from a USB stick with no conversion. You pick it from the menu at the top
+  of the export window, like the .ctb.
+
+- It carries EVERYTHING the parameters window shows, waits and the second lift
+  stage included: those are the rows that stay greyed out with a CTB v2 because
+  that format has no field for them. On these machines there is nothing left to
+  set by hand afterwards.
+
+- The file also comes out smaller than the .ctb of the same scene, 3.3 MB against
+  4.9 on a supported cube, and costs nothing extra to write: this format too
+  takes the grey runs exactly as the engine produces them.
+
+- HOW IT WAS VERIFIED, since a wrong binary file never complains. UVtools opens
+  it; the pixels are the same as the .sl1s of the same scene, layer by layer; and
+  having UVtools convert one of our .ctb files into .goo, the 900 layers of its
+  file fall in the same places and with the same sizes as ours. There is also a
+  check that runs by itself as soon as the file is written: if something does not
+  add up, instead of "Done" you get a warning.
+
+
+THE PRINTERS IN THE LIST
+
+- THE PRINTER CHOOSES THE FORMAT, AND NOW ALSO THE MACHINE NAME AND THE MIRRORING.
+  Name and mirroring used to live in the PRINT preset, together with the exposure
+  and the resin: applying a preset overwrote them, and a file exported for a
+  Phrozen declared itself to be for a machine called "SL1S". A mirror in the wrong
+  place is worse than a rejected file: the print starts, it uses resin, and the
+  piece comes out mirrored.
+
+- THE PHROZENS HAVE A NATIVE FORMAT. The Sonic Mini 8K S exported to SL1S, which
+  the printer does not read: a pass through UVtools was unavoidable. The .prz
+  those machines want is the same GOO 3.0 we were already writing, with a
+  different extension, verified against a .prz produced by Lychee for that
+  printer, which our reader unrolls layer by layer. The file now goes straight
+  onto the stick.
+
+- THREE PRINTERS DECLARED THE WRONG PLATE. The plate divided by the resolution
+  gives the pixel size, so a wrong plate makes the piece come out a different size
+  from the one you designed. The "Anycubic Photon" entry declared 130 x 80: that
+  machine does not exist, with 1620x2560 and Z=165 it is the Photon MONO, whose
+  plate is 82.62 x 130.56, that is the two sides swapped and rounded. Elegoo
+  Saturn 2 (218.88 x 123.12) and Phrozen Sonic Mega 8K (330.24 x 185.76) were
+  corrected as well.
+
+- The printer list now includes ELEGOO SATURN, SATURN 3 ULTRA, SATURN 4 ULTRA and
+  PHROZEN SONIC MINI 8K S. They are added even if you had already customised the
+  list: the ones you added or changed stay as they are.
+
+- The measurements are those of the PANEL, not those of the box. A Sonic Mini
+  8K S is sold as "8K" but its screen is 7536 x 3240 pixels: printing at
+  7680 x 4320 would not give a less defined piece, it would give a piece of the
+  wrong size.
+
+- Choosing the printer also chooses the format that machine reads, .goo for the
+  Saturn Ultras, .ctb for the ChiTu ones, .sl1s for the others, and the name that
+  ends up written inside the file, which used to be "SL1S" for all of them.
+
+- FIXED: THE PRINT PARAMETERS DID NOT REACH THE FILE. Lifts, speeds and waits set
+  in the window were lost the moment the export started, and the default values
+  ended up in the file. The window showed one thing and the file contained
+  another, with no warning at all.
+
+
+RAFT
+
+- On SQUARED pieces it came out shrunken and shifted sideways: the outline was
+  simplified down to its four corners and then smoothed, and smoothing pulls every
+  point towards the average of its neighbours, which on four points means pulling
+  the corners towards the centre. It is now smoothed first and simplified after.
+
+- On geometries with LARGE FACES, typical of Blender, it lost whole areas of the
+  shadow: the sampling depended on the NUMBER of vertices instead of on how far
+  apart they are. A decimated ZBrush model always worked, a mechanical part did
+  not.
+
+- A model resting on TWO SEPARATE POINTS, two legs, a handle, a C shaped piece,
+  got the slab under only one of the two.
+
+
+TRIANGLE PAINT
+
+- PLACING SUPPORTS ON THE RIM IS NO LONGER THE SAME KEY AS THE BRUSH. S did two
+  different things depending on where you were: outside a triangle selection it
+  turned on the smoothing brush, inside it placed supports on the rim. They were
+  not two conflicting shortcuts, the second one was not a shortcut at all, it was
+  a piece hidden inside the first. It did not appear among the shortcuts, it could
+  not be changed, and while you were in triangle selection the brush could not be
+  used at all.
+
+  It is now a command of its own, on P, and you reassign it like all the others.
+  The brush always turns on.
+
+- AND TWO COMMANDS THAT EXISTED BUT COULD NOT BE SEEN. The "Activate Select Mode"
+  button was the only one in the panel that did not say which key does it, which
+  is Q, and placing supports on the rim had no button at all: it could only be
+  done from the keyboard.
+
+- The old "Grow" is now called SELECT CONNECTED, because that is what it does:
+  from the painted triangle it takes the whole region connected within "Max
+  Angle". Next to it there are a real GROW and a real SHRINK, one ring at a time,
+  each the inverse of the other.
+
+- It hardly ever moved: the angle started at 3 degrees and stopped at the first
+  curvature, and on heavy models it rebuilt the adjacency of the whole mesh on
+  every click. It now starts at 20 degrees and the adjacency is computed once.
+
+- Removed the second angle, "Max from down", which stopped the selection on steep
+  walls and made unpredictable a command that has to be obvious.
+
+- UNDO in the panel: Ctrl+Z undoes the last brush stroke, the last grow, shrink or
+  clear; once those are gone it continues onto the real mesh changes. A brush
+  stroke is one gesture and is undone in one go.
+
+- The key for each command is written on the button that runs it.
+
+
+UNDO (everywhere, not just in the panel)
+
+- Ctrl+Z did not undo mesh changes, triangle deletion included: it only restored
+  scenes, and on top of that it ate the history step. The Undo button worked, the
+  shortcut did not.
+
+- The very first mesh change of a session could not be undone, and the button
+  stayed greyed out with no explanation.
+
+
+BATCH REPAIR
+
+- NAME FILTER, with wildcards: typing *(Supported)* repairs only the supported
+  files and not the originals sitting in the same folder. Text without wildcards
+  works as "contains". Runebrace applies it while scanning, not the system dialog,
+  so it works identically on Windows, Mac and Linux; on Mac the trick of typing
+  the filter into the dialog does not exist.
+
+- You choose the FOLDER, not "any file inside the folder". Subfolders were already
+  included and still are.
+
+
+SUPPORTS
+
+- THE ORGANIC CUT REMEMBERS HOW IT WAS. Sheet thickness, overshoot, softness,
+  membrane relaxation and the graft measurements are now stored in the scene AND
+  in the global settings. The switches are saved too: membrane, wireframe, x-ray
+  and graft no longer have to be turned back on every session, and above all
+  "Snap to sharp edges" and "Refine near the cut", which change the RESULT and not
+  the view, no longer revert on their own.
+
+- BETWEEN TWO CLOSE, ALMOST VERTICAL WALLS a little vertical column was created,
+  which went straight down to the first support far below instead of using the
+  wall it had a couple of millimetres away. Now it starts a
+  45 degree strut that rests on it.
+
+- It happened because the fallback looked for a landing only in the directions
+  that lie both within 45 degrees of the surface normal AND within 45 degrees of
+  vertical: on a vertical wall the two conditions almost never meet, and the only
+  one left standing was the vertical drop.
+
+- Among the candidates the genuinely shortest one now wins, measured in
+  millimetres: before, a slanted strut paid a 41 percent penalty and lost to
+  vertical columns longer than itself. The vertical column only wins if there is
+  no slanted option, or if it is appreciably shorter.
+
+  This applies to automatic supports too, which use the same fallback.
+
+
+- THE "USE TIP SPHERE" TICK HAD NO EFFECT on any of the automatic placement
+  tools: triangle selection, line, arc, area, perimeter and connection all created
+  the support without reading it, and the sphere tip never arrived. Only manual
+  placement, one at a time, read it.
+
+
+SUPPORTS: THE CROSS SECTION IS VISIBLE ON THE CUTTING LINE
+
+- THE WHITE SLICE ALWAYS DREW THE SHAFTS ROUND. With the cross section turned on,
+  the print file came out correct, cross shaped shafts, which is what saves resin,
+  but on the cutting line, while you work, the supports stayed circles. That slice
+  is rasterised on the printer grid, so its pixels are the pixels of the layer:
+  showing them round meant showing a shape that does not get printed. They now
+  follow the cross.
+
+- It applies on the plate too, and it does not depend on how the supports are
+  drawn: the fluting is a print treatment, so the cross shows in the slice even
+  with mesh supports, which stay round on screen by necessity.
+
+- Shafts thinner than the "Min diameter" stay circles, on screen and in print:
+  their arms would be too few pixels to cure.
+
+- The slice is rebuilt as soon as you touch the tick or the two sliders, without
+  having to move the cutting line to see the change.
+
+
+RESIN VOID FIXER
+
+- A FAILED APPLY TOOK THE MODEL BACKWARDS. When the operation failed, the error
+  handler called an Undo that nobody had prepared: it ate a history step from
+  another operation and put an older mesh back in the scene. Anyone who kept
+  working, a mesh repair, a second Apply, did so on the old geometry and found
+  again the islands they had already smoothed away. Now a failed Apply says it
+  failed and touches nothing.
+
+- THE SHELL IS COMPUTED ON THE CURRENT MESH. Before, the mesh was photographed
+  when "Start Preview" was pressed, and that photograph stayed even when pressing
+  "Recalculate": if you smoothed or repaired in the meantime, the boolean joined
+  the new mesh to a shell of the old mesh, and the old geometry came back.
+
+- If the model changes after the shell has been computed, Apply stops and asks for
+  a Recalculate, instead of applying one thing in place of another.
+
+- Ctrl+Z undoes the Resin Void Fixer, as the other tools that rebuild the mesh
+  already do. And the fix is no longer lost by the first Hollow or the first hole
+  applied afterwards.
+
+
+SUPPORTS: WHEN YOU ONLY SEE SOME OF THEM
+
+- BRACINGS FOLLOW THE SUPPORTS. Hiding some of them, with Hide Unsel., with Show
+  Errors, or by selecting the flat branches and hiding the rest, left the bracings
+  hanging in mid air, and you had to turn them off by hand with the checkbox. Now
+  a bracing is only visible if both the supports it connects are visible, and it
+  comes back on its own with them. What gets printed does not change: the filter
+  is on the drawing only, the bracing is still there.
+
+- BRANCHES THAT ARE TOO FLAT ARE BRIGHT YELLOW, no longer blue. They are the ones
+  "Sel. Flat" selects, that is the branches that lean away from vertical by more
+  than the threshold, 60 degrees to start with, and which after a cluster optimize
+  can be left unstable: they can now be spotted at a glance among the others.
+  Solid yellow stays the colour of the support under the mouse.
+
+- A STRIP FOR STEPPING THROUGH THE SUPPORTS STILL VISIBLE, under the islands
+  panel. It appears by itself as soon as some of the supports are hidden, tells
+  you where you are, "Visible supports: 3 / 12", and the arrows jump from one to
+  the next without hunting for them by eye. Before, the arrows only existed for
+  supports in error, at the bottom of the right panel, and nobody found them.
+
+- Stepping through no longer loses your framing: the camera just moves, the zoom
+  and the tilt stay as you set them. Before, every jump reset the view to a fixed
+  distance and 45 degrees.
+
+- "Show Errors" updates the collisions before hiding, not after: it could leave
+  visible a support that was no longer in error.
+
+SUPPORTS: THE JOINT HAS TO BE BELOW THE WRIST
+
+- A SUPPORT HANGING ON ANOTHER is flagged in yellow in three cases now, not just
+  one: if the joint is not below the wrist, if the wrist is above the tip that
+  touches the mesh, or if the wrist to joint segment runs flatter than the
+  threshold. The first two are the ones that produce an island: in the slice the
+  joint appears before whatever is supposed to hold it.
+
+- DIRECT BRANCHES (ALT) WERE NEVER CHECKED. They have two points instead of
+  three, and the rule demanded three: they could be created up to 65 degrees from
+  vertical with nothing saying so. They are now included in the count, and
+  "Sel. Flat" selects them along with the others.
+
+- THE COLOUR UPDATES WHILE YOU DRAG: moving a joint you see immediately whether
+  the support turns yellow or goes back to normal, without touching anything else.
+
+- THE AUTOMATIC CORRECTOR STRAIGHTENED THEM THE WRONG WAY. After a cluster or a
+  grid optimize, when it had to fix a crooked branch it computed the descent with
+  the complementary angle and left it at 65 to 70 degrees from vertical, that is
+  flatter than the threshold beyond which it then flagged it. It now aims at the
+  threshold minus ten degrees, and the branches it fixes are created straight.
+
+- The threshold in the box next to "Sel. Flat" also drives the correction, not
+  just the colour: it was the only number in the chain that counted for nothing.
+
+  Ground supports, reinforcements and mesh to mesh struts stay outside all this,
+  and rightly so: they do not hang on any support.
+
+- THE YELLOW IS A BRIGHT YELLOW, which reads by its brightness and not by its hue:
+  in a scene of dull green supports the only one that shines is the crooked one.
+  The support under the mouse, which used to be yellow, is now cyan: yellow means
+  one thing only.
+
+ON macOS AND LINUX YOU NO LONGER HAVE TO DO IT BY HAND
+
+- THERE IS A SCRIPT IN THE ARCHIVE. Until now, after extracting, you had to set
+  the permissions by hand and on macOS sign the executable with codesign, or it
+  would not start. The archive now contains setup.sh: run it with "sh setup.sh"
+  from the folder where you extracted, and it does those things for both
+  executables, Runebrace and the .ctb viewer.
+
+  Before touching anything it says which files it will prepare and which commands
+  it will run, and waits for a confirmation. It does not need sudo and it does not
+  touch anything outside that folder. It stays optional: anyone who prefers to
+  keep doing it by hand finds the commands written at the top of the script, and
+  they are exactly those.
+
+  On Windows there is none and none is needed: there the executable is signed and
+  starts as it is.
+
+
+LOADING
+
+- OPENING A HOLLOW SCENE NO LONGER FREEZES RUNEBRACE. With a procedural shell and
+  some holes the window sat still for seconds: it went white and Windows declared
+  it "not responding". On a piece with 557 thousand vertices that was 3.6 seconds,
+  on a big model many more. The loading was already done in the background, but
+  only to read the file and interpret it, a handful of milliseconds, while the
+  shell reconstruction, which on its own is 84 percent of the time, was done by
+  the thread that draws the window. That is now done in the background as well,
+  and the window keeps responding while the project opens.
+
+- AND NOW THE PROGRESS BAR AT THE TOP OF THE PANEL IS ACTUALLY VISIBLE. It was
+  already there, but while the loading held the program still no window was being
+  drawn, so it never appeared. The percentage now comes from the real steps of the
+  reconstruction, distance field, inner shell, union, instead of from an animation
+  that advanced on its own.
+
+- THE BAR NO LONGER GOES BACKWARDS. It advanced by itself while waiting, and when
+  the real figure for a stage arrived it stepped back. Now on its own it never
+  goes more than a few points past the last real value.
+
+
+SUPPORTS: PLACING THEM ON CROWDED SCENES
+
+- PLACING A SUPPORT ON A SCENE WITH MANY SUPPORTS NO LONGER COSTS TWO SECONDS. On
+  a model with 1684 supports every click regenerated their bracings from scratch,
+  fifty thousand of them, and regenerated them EVEN WHEN THEY WERE TURNED OFF,
+  which explains why removing them made no difference. Now with bracings hidden
+  they are not computed, and what is left is the raft.
+
+- THE RAFT CAN BE SUSPENDED TOO. With the bracings gone, what remained was another
+  380 milliseconds for every support placed, all of it rebuilding the raft from
+  scratch. There is now a tick in front of "RAFT SETTINGS", like the one in front
+  of "BRACING SETTINGS": untick it and you work fast, tick it back when you want
+  to see how it turned out. While it is suspended the panel tells you the raft you
+  are looking at is not up to date.
+- THE TWO TICKS SIT IN FRONT OF THEIR SECTIONS. They are the two switches used
+  the same way, and now they are where they take effect; the old "Bracings" tick
+  among the display options has been removed because it did the same thing in a
+  worse place.
+
+- THE STL OF THE SUPPORTED MODEL IS A QUARTER OF THE SIZE. On a scene with fifty
+  thousand bracings the file came out at 1.76 GB, and programs like 3D Builder
+  could not open it. The culprit was the bracings: each one was written with 576
+  triangles, which is entirely the two little spheres at the joints drawn far too
+  finely. 64 are enough now, and the file drops to about 440 MB, a quarter. The
+  spheres stay, because those really do get printed: it was only the way of
+  drawing them in the file that was needlessly fussy.
+
+  The print file does not change by a hair: it does not use triangles, it uses the
+  exact shape of the cylinders.
+
+- AND TURNING THEM OFF DOES NOT REMOVE THEM FROM THE PRINT. Before writing the
+  print file, or an OBJ, a 3MF, or separate STLs, the bracings are rebuilt anyway,
+  even if you are not looking at them. The console says so too. Without this,
+  anyone who had worked with bracings off would have exported a piece with fewer
+  bracings than it needs, with no way of noticing.
+
+- AND NOW THE TWO CALCULATIONS ARE FAST IN THEMSELVES. The ticks above existed to
+  stop the program doing two jobs that cost too much. Those two jobs now cost
+  little, and the ticks remain only as a convenience. On the 1684 support scene,
+  rebuilding all fifty thousand bracings goes from 1.6 seconds to under two
+  tenths, and rebuilding the raft from 0.36 seconds to a little over one tenth:
+  with the ticks on, placing a support costs less than a third of a second instead
+  of two full seconds.
+
+  Nothing about the output has changed. The bracings are the same, one by one, and
+  the raft has the same 85,748 triangles in the same places: they were compared
+  one by one, before and after. It was only the way of getting there that was
+  wasteful; every bracing was measured against all eleven hundred supports in the
+  scene to discover that it grazed three, and every check ray crossed five million
+  triangles of the model to find the one two millimetres away.
+
+
+VOXEL EDIT
+
+- ENTERING VOXEL EDIT IS SIX TIMES FASTER. On a piece with three million faces it
+  goes from 7.9 to 1.3 seconds, and on a slower machine from seventy five seconds
+  to under ten. The cost was all in the search for the nearest triangle: for every
+  voxel it gathered into a list ALL the triangles within a radius and measured them
+  one by one. It now descends into the search structure, pruning the branches
+  already further away than the best one found.
+
+- AND RAISING THE VOXEL SIZE NOW REALLY IS FASTER. Before it did the opposite: the
+  search radius grew with the voxel, and at 2 mm it took 45 seconds against the
+  7.9 of 0.5 mm, with sixty times FEWER voxels to compute. The result is identical:
+  across seven and a half million voxels the distance field does not change by one
+  bit.
+
+
+AUTO-ORIENT
+
+- AUTO-ORIENT WAS MEASURING A BOX, NOT THE PIECE. To find out whether an
+  orientation fits on the plate it took the axis aligned box, rotated it, and
+  measured the container of that. On a model that sits at an angle to its own axes
+  that container is enormous: on an Artisan Guild whale the box measures 608 cm3
+  against the 113 cm3 of the piece, five and a half times more. The narrowest side
+  that model can actually present is 46.9 mm, but the box declared 81.5, and on a
+  plate 71.6 mm deep the search rejected ALL 441 orientations it tried, while 158
+  of them fitted.
+
+  It now measures the real vertices. On the same whale: Phrozen Mini 4K from 0 to
+  158 valid orientations, Sonic Mini 8K S from 0 to 138, Elegoo Saturn and Saturn
+  3 Ultra from 207 to 441, because even on the big printers half the candidates
+  were being thrown away. On small models the defect did not show, the
+  overestimate was there anyway but they fitted regardless: it only came out when
+  the piece fills the plate, which is exactly when auto-orient is useful.
+
+- THE ORIENTATION YOU HAVE ALREADY CHOSEN IS NOW IN THE RACE. The best started
+  from an infinite value, so the first candidate with any score at all became "the
+  best", and from there a strictly lower score was needed to displace it: anyone
+  who had oriented the piece by hand saw it moved even when there was nothing to
+  gain. Your orientation now has to be BEATEN, not equalled, and if nobody does
+  better the piece stays where it is and the panel says so.
+
+- TWO TABS, ONE PER METHOD. "By Overhangs" and "By Islands" shared Range and
+  Steps: tuning one of the two searches upset the other, and they are searches
+  that want different numbers. Each now has its own, saved separately in the
+  global settings, and the open tab also chooses the method.
+
+- THE WHEEL MOVES BY ONE DEGREE. On the Range and Overhang fields the step was a
+  tenth of a degree on a field that does not show decimals: for nine clicks out of
+  ten the number did not change.
+
+- AUTO-ORIENT BY ISLANDS CHECKS THAT THE PIECE FITS ON THE PLATE. Of the two
+  methods, "By Overhangs" already discarded orientations where the rotated piece
+  hangs off the plate or exceeds the printer height; "By Islands" did not, and
+  could therefore settle on an orientation with few islands but not printable. The
+  check is now the same for both.
+
+- AND IF NO ORIENTATION FITS, IT TELLS YOU. Before, in that case it announced a
+  "Best" with an absurd number; now it puts the piece back as it was and writes
+  how many orientations it discarded and why.
+
+- YOU NOW CHOOSE THE PRECISION. Searching for the best orientation "By Islands"
+  means slicing the model at every rotation tried, and how finely it sliced was
+  decided inside the program: one layer in four, and on top of that at a quarter
+  of the printer resolution. There is a "Precision" menu with three entries: Fast
+  (one layer in four), Half (one in two), All (every layer).
+
+  The resolution, on the other hand, is now ALWAYS the printer's. With the new
+  slicing engine lowering it saves almost no time, the layers take the time, but
+  it does lose the small islands, which are exactly the ones you are looking for.
+  So even the Fast setting, which costs the same as before, sees more islands than
+  the program saw until yesterday.
+
+- AND IT TELLS YOU HOW LONG IT WILL TAKE. Next to the number of steps the panel
+  now also writes a time estimate, because with the starting values the steps are
+  1681 and multiplied by one slicing each that makes minutes, not seconds. If you
+  want high precision it is worth lowering "Steps" first.
+
+- THE PANEL FITS IN TWO ROWS. Method and Precision on the first, Range and Steps
+  on the second; when the method is "By Overhangs" the place of Precision is taken
+  by its angle, which used to sit on a row of its own. The red warning above a
+  hundred trials has gone too: there is now the time estimate, which says the same
+  thing better, and the stop button was always there.
+
+INTERFACE
+
+- THE POP-UP HINTS ARE GONE. There were a hundred and thirty three of them, and by
+  appearing under the pointer they placed themselves in front of the control you
+  were about to use. On a crowded panel that is worse than not having them. The
+  ones that declared an ACTION, rather than a description, were moved into the
+  visible text instead of disappearing with them: in Recent Scenes the header now
+  says that right clicking opens the project folder.
+
+- RECENT SCENES NO LONGER COVERS ITSELF. Hovering over the names showed the full
+  path, which on deep folders covered half the list.
+
+- CHANGING PRESET WITH THE MOUSE STARTS FROM THE SELECTED SUPPORT. The two side
+  buttons cycled through the presets starting from the last one CLICKED in the
+  panel and not from the one the chosen support has: if you had not clicked one
+  recently it restarted from the first in the list, and a Medium became a Nano. On
+  top of that, recognising the preset of a support accepted any preset within the
+  selection tolerance, which is 0.05, while the presets are 0.010 to 0.025 apart:
+  a Medium resembled six presets out of eight. It now starts from the preset the
+  support actually has, choosing the nearest one.
+
+- SCROLLING THE PANEL WITH THE WHEEL NO LONGER MOVES THE SLIDERS. All it took was
+  for a slider to end up under the pointer while the panel was scrolling: from
+  that moment the wheel changed that value instead of carrying on scrolling, and
+  the panel stopped as well. A slightly long spin and you found a parameter
+  changed without knowing which.
+
+  Who is in charge is now decided at the start of the wheel gesture: if the
+  pointer was already resting on a slider the gesture is the slider's, otherwise it
+  belongs to the scrolling and stays there to the end, whatever passes underneath.
+  To change a slider you just move onto it and spin: the movement closes the
+  previous gesture, there is nothing to wait for.
+
+- THE HOLLOWING VOXEL SIZE HAS A NAME. It was a numeric field with no label: on
+  screen just a number, with nothing to say what it was. It is now called "Voxel
+  Size" and stays where it was, on the thickness row together with the Auto button.
+
+- THE WHEEL WORKS ON EVERY SLIDER, no longer on some of them. About thirty were
+  left out: the whole cut panel, the Mesh Repair parameters, the layer height and
+  the fluting in the export, the rotation of pieces on the plate, the auto save
+  interval.
+
+  Where the step is not stated, one click is worth one hundredth of the slider's
+  travel: on an angle from 0 to 90 degrees it moves by 0.9 degrees per click and
+  not by one hundredth, as it would have been with the fixed step of before.
+  SHIFT moves ten times as much, CTRL a tenth.
+
+- THE PARAMETER NAME CAN GO ON THE LEFT. There is a new tick in the settings,
+  "Parameter Names on the Left": on, every slider shows the name on the left and
+  the value lined up on the right, as in almost every other program. Off, the
+  ImGui layout stays, widget on the left and name after, which is the usual one.
+  The choice is remembered between sessions.
+
+  It applies to every slider and numeric field at once, without touching them one
+  by one: they all go through the same place.
+
+  The name column is as wide as THE LONGEST NAME in the group of entries it
+  belongs to, that is the sliders that follow one another in a panel, so they all
+  start from the same X and lose only the few pixels needed to line them up. A
+  title or a separator closes the group, and the panel below has its own column.
+
+  The sliders in a group are all the same length: they all shorten by the same
+  amount, not each one according to its own name. Otherwise the entry with the
+  short name ended up with a shorter slider, Tip short and Base long in the same
+  column, and a ragged edge was left on the right.
+
+  The row never grows wider: the little the column adds is paid for by the slider.
+  This matters for rows with several controls side by side, Scale and Lift, the
+  hollowing thickness with the voxel size and the Auto button, the Relative
+  Scaling percentages, where otherwise the first control takes the row and the
+  others end up outside the window.
+
+- REOPENING A PROJECT SAVED WITH THE WINDOW MAXIMISED, the bottom of the panel
+  ended up under the Windows taskbar and the last row of tickboxes could not be
+  pressed. The position and size of a maximised window were saved and applied to a
+  normal window: on Windows a maximised window sits eleven pixels off screen on
+  each side, because the resize border is invisible and the system crops it away
+  while it stays maximised. Now it saves WHETHER it was maximised, and on restart
+  it maximises it again.
+
+- The window is kept inside the free area of the screen anyway, the part the
+  taskbar does not cover. Before it reasoned about the whole monitor, taskbar
+  included: a project saved on a larger screen reopened as tall as the whole
+  monitor, and on a small laptop the initial window was already born with its
+  bottom off screen.
+
+- THE PANEL STOPS AT THE EDGE AND SCROLLS. With enough sections open the last row
+  of ticks was still cut off, and this was a different defect from the first one:
+  the panel adapts to its content and stops at the screen height, but it did not
+  account for starting forty pixels lower down. It overshot by exactly that, and
+  the scrollbar did not appear because it was convinced it fitted.
+
+- The "Use Slider/Wheel" and "Parameter Names on the Left" ticks are written to
+  disk as soon as you touch them, instead of being lost on exit if you did not
+  press "Save Current Settings as Global Defaults".
+
+- THE WHEEL ON A SLIDER MOVES THE LAST DIGIT THE SLIDER SHOWS. Before it moved by
+  one hundredth of the full scale, which on long travel sliders meant absurd
+  jumps: "Max Angle" showed 3.00 and moved by 0.9 on every click. Now a slider
+  showing two decimals moves by 0.01. This applies to all of them.
+
+- THE RADIUS MULTIPLIERS MOVE ONE POINT AT A TIME, and next to each one there is
+  an R that puts it back to 100 percent. The four "Relative Scaling" sliders, Tip,
+  Top, Mid and Base, the ones that thicken or thin the SELECTED supports, moved in
+  tenths of a percentage point, and nobody sets the tip of a support to 90.3
+  percent: you slid past the number you wanted. The limits stay 5 percent and 300
+  percent, and right clicking the slider still puts it back to 100 as it did
+  before. The help line under the sliders promised a reset "to 0%": it stated
+  something the program has never done.
+
+- AND THE BRACING PARAMETERS MOVE BY A TENTH. Min Len, Angle, Max Len, Radius and
+  Sep. showed two decimals, so one wheel click was worth 0.01 and the bracings did
+  not change at all: you had to spin it ten times to see anything. The bracings are
+  rebuilt when the wheel stops, not during a drag, so with the wheel the result
+  shows immediately.
+
+
+THE PLATE
+
+- IT IS NOW A ROOM OF ITS OWN, AND IT IS CALLED "PRINT". The plate was a panel
+  that opened over the editor, and around it stayed the tools of another trade:
+  Mesh Repair, the support tools, the right panel with the bracing knobs. Someone
+  coming in to prepare a print faced thirty commands, two of which concerned them.
+  Now, on entering, everything that is not about printing disappears.
+
+- YOU CAN ALSO PUT ON THE PLATE STLs ALREADY SUPPORTED BY OTHER PROGRAMS. Drag in
+  an .stl prepared with Lychee or Chitubox, or pick it from "Add piece": Runebrace
+  splits it by itself into model, raft and supports, stands it up with the raft
+  resting on the plate, and slices it together with the other pieces.
+
+  How it recognises them. The model is the part that contains the highest point,
+  and that is not a gamble: in resin the supports come from below and the top of a
+  support is where it touches the model, so it cannot go higher. The raft is what
+  rests on the plate AND IS A SLAB, that is much wider than it is thick. Everything
+  else is supports.
+
+  That "and is a slab" is not pedantry: Chitubox makes the raft from overlapping
+  square tiles, one per support foot, and no support touches the plate; Lychee
+  makes a single slab but lets the supports come DIRECTLY down to the plate, 106
+  out of 107 in one test file. Looking only at the height, those 106 supports would
+  have become raft.
+
+  Tested on five real, old files from the two programs: from 26 to 1364 separate
+  parts each, and the split is right on all of them.
+
+  No on screen confirmation yet: if the split is not convincing the program writes
+  it in the console with the reason, but it does not ask you. And an .stl
+  containing MORE THAN ONE model is not handled yet: it would be taken as a single
+  model with the others mistaken for supports.
+
+- THE PIECE LIST ONLY SAYS WHAT THEY ARE CALLED. Every row carried the
+  measurements, a rotation field, two 90 degree buttons, Duplicate and Delete:
+  with seven pieces it became a wall in which the name could no longer be found.
+  Now there is the name, and nothing else. The measurements have not gone, they
+  come out on hover, together with the warning when a piece has no supports.
+
+- AND WHAT YOU DO TO A PIECE, YOU DO ON THE PIECE. Right click a thumbnail and
+  there are Duplicate and Delete, right where you are already looking. A piece is
+  moved by dragging it and rotated with Shift and the wheel, so the pointer is
+  already over it: there is no sense in sending you off to find the right row in a
+  list. The right button DRAGGED still rotates the camera as always: the menu only
+  opens if the pointer stays still.
+
+- RAFTS CAN BE ALLOWED TO TOUCH, AND SUPPORTS TOO. Two new ticks under the
+  distance sliders. Until now the arrangement kept the whole footprint apart, raft
+  included, and even at the minimum value the pieces stayed far apart: the raft is
+  the part that takes up most room on the plate and it is the one that touches the
+  neighbour first.
+
+  "Raft overlap" takes it out of the count. It is sacrificial material, two
+  interpenetrating rafts actually give a stiffer base, and the raft extends a
+  millimetre and a half beyond the feet of the supports: between two neighbours
+  that is two or three millimetres of plate that become usable again.
+
+  "Supports overlap" also removes the supports, which already overlap when you
+  place them by hand, and once fused they break when you separate the pieces. It
+  only becomes available after the first one, because supports sit above the raft:
+  when two supports touch, their rafts are already touching.
+
+  THE MODEL HAS NO TICK, and that is the point. Two models that touch come out of
+  the printer as one piece, and that distance is always defended.
+
+  The warning follows the ticks: turning them on, the pieces whose rafts touch
+  stop being flagged immediately, without waiting for the next Arrange. And the
+  plate edge stays a matter of the real footprint, raft included: two pieces may
+  interpenetrate, the plate may not.
+
+- THE PLATE COMMANDS ARE IN THE TOP BAR, where New, Load and Save Project are in
+  the editor: Add .ags, Arrange, Clear Plate, Reset View, Open Plate, Save Plate.
+  They used to be at the bottom of the print parameters panel, which is why this
+  part felt like a settings window instead of the place where a print is prepared.
+
+- THERE IS ONE BUTTON THAT PRINTS, at the end of the bar and set apart from the
+  others: "Export Print File". Everything else prepares, that one concludes.
+
+- THERE IS A "PRINTER" HERE TOO. These are the same printer settings as in the
+  editor panel, machine, preset, sizes, resolution, because the machine is changed
+  precisely while looking at the plate. Change it and the plate adapts to the new
+  sizes at once. The rest of the settings stay in the editor: they are not needed
+  to prepare a print.
+
+- THE PRINT FILE IS MADE IN ONE PLACE. "Export SL1S" is no longer under "Export
+  Mesh": in there now you only find mesh formats, STL, OBJ, 3MF. They were two
+  different routes to the same thing, with two names that did not resemble each
+  other, and next to them was "Plate" which led to the same place for the third
+  time. To print you go through "Print", and in there through "Export Print File".
+
+- THE BUTTON TO GO IN AND THE BUTTON TO COME OUT ARE IN THE SAME PLACE, first on
+  the left: "Print" in the editor, "Editor" in the print room. Before, "Plate" was
+  second to last and on the way back the button jumped to the other side of the
+  bar.
+
+- AND IT IS THERE WITH "USE STANDARD FILE BUTTONS" ON TOO. With that tick the
+  plate button was simply absent, and there was no "Export SL1S" in the menu
+  either: anyone working that way had no way at all of preparing a print.
+
+- THE EDITOR KEYS NO LONGER REACH THE PRINT ROOM. The mouse was already fine, the
+  keyboard was not: pressing Delete in there, thinking you were removing a piece
+  from the plate, deleted the supports in the editor scene, which at that moment
+  is not even being drawn, so nothing appeared to happen and you found out much
+  later. Now in there the delete key removes the selected PIECE and Escape
+  deselects it; the camera views and the cutting line remain, and the rest does
+  nothing.
+
+- "ADD CURRENT" PUTS THE OPEN PROJECT ON THE PLATE, without going through a file
+  you have to hunt down. It is greyed out if there are unsaved changes, and it
+  says why: the plate reads the file on disk, and that would be older than what
+  you have in front of you.
+
+- ARRANGE FITS MORE PIECES IN, AND THE TWO DISTANCES CAN BE CHOSEN. The margin
+  towards the plate edge and the distance between one piece and another were the
+  same number, fixed at 3 mm, and they are not the same thing: the edge is a strip
+  of the machine you choose not to use, the distance is how close you accept two
+  pieces ending up. They are now two sliders in the panel.
+
+  The edge costs far more than it looks. On a 134 x 76 mm plate, three millimetres
+  of edge throw away 1224 square millimetres, which on a test plate with seven
+  pieces is as much as the piece that was left out. With the new values, 1.5 mm gap
+  and 1.5 mm edge, all seven pieces fit and take up 90 percent of the plate; with
+  the old ones six of them fitted. If your printer has a dirty edge, the slider
+  goes up and you know what it costs.
+
+- AND ARRANGE SEES THE SHAPES MORE CLOSELY. To find a place it does not use the
+  real footprint, which would have hundreds of sides and make the search extremely
+  slow, but a polygon that contains it. That polygon had sixteen sides, and that
+  number was chosen on a plate where the pieces all fitted anyway: there it could
+  not go wrong, and indeed the only thing deciding it was speed. On a full plate it
+  did go wrong. There are now twenty four sides.
+
+  On a plate with seven miniatures on 134 x 76 mm, where six used to fit, all
+  seven now fit, and it takes less time than before, not more: a more faithful
+  outline collides less, so the pieces settle sooner and there are fewer attempts
+  to make. On wide plates, where all the pieces already fitted, you wait about
+  twice as long but the group comes out tighter.
+
+- RESET VIEW LOOKS AT THE PLATE FROM ABOVE. It put the eye exactly at plate height,
+  and all you saw of the plate was its edge: the camera is now thirty degrees
+  higher, which is also the framing the room opens with.
+
+- THE BACKGROUND IS DARKER AND SLIGHTLY WARMER, to make it obvious at a glance
+  that you are in another room. The step is one of brightness before hue: in there
+  orange is already the plate and red means "outside the print volume", and one
+  hue has to mean one thing only.
+
+- YOU NOW CLICK THE PIECE. To select a model on the plate you had to go and grab
+  its raft, or the outline drawn on the ground: clicking on the model did nothing.
+  The program looked at where the pointer touched the PLANE of the plate, and that
+  point coincides with the piece only if you look straight down at it; as soon as
+  the camera drops it falls much further back. The pointer now looks for the real
+  piece first, and among several overlapping pieces takes the one in front. The
+  raft and the supports stay clickable as before.
+
+- PIECES CAN BE PUT MUCH CLOSER TOGETHER. The footprint drawn on the ground around
+  each piece was a "stretched" outline: an elastic band pulled around the piece,
+  cutting straight across every recess. The raft of a supported piece is lobed,
+  with deep recesses between one cluster of supports and the next, and two pieces
+  that could mesh like gear teeth stopped elastic against elastic, with an empty
+  hole between them.
+
+  The footprint now follows the real outline, recesses included. On three supported
+  miniatures it is 9 to 21 percent smaller, and two copies of the same piece, one
+  with a yoke on the shoulders, come together at 18.3 mm instead of 22.1: almost
+  twenty percent less.
+
+  It applies when you move them by hand and when the program looks for a place for
+  a newly added piece; the Arrange button does not go through it yet, it will
+  later.
+
+- SHIFT AND WHEEL ROTATES BY SIX DEGREES, no longer fifteen. Fifteen was a step for
+  turning a piece round, not for adjusting it: to put a shoulder where you wanted
+  you always skipped one too many. The plain wheel is still the zoom, and the
+  numeric field and the 90 degree buttons in the panel are where they were.
+
+- .agsplate FILES REOPEN IN A FRACTION OF THE TIME. The archive now contains the
+  mesh already hollowed and drilled: reopening the plate no longer rebuilds the
+  shell nor redoes the holes, piece by piece. On a hollow, drilled torso the
+  loading goes from about 15 s to about 3.3. And it is not only speed: that
+  reconstruction was not reproducible, so a plate arriving from another computer
+  was not exactly the one the person who prepared it had. Now it is. (Supports,
+  bracings and raft are still rebaked: they cost far less. Plates saved before do
+  not have the frozen mesh and behave as always.)
+
+- The slice shows on the plate too: lowering the cutting line opens the pieces and
+  the section fills with white, with supports and raft solid and the model
+  semi-transparent, as in the editor. While you drag a piece the section stays
+  still and updates as soon as you let go.
+
+- The cutting line starts at the top and the two sliders cover the real height of
+  the pieces. Before it inherited the editor's travel, and the plate opened with
+  the pieces already cut off and a layer count that meant nothing.
+
+- The GROUND FOOTPRINTS of the pieces rotated the opposite way to the piece.
+
+- ARRANGE INTERLOCKS THE SHAPES, INSTEAD OF LINING UP BOXES. Before it laid the
+  pieces out in rows, and the depth of a row was that of the deepest piece in it: a
+  long piece ate the row, what was left of the plate was not enough for a second
+  one, and the rest of the pieces stayed out. On a six piece test plate, 219x123
+  mm, it placed three. Now every piece looks for the lowest, leftmost place where
+  it touches nobody, trying twenty four orientations and thousands of positions,
+  and the outline counts for what it is instead of for the rectangle containing it:
+  on the same six pieces it places all six, in a little over half a second. While
+  it works there is a progress bar in the middle of the screen, and the scene keeps
+  turning.
+
+- ARRANGE CAN ROTATE THE PIECES, and there is a "Rotate" tick next to the button to
+  decide whether it may. That is where almost all the gain is: without rotating,
+  five of those six pieces fit. Rotating about the vertical axis does not touch the
+  supports, which stay as valid as they were; it does change the orientation of the
+  piece with respect to the peel, so anyone who turned the pieces on purpose
+  unticks it and finds them as they left them.
+
+- ARRANGE NO LONGER LEAVES PIECES ON TOP OF EACH OTHER. The pieces that did not fit
+  stayed where they were, and where they were somebody else now was: the plate came
+  out of Arrange with overlaps, which printed are two pieces fused together, and
+  nobody said so because the message counted the rejected pieces and not the
+  collisions. They now end up in a row in front of the plate, outside the edge,
+  where they can be seen and touch nothing.
+
+- TURNING "ROTATE" ON CAN NO LONGER FIT FEWER PIECES. On a narrow plate the
+  opposite of what you expect happened: a deep piece only fits lying down, lying
+  down it takes the whole width, and so it went in and nothing else, while without
+  rotation it stayed out and two others went in instead. Arrange now tries several
+  ways of laying things out and keeps the one that places the most pieces, and
+  among the ways it tries there is always the one that rotates nothing: rotation
+  can only improve the result or leave it as it was.
+
+- AND IF THE SEARCH STOPS EARLY, IT SAYS SO. There is a limit to the work Arrange
+  may spend, so as not to grind forever on a plate full of pieces. When that limit
+  triggers the status line says so, instead of letting you believe the plate is
+  full: a plate where the search stopped and a plate that is genuinely full are two
+  different things, and looking at it you cannot tell them apart.
+
+- EXPORT AND "SAVE PLATE" START FROM THE RIGHT FOLDER. They offered the folder of
+  the model open in the editor, which while you are working on the plate is a
+  project that has nothing to do with it, or none at all, in which case they ended
+  up in the program's working folder inside AppData, where nobody goes looking for
+  their files. The folder is now that of the .agsplate the plate comes from, or,
+  for a plate built by adding pieces, that of the first piece: someone who supports
+  a model and puts it on the plate finds the print file next to the scene.
+
+- AN .agsplate DRAGGED ONTO THE WINDOW OPENS THE PLATE. Before it only worked if
+  you were already in plate mode; from the editor it answered "Unsupported file
+  type", despite being a Runebrace file. It now enters plate mode by itself and
+  opens it, as a double click does.
+
+- AND DOUBLE CLICKING AN .agsplate ALREADY WORKS, but Windows has to be told once:
+  right click the file, "Open with", "Choose another app", browse to
+  Runebrace.Console.exe and tick to always use it. Note that the association points
+  at the folder Runebrace is in now: when you install a new version in another
+  folder, it has to be done again the same way.
+
+
+THE .CTB IS WHAT CHITU MACHINES PRINT
+
+- THE FILE WAS REJECTED BY THE ELEGOO SATURNS. The machine listed it and then
+  answered "unknown file format", with a green square instead of the preview.
+  Comparing it with a .ctb produced by Lychee for that same machine, on the exact
+  same 1246 layer plate, showed that everything matched except four fields: the two
+  configuration blocks were SHORTER than they should be, 48 and 64 bytes instead of
+  60 and 76.
+
+  The reason this breaks everything is that the printer firmware reads a fixed size
+  structure: reading 60 from a block that has 48 takes the last twelve bytes from
+  the next one, that is garbage, and at that point it rejects the file. The blocks
+  are now the right size, and the same machine that rejected it has printed.
+
+- THE PREVIEW INSIDE THE PRINT FILE NOW SHOWS THE PIECE. Before it was a uniform
+  grey rectangle, a placeholder, and on some machines you saw a coloured square
+  instead of the model. It is now the outline of the piece seen from the side,
+  taken from the slicing itself while the file is written: you recognise the model
+  and you also see how it sits on the plate.
+
+- AND THE PREVIEW SIZES ARE DECIDED BY THE PRINTER, like the resolution and the
+  mirrors already are. A Saturn wants them 210x210 and 200x200 pixels, other ChiTu
+  machines 400x300 and 200x125, and firmware expecting one size and finding another
+  draws an empty square. They are now in the machine preset.
+
+
+ON macOS AND LINUX RUNEBRACE IS A REAL APPLICATION
+
+- NO MORE setup.sh. Before you downloaded an archive and had to open the terminal
+  to make the program executable and sign it by hand. There are now real packages:
+
+    macOS            a DMG: open it, drag the icon onto Applications, done.
+    Debian, Ubuntu   a .deb: install it and Runebrace appears in the menu with its
+                     icon, like any other program.
+    other Linux      an AppImage, a single file to make executable and run.
+
+- The two Linux formats are deliberate. The AppImage runs on any distribution but
+  to start on a double click it wants libfuse2, which recent versions of Debian and
+  Ubuntu no longer ship; the .deb depends on nothing. They are the same program,
+  only the wrapper differs.
+
+- ON macOS, ON FIRST LAUNCH, THE SYSTEM WARNS that it cannot verify the developer.
+  The application is properly signed, but Apple's notarisation service on our
+  account is not active yet. You open it from System Settings, Privacy and
+  Security, pressing "Open anyway": once only, then it starts on a double click
+  like every other program.
+THE .GOO AND THE .PRZ NOW HAVE A PREVIEW
+
+- THE PREVIEW INSIDE THE .GOO WAS AN EMPTY BOX. On the printer's "File information"
+  screen, instead of the model you saw a rectangle of a single colour: with ten
+  files on the stick you cannot tell which one you are about to print. There is now
+  the outline of the piece, the same one the .ctb already has. It applies to the
+  Phrozen .prz too, which is the same format with a different extension.
+
+- IT IS NOT A RENDERING: it is the outline seen from the side, taken from the
+  slicing itself while the file is written. You recognise the model and you see how
+  it sits on the plate, raft included.
+
+- AND THERE IS NOW A CHECK THAT NOTICES. The verification that runs by itself after
+  every export also looks inside the preview, and stops if it is a single colour.
+  Before, that preview was formally impeccable, right sizes, bytes in the right
+  place, and indeed no check had ever seen it: a tester saw it, looking at the
+  screen of his printer.
+
+- SEEN ON A REAL PRINTER. The "File information" screen of an Elegoo shows the
+  outline of the plate, raft included. It is not a rendering of the model: if you
+  expect the three quarter image other programs produce, that is not there yet.
+
+- EXPORTING TO .PRZ FROM THE COMMAND LINE produced an archive of PNGs with the
+  Phrozen extension instead of a GOO file. It only affected the command line, where
+  the format is chosen from the file name: in the export window the printer decides
+  it and the defect did not show. Fixed.
+
+
+THE ELEGOO SATURN 3 IS THERE, AND THE SATURN S
+
+- THE SATURN 3 IS NOT THE 3 ULTRA. Same screen, same plate, same pixel, but the
+  usable height is 250 mm instead of 260, and indeed Lychee keeps them as two
+  separate printers too. Only the Ultra was there: now both are.
+
+THE ELEGOO SATURN S IS IN THE LIST
+
+- IT WAS MISSING, and the difference from the first series Saturn is not a detail:
+  196.7 x 122.9 against 192 x 120. A plate prepared for the S was rejected when
+  choosing the only "Saturn" entry there was, because it overran by two millimetres
+  in depth.
+
+AN STL WITH NO SUPPORTS RESTS ON THE PLATE
+
+- BEFORE IT SANK. Dragging onto the plate a piece that needs no supports, or any
+  STL out of a modeller, half of it ended up under the glass. A twenty millimetre
+  cube sank ten millimetres into the plate.
+
+- THE REASON: a piece exported from a modeller is centred on its origin, while one
+  coming out of another slicer already has its raft resting at zero. We put both
+  where they were, and it worked by accident only for the second kind. Now, after
+  standing the piece up, its lowest point is brought to zero: anything already in
+  the right place does not move by a micron.
+
+
+A RAFT THAT OVERHANGS NO LONGER BLOCKS THE EXPORT. The edge check looks at the
+  model and the supports; if the only thing sticking out is the slab, it prints and
+  a warning is enough, because that corner is cut off by the edge of the screen and
+  it is sacrificial material.
+
+  The case that brought it out: a Lychee plate of 34 million triangles was rejected
+  over 2.4 mm. What stuck out was TWENTY EIGHT triangles out of 34 million, all
+  below 1.2 mm in height, that is the zigzag corners of two rafts. Models and
+  supports were inside with five millimetres to spare: it was a print that works,
+  rejected over a corner of slab.
+
+- AND THE PLATE NOW SAYS BY HOW MUCH A PIECE OVERRUNS, in millimetres on the two
+  axes, next to the plate size. Before it only said that it overran: with a single
+  piece there was nothing left to move and nothing to understand. And if the piece
+  is wider than the plate itself it says so, because there it is not a matter of
+  moving it but of the preset.
+
+
+THE PARAMETERS WINDOW FOLLOWS THE PRINTER
+
+- THE ROWS YOUR PRINTER DOES NOT USE ARE NOW GREYED OUT ONE BY ONE. Before they
+  were all greyed out together or all left active, and with four formats that was
+  starting to lie: some machines have the second lift stage and not the separate
+  waits, and the other way round. The defect was silent, because a value set in a
+  row the format does not carry disappeared without saying so.
+
+- THE SPEEDS ARE SHOWN IN THE MACHINE'S UNIT: mm per second for the Anycubic, mm
+  per minute for the others. It is the unit you see on the printer panel, so typing
+  6 having read 6 means the same thing. The stored value does not change, so a
+  preset does not change meaning when moving from one printer to another.
+
+
+THE STL CAME OUT WITHOUT THE BRACINGS
+
+- SAVING AN .STL WHILE WORKING IN LINE VIEW, the bracings did not end up in the
+  file. Line view (key W) turns the bracings off so they are not recomputed on
+  every support placed, and whoever exports has to rebuild them before writing.
+  Three of the four geometry saves did that, the .stl did not. Reported by a
+  tester, who had also worked out the rule on his own: it happens if you never
+  leave line view.
+
+- THE SAME APPLIED TO THE RAFT: with the raft update suspended, the .stl came out
+  with the old one, that is with supports resting on nothing.
+
+- THE PRINT FILE WAS NOT AFFECTED. The .ctb, the .goo and the .sl1s already rebuilt
+  the bracings: what gets printed was right even before. This concerned the .stl,
+  and therefore anyone taking the supported piece into another program.
+
+
+THE ANYCUBIC PHOTON P1 MAX HAS ITS OWN FORMAT
+
+- RUNEBRACE EXPORTS .PP1M, which the P1 Max reads from a stick with no conversion.
+  Choosing that printer in the list sets the format by itself, as for the other
+  machines that have a native one.
+
+- IT IS A DIFFERENT KIND OF FORMAT FROM THE OTHER TWO. Not a single binary but an
+  archive, containing the machine profile, the parameters layer by layer and one
+  image per layer with sixteen grey levels instead of 128 or 256. On an antialiased
+  edge this shows: the grey step is wider. What actually cures is identical, and it
+  was compared pixel by pixel with the same plate exported to .sl1s.
+
+- WHY NOW. Because a tester who is about to receive that printer asked for it,
+  saying that slicing in Anycubic Workshop 4.18 is extremely slow. On his own
+  plate, 1050 layers of 99 million pixels, we take less than a second.
+
+- HOW IT WAS WORKED OUT. From a file produced by Anycubic Photon Workshop for that
+  machine, unrolled field by field: the layer bytes we write are IDENTICAL to its
+  own, verified by redoing five layers of its file and comparing them. Still to be
+  proved in an actual print are the lift times, which are the only field whose
+  effect cannot be seen by looking at the file.
+
+- AND THE PRINTER NOW TAKES IT. The first versions were rejected before even being
+  opened: the P1 Max verifies the integrity of the file before printing, and ours
+  stopped there. Two things were missing. The first is that every part of the
+  archive wants its own signature, which the format declares nowhere. The second is
+  a field of the resin profile we were not writing: out of thirty six differences
+  between our profile and one written by Anycubic, it is the only one that matters.
+
+- AND IT PRINTS. Since 27 August 2026 a P1 Max has been working on our .pp1m files,
+  not just accepting them: the full round trip, from the stick to the piece, has
+  been done.
+
+- HOW IT WAS FOUND, because it is the method and not luck. Not by fixing the file
+  that failed, but by breaking the one that works: we took the file that prints on
+  a tester's machine, and grafted one of our parts into it at a time, halving each
+  round. Every round also carried a control file, that is his own left intact, and
+  that is what tells you whether the data or the instrument is at fault. Four rounds
+  in an hour on the real printer, and at the end one field was left.
+
+- THE VIEWER OPENS IT. RunebraceSliced reads .pp1m files, both ours and those from
+  Photon Workshop, and recognises them even if the file has been renamed.
+
+- AND IT NOW CARRIES THE PRINT PARAMETERS TOO. Exposures, light off time, waits,
+  transition layers and the TWO stage lift, what Photon Workshop calls Step0 and
+  Step1: what you set in the export window reaches the printer. Before, the file
+  only carried the exposures.
+
+- WHERE THEY ARE, BECAUSE IT WAS NOT OBVIOUS. The block the format keeps layer by
+  layer has two fields that look like the lift and are not: they stay the same even
+  when all the speeds change. The real parameters are in the resin profile, and this
+  was found by comparing two files of the same piece sliced with different lifts.
+  The speeds there are in millimetres per SECOND, not per minute: we do the
+  conversion.
+
+
+YOU CAN WORK INSIDE THE HOLLOW PIECE
+
+- THE "INTERIOR" TICK SHOWS THE CAVITY INSTEAD OF THE OUTER SHELL. On a hollowed
+  piece the internal supports were placed blind: the outer shell covered everything
+  and the click landed on it. Turn Interior on and the outer shell becomes a ghost,
+  the cavity is seen from inside, and the click lands where you are looking. It is
+  the first half of Lychee's Exterior/Interior, asked for by people coming from
+  there.
+
+- THE CLICK LANDS ON THE CAVITY, NOT ON THE NEARBY WALL. Making a surface
+  transparent is not enough to be able to go through it: the aiming has to change
+  too, or you see one thing and hit another.
+
+- THE HOLES ARE VISIBLE FROM INSIDE TOO, and stay solid while you work in there.
+  Before they disappeared as soon as you entered the cavity, which is the moment
+  they are needed.
+
+- IT IS TURNED ON AND OFF WITH Ctrl+I, and the tick has moved up onto the "Use Tip
+  Sphere" row, where you find it without looking.
+
+
+THE PLATE SAYS WHAT IT IS DOING
+
+- SUPPORTS ON THE PLATE ARE DRAWN AS IN THE EDITOR, so on the cutting line you see
+  their cross section instead of a round cylinder. The slice shows the pixels that
+  reach the print, and this is true in both places in the same way.
+
+- LOADING A PLATE SAYS HOW FAR IT HAS GOT. Importing several pieces or opening an
+  .agsplate could look like a freeze: the progress now counts the pieces, one by
+  one, and you see which one it is working on.
+SHORTCUTS ARE NO LONGER LOST
+
+- SHORTCUTS ADDED AFTER THE LAST SAVE DISAPPEARED. Anyone who had customised their
+  keys found themselves without the new ones, because on loading only the user file
+  counted and the program's additions were thrown away. The two are now added
+  together: yours stay yours, the new ones appear.
+
+- SUPPORTS CAN ALSO BE PLACED ON THE RIM OF A TRIANGLE SELECTION, which used to be
+  a single shortcut and is now a choice.
+
+
+THE CUT PANEL READS BETTER
+
+- THE TICK THAT TURNS THE TOOL ON HAS MOVED UP IN FRONT OF THE TITLE, the method
+  selector has gone because only one was left, and the cut points light up when
+  they are needed. Fewer things on screen and in the order in which they are used.
+
+
+MICROSCOPIC ISLANDS CAN BE HIDDEN
+
+- THERE IS A THRESHOLD IN PIXELS NEXT TO DETECT. Some models have a dense texture
+  that generates hundreds of islands one or two pixels across, and the real ones
+  end up lost among them. Type a number in that field and islands smaller than that
+  are no longer shown. Zero shows them all, and is the starting value.
+
+- THE FILTER ACTS AFTER THE DETECTION, not inside it. Changing the number does not
+  redo the slicing: the search stays complete and only what is shown changes, so
+  you can try a value and see the effect on the model immediately.
+
+- YOU CAN ASK FOR A PRINTER THAT IS NOT IN THE LIST. In the printer settings, which
+  is the point at which you discover yours is not there, a button sends the request.
+  The window shows in full what will be sent, that is the name you type and the
+  sizes that are already on screen, and asks for a contact only if you want to be
+  told when that machine is added. The more people ask for the same one, the sooner
+  it arrives.
+
+- THE THRESHOLD IS NOW REMEMBERED. It restarted from zero on every launch, so
+  anyone who had found a good one for their printer typed it again every time. It is
+  now stored in the settings, and saves itself as soon as you stop changing it.
+
+- THE FIELD IS AS TALL AS THE BUTTONS NEXT TO IT AND RESPONDS TO THE WHEEL. Before
+  it was shorter than the others and could only be changed by typing into it. In the
+  same bar "ADD SUPPORTS" was cut off mid word, because the two wide buttons split
+  the space equally without looking at how long the text going into them is.
+
+
+THE SLICE YOU SEE IS THE ONE THAT PRINTS
+
+- THE PREVIEW AND THE EXPORT USE THE SAME SLICER. They were two different pieces of
+  code, and it showed: on an Anycubic Photon P1 Max two dark lines appeared on the
+  white slice that were not in the print file. Slicing all 884 layers of a real
+  scene at 11520x8640 the black lines were zero.
+
+- THEY BELONGED TO THE PREVIEW, which still went through the old ray engine: one
+  ray per pixel row, and where a ray grazes along an edge the intersection count
+  comes out odd and the row stays empty. They only showed with certain printers
+  because which rays fall on the edge is decided by the spacing between rows, that
+  is the plate size divided by the resolution.
+
+- A PREVIEW THAT INVENTS A DEFECT IS WORTH LESS THAN NOTHING, because it makes you
+  doubt the slicer exactly when it works. The slice you look at is now a real layer,
+  at the height at which it will actually be printed, and not a plane halfway
+  between two.
+
+
+IN INTERIOR VIEW A YELLOW COPY OF THE MODEL NO LONGER APPEARS
+
+- ANYONE WORKING IN INTERIOR VIEW WITH THE SUPPORTS DRAWN AS LINES saw a yellow,
+  shrunken copy of the piece appear, resting on the last support placed, growing as
+  internal supports were added. It takes that precise combination to be seen, which
+  is why it stayed there for a long time: anyone working with supports drawn
+  normally never meets it.
+
+- WHAT WAS HAPPENING. The piece, when it is semi-transparent, is drawn AFTER the
+  supports instead of before. But it did not choose for itself what to draw with:
+  it relied on whatever had been left set, and the line supports had meanwhile left
+  the drawing configured for the little sphere that marks the tip of a support. The
+  piece inherited that configuration: the yellowish colour of the tip, and its
+  position and its scale.
+
+- NOW EVERY DRAWING SETS ITS OWN, instead of trusting how whoever came before left
+  it. The same carelessness existed in a second place, which was fixed at the same
+  time before it bothered anybody.
+
+
+ISLANDS NO LONGER DISAPPEAR WHEN THE ROTATION IS TURNED OFF
+
+- YOU TURNED ON THE ROTATION HANDLE, turned the pieces, looked for the islands, the
+  markers appeared. Then you turned the handle off and the islands disappeared, even
+  though they had been found on the already rotated piece.
+
+- THE PROGRAM WAS CHECKING THE WRONG THING: on leaving the rotation it compared how
+  the piece was placed with how it was placed when you WENT IN, and if anything had
+  changed it threw the islands away to be safe. But someone who rotates and then
+  looks for islands computed them afterwards, and they are right.
+
+- THE ISLANDS NOW KNOW WHICH ORIENTATION THEY BELONG TO. They are thrown away only
+  if the piece has been turned AFTER they were found, which is the only case in
+  which they no longer mean anything.
+
+
+ARRANGE NO LONGER RUINS AN ALREADY TIDY PLATE
+
+- ON A PLATE PREPARED BY HAND, with thirteen pieces all inside and no overlaps,
+  pressing Arrange pushed one of them out. Anyone who had spent time interlocking
+  them found their work made worse by a button that was supposed to help.
+
+- ONE POSSIBILITY WAS MISSING FROM THOSE THE PROGRAM TRIES: leaving things as they
+  are. The automatic arrangement tries several routes and keeps the best, but none
+  of those routes was "touch nothing", so the comparison happened only between
+  rearrangements and the starting plate was not in the race.
+
+- THE PIECES AS THEY WERE ARE NOW IN IT TOO. They win if they keep more pieces
+  inside, or if they keep as many but more tightly packed. A valid but scattered
+  plate is still tightened as before, which is what you expect when pressing the
+  button: what can no longer happen is that a piece that was inside ends up outside.
+
+
+THE "ROTATE" TICK NO LONGER EMPTIES THE PLATE
+
+- TURNING IT ON COULD FIT FEWER PIECES, not more. On a real thirteen piece plate,
+  the kind that fills the platform up to eighty percent, without rotation twelve
+  fitted and with rotation nine. Anyone turning it on saw the plate empty out with
+  no way of understanding why.
+
+- TWELVE NOW FIT IN BOTH CASES, and the search takes no longer than before.
+
+- WHAT WAS HAPPENING. The arrangement tries several routes and keeps the best, and
+  among them there is always the one that leaves the pieces as they are: that is
+  where the promise that rotating cannot make things worse came from. But the search
+  time was split equally between the routes, so adding one took the air away from
+  all of them, and precisely the one that upholds the promise stopped halfway.
+
+- THE ROUTES THAT DO NOT ROTATE NOW HAVE THE SAME TIME THEY WOULD HAVE ON THEIR
+  OWN, and they are tried first. On a plate that resolves immediately the others do
+  not even start.
+
+
+THE FILES FOR THE PHOTON P1 MAX ARE A FIFTH SMALLER
+
+- A FULL PLATE GOES FROM 125 TO 98 MEGABYTES, and a single piece from 10.2 to 7.9:
+  22 percent less both times, without taking anything out of the file.
+
+- AND IT COSTS NO TIME. The archive is written while the piece is being sliced, in
+  parallel, and compressing better is still faster than the slicing: the total time
+  of an export has stayed the same to the hundredth of a second.
+
+- IT MATTERS BECAUSE THE SLOW PART IS NOW SOMEWHERE ELSE. A tester with the P1 Max
+  pointed out that the printer takes longer to copy the file into its own memory
+  than Runebrace takes to slice it. When the bottleneck moves there, a fifth less
+  file is a fifth less waiting.
+
+
+THE EXPORT BAR REACHES THE END WHEN IT IS REALLY FINISHED
+
+- ON A LARGE PLATE IT SAID 100% AND THE PROGRAM CARRIED ON for another ten seconds
+  or so, still showing the rate and the layer number. It looked stuck with the work
+  declared done.
+
+- 100% MEANT "LAST LAYER SLICED", and quite a lot was still to come: the last layers
+  to write to disk, closing the file, and checking the file just written. On a one
+  gigabyte archive that check reads everything back and re-verifies the signature of
+  every part: those are real seconds, not an instant.
+
+- EVERY STAGE NOW HAS ITS SHARE OF THE BAR and says what it is doing. The rate in
+  layers per second and the estimated time remaining are only shown while slicing:
+  afterwards, "0 seconds left" would be a lie, because how long the closing takes is
+  not known before doing it.
+
+- THE FILE CHECK HAS NOT BEEN REMOVED, and it is what costs those seconds. Three
+  print format defects in a row were discovered by
+  people printing, one round at a time, and every time the file was already wrong
+  the moment it came out. What needed fixing was that the check should be declared
+  instead of looking like a freeze.
+
+
+PIECES ON THE PLATE ARE TURNED BY DRAGGING A RING
+
+- BEFORE THEY ROTATED IN SIX DEGREE STEPS with Shift and the wheel, fifteen clicks
+  for a quarter turn. Now, in the print room, the rotation mode key turns on a ring
+  around the chosen piece: you grab it and drag.
+
+- ONLY THE ANGLE COUNTS, NEVER THE DISTANCE FROM THE CENTRE. Once you have hold of
+  the ring you can move as far away as you like, and the further away the finer the
+  movement becomes, because the same fraction of a turn is spread over more space.
+  There are no steps and no notches: you turn it by eye, as you would with your
+  hands.
+
+- TWO RAYS SAY HOW MUCH YOU ARE TURNING. One stays where you pressed, the other
+  follows the mouse: the angle between the two is the rotation you are applying, and
+  it reads without looking at the number. The number is there anyway, and it is the
+  change, not the absolute orientation.
+
+- IT TURNS ONLY ABOUT THE VERTICAL, and that is not a limitation left there out of
+  laziness: it is the reason the supports stay valid. Turning a piece about the
+  vertical axis does not change the angles of the branches, does not change how far
+  the tips sink in, does not change any height, because gravity stays where it is.
+  Tilting it on the plate, on the other hand, would make all its supports wrong
+  without saying so.
+
+- THE RING IS THE SAME AS THE EDITOR'S, in shape and colour: anyone who has already
+  used the rotation on the model recognises it, instead of learning a second way of
+  saying the same thing.
+
+
+THIN, SLANTED ISLANDS ARE NOW SEEN
+
+- A LONG AND CLEARLY VISIBLE TONGUE COULD GO UNFLAGGED. To decide whether a blob in
+  a layer rests on the one below, Runebrace took the RECTANGLE containing it and
+  looked inside it for any filled point of the previous layer, without asking
+  whether that point was actually underneath the blob.
+
+- THE ERROR ALWAYS WENT THE SAME WAY: it declared supported something that was not,
+  that is it HID islands, and never invented any. On a roundish blob the difference
+  is almost nil, which is why it did not bother anyone. On a thin and SLANTED tongue
+  it is everything: its rectangle covers a huge area compared with the little it
+  occupies, and any piece of wall in there is enough.
+
+- THE POINTS OF THE BLOB ARE NOW LOOKED AT, one by one. On a real scene the islands
+  found go from 30 to 31, and the one that appears is the second largest in the
+  whole piece. On two other scenes the count does not change by one: the new check
+  does not invent islands, it finds the ones that were there.
+
+- AND IT IS FASTER TOO, because the points of a blob are fewer than those of the
+  rectangle containing it, and almost all of them resolve on the first row.
+
+
+THE WHITE SLICE FOLLOWS THE CUTTING LINE AGAIN
+
+- RAISING THE CUTTING LINE, THE SLICE STAYED STILL. Not for one layer: for five in a
+  row, while the supports drawn on the same slice moved normally. They were two
+  halves of the same image computed at two different heights.
+
+- THE SLICE WAS SLICED AT THE STEP OF THE PRINT PARAMETERS, while the line moves at
+  the step of the settings. And that value was not even the chosen one: until the
+  parameters window was opened it stayed at 0.05, even for someone who had set
+  everything to 0.01.
+
+- THE TWO STEPS ARE NOW THE SAME, in the editor and in the print room: every click
+  of the cutting line shows a different layer.
+
+
+THE NEW VERSION NOTICE ALWAYS ARRIVES
+
+- IT USED TO DEPEND ON A SERVER THAT COULD BE DOWN, and when it was up it could
+  announce a test version that was not downloadable anywhere. The available version
+  is now stated by the site, which is always there, and it is the same one that
+  feeds the downloads page: one place only, so there cannot be two different
+  answers.
+
+
+OTHER FIXES
+
+- HOLES: WHEN THE OPERATION FAILED, THE PROGRAM SAID IT HAD SUCCEEDED. Applying
+  holes on problematic geometry the subtraction can fail, and in that case Runebrace
+  behaved correctly, it kept the mesh without holes and stayed in edit mode, but it
+  wrote "Holes applied" anyway, covering the error message it had just given itself.
+  You saw a declared success and a program that appeared to be stuck. The success
+  message now only appears if the holes are really there, otherwise what stays
+  written is that the subtraction failed.
+
+- THE VOXEL LASSO STARTED FROM THE WRONG POINT. If the window lost focus while the
+  mouse was moving, switching to another program and coming back, the first point of
+  the lasso stayed where the cursor was before leaving, and you saw a segment that
+  did not follow the mouse. The lasso now starts from the real position at the
+  moment of the click, and the same fix applies to the other tools that started from
+  the same data.
+
+
+TO BE TESTED IN PRINT
+
+The print files have now been through real printers. The .goo was printed on an
+Elegoo Saturn 4 Ultra at the first attempt, the .ctb was accepted by a first series
+Elegoo Saturn after the configuration block fix described above, and the .pp1m has
+been printing on an Anycubic Photon P1 Max since 27 August.
+
+Still to be tested are the other machines that declare .ctb as their native format,
+that is Saturn 2, Phrozen Sonic Mini 4K and Phrozen Mega 8K: that fix was made
+against the reference of ONE machine, and it is not certain the others want exactly
+the same values. If a file were rejected, what is needed is a .ctb produced by
+Lychee or Chitubox FOR THAT printer to compare with ours: it is the way this problem
+has been solved twice out of twice.
+
+And there is a second thing to test now: the slicing has changed from top to bottom,
+model, supports and file writing. The images have been compared with the previous
+ones and the differences are the ones described above, but a piece with tolerances
+already dialled in has to be printed: a fit that went together must continue to go
+together.
+
+And a third, concerning the plate: Arrange now ROTATES the pieces about the vertical
+axis. For the supports nothing changes and it can be proved: turning about the
+vertical touches neither the angles of the branches, nor how far the tips sink in,
+nor the heights, because gravity stays where it is. What changes is how the piece is
+placed with respect to the direction in which the layer peels off the bottom of the
+vat, and that is not something you can see on screen: a plate laid out by Arrange
+has to be printed and watched, to see whether the pieces come off as before,
+especially the wide ones placed crosswise. If it causes trouble, the "Rotate" tick
+comes off and Arrange leaves the orientations as you set them.
+
+
+THE ELEGOO MARS 5 ULTRA IS IN THE LIST
+
+- IT WAS MISSING, and with it all the Mars machines. Anyone who has one had to pick
+  somebody else's printer to unblock the export, and the file came out with that
+  one's resolution: the printed piece comes out the wrong size and nobody says so.
+  The entry is now there, 153.36 x 77.76 x 165 mm at 8520 x 4320, and choosing it
+  sets the format to the .goo that machine reads on its own.
+
+- THE MEASUREMENTS ARE NOT TAKEN FROM A DATA SHEET. They come from a file written by
+  Lychee for that machine and sent in by someone who owns one: plate and screen
+  confirm each other on a pixel of exactly 18 microns, in both directions. The same
+  test also verified the Elegoo Saturn 4 Ultra, which until now no real file had ever
+  checked, and the mirror direction turned out to be the one we were already writing:
+  nobody printing with it has ever printed mirrored.
+
+
+A PRINTER ADDED BY HAND REMEMBERS ITS FORMAT
+
+- ANYONE WHO CANNOT FIND THEIR MACHINE saves it with "Add to Presets". That preset,
+  however, was always born .sl1s, whatever format had been chosen in the export
+  window, and above all it PUT BACK the .sl1s: reselecting it from the printer menu
+  was enough for the earlier choice to disappear without a message.
+
+- THE PRESET NOW CARRIES THE FORMAT AND THE MIRRORING TOO, and the window that saves
+  it writes which ones it is saving, because those are two things chosen in another
+  window and whoever saves had no way of knowing they were taking them along. The
+  mirroring matters as much as the format: wrong, it does not make the file be
+  rejected, it makes the piece print reversed.
+
+
+OBJ FILES OPEN ON MAC, AND ARRIVE UPRIGHT
+
+- ON MAC AN OBJ WOULD NOT OPEN. The window said "Load Error: Error loading unmanaged
+  library from path: libassimp.dylib" and loaded nothing. The library that read OBJ
+  files does not exist for Macs with an Apple processor, and no file of that format
+  could get in. OBJ files are now read and written by Runebrace itself, with nobody
+  else's libraries: on a piece of 800 thousand triangles it takes less than half the
+  time it used to, and on Mac it works.
+
+- AN OBJ CAME IN LYING DOWN BY 90 DEGREES. Anyone exporting from Cinema 4D, Blender
+  or ZBrush writes the model standing on the Y axis; Runebrace instead treated it
+  like an STL, which stands on Z, and straightened it one time too many. It went
+  unnoticed because the only OBJ files coming back in were those written by Runebrace
+  itself, which were already turned. An OBJ now comes in as it is.
+- BEWARE OF AN OBJ EXPORTED BY AN EARLIER VERSION: those were written turned, and
+  now they come in lying down. Straighten them by hand once, or export the piece
+  again from this version.
+
+- WHERE ONLY AN STL COULD BE CHOSEN you can now also choose OBJ and 3MF: replacing
+  the model, the piece added to the plate, and importing a mesh for alignment. Also
+  the model a project finds again on disk: a project born from an OBJ now reloads it
+  instead of opening empty.
+
+
+UNDO IN TRIANGLE MODE UNDOES WHAT YOU DID LAST
+
+- CTRL+Z UNDID THE WRONG THING. Anyone who painted a selection, grew it with Select
+  Connected, put supports on it and then pressed Ctrl+Z saw the selection shrink
+  while the supports stayed where they were. The program only looked at whether
+  there was a selection gesture to undo, and not at when it had happened.
+
+- THE LAST THING DONE IS NOW UNDONE, whatever it is. Pressing Ctrl+Z three times
+  goes back in the right order: first the supports, then the growth, then the brush
+  stroke.
+
+- AND THE PANEL'S UNDO BUTTON NO LONGER MAKES THE PROGRAM QUIT. It happened when
+  that click took away the last remaining undo: an error window appeared containing
+  "Calling EndDisabled() too many times!" and there was no way back.
+
+
+"SUPPORTS ON AREA" SAYS WHY A POINT WAS LEFT UNCOVERED
+
+- ANYONE FILLING AN AREA AND SEEING IT EMPTY IN THE MIDDLE had no way of knowing
+  why. The message only said how many supports had been placed.
+
+- IT NOW NAMES THE REASONS: "42 placed, skipped 2113 facing up, 730 no path down". A
+  support only hangs from a surface that faces downwards and has a clear path to the
+  plate, and from these two figures it is immediately clear which of the two
+  conditions was missing.
+
+
+THREE REPAIR PRESETS, AT THE TOP OF THE LIST
+
+- THE MESH REPAIR WINDOW OPENED EMPTY: eight steps and twenty sliders, and no
+  starting point. At the top of the list, in bold, there are now Light, Medium and
+  Strong. You try those, and anyone who wants derives their own as before.
+
+- NONE OF THE THREE REBUILDS THE SURFACE. Voxel, remesh and decimation stay off:
+  those three redraw the model from scratch and eat the detail by the way they are
+  made, not by how they are set.
+
+- THE POINT WELDING ADAPTS TO THE MESH. A fixed value in millimetres cannot suit
+  everybody: between a piece out of ZBrush with decimate and one assembled in Blender
+  the smallest triangle changes by forty times, and the same tolerance that touches
+  nothing on the first fuses a fifth of the edges on the second. The three presets
+  compute it on the loaded model, and under the menu it says what it comes out to.
+
+- MEASURED, NOT DECIDED BY EYE. On a model full of errors, Light preserves 74 percent
+  of the sharp edges where the previous settings preserved 56 percent, and deletes
+  fifty times less geometry. On healthy pieces all three leave the surface where it
+  was, above 99 percent of the edges.
+
+
+TWO COMMANDS NO LONGER END UP ON THE SAME KEY
+
+- ANYONE WHO HAS USED RUNEBRACE FOR A WHILE could find two different buttons with the
+  same key written next to them, and one of the two would not fire. It happened
+  because the personal shortcut file only keeps the ones you changed, and stayed as
+  it was even when a new version moved the factory keys.
+
+- A SAVED SHORTCUT THAT LANDS ON TOP OF ANOTHER COMMAND IS NOW REFUSED, and that
+  command goes back to its normal key. Your other personal shortcuts stay where you
+  put them. If you really did want the key there, reassign it from the editor, which
+  has always checked for conflicts.
+
+
+SUPPORTS ALWAYS GO INTO THE PRINT FILE
+
+- THE EXPORT WINDOW HAD AN "Include supports" TICK, and it has been removed. Turned
+  off it did not give a different print: it gave the piece and the raft separated by
+  empty space, with nothing holding them together, and you found out with the machine
+  already stopped.
+
+- THAT VALUE ALSO ENDED UP INSIDE THE PRINT PRESETS. It is no longer read from there:
+  supports, bracings and base reinforcements always go into the file.
+
+
+HOW MUCH GRIP YOUR SUPPORTS ACTUALLY HAVE
+
+- EVERY LAYER IS GLUED TO THE FILM and is torn away when the plate rises. If we put
+  in a lot of supports it is because nobody wants to find out with the print finished
+  that they put in too few, but until now "how many is enough" was a feeling and not
+  a number.
+
+- THE "Peel stats" BUTTON IN THE EXPORT WINDOW measures it. Zone by zone it says how
+  much area glues to the film, how much grip the columns working under it have, and
+  how much that zone already holds onto the piece by itself. The list appears just
+  below, with the zones that have more support than they can hold at the top, and
+  clicking a row takes the cutting plane to that height.
+
+- THE "attach" COLUMN IS THE ONE THAT DECIDES. Near 1 that zone already holds onto
+  the piece above, and the columns are extra: that is where you start removing. Near
+  0 they are the only thing holding it, and there you touch nothing.
+
+- A SLANTED TIP COSTS TWICE, and the report says so by separating the two things: it
+  holds less, because it pulls sideways instead of upwards, and it glues more,
+  because the plane cuts it into an ellipse instead of a circle.
+
+- THERE IS NO SAFETY THRESHOLD, and that is not an oversight. How much grip is enough
+  depends on the resin, the temperature, the lift speed and the state of the film: a
+  number put there without measuring it would be a guess in disguise. The comparison
+  is valid though, and that is what is needed: between two zones of the same plate,
+  and between two plates that have both printed. Anyone who uses fewer and prints
+  cleanly moves the reference down for everybody.
+
+- THE FULL GUIDE IS ON THE SITE, with the columns explained one by one and the round
+  trip to follow to remove supports without guessing.
+
+
+ROTATING IN 45 AND 90 DEGREE STEPS
+
+- PUTTING A PIECE STRAIGHT OR HALF TURNED meant aiming with the mouse and watching
+  the number. The rotation now snaps, and there is no key to hold down.
+
+- THE RULE IS IN THE DISTANCE FROM THE CENTRE: with the mouse ON THE RING the
+  rotation snaps every 45 degrees, with a magnet you can feel but that does not trap
+  you; pulling the mouse OUTSIDE the ring the rotation goes back to continuous, and
+  that is how you make the 8, the 12 or the 27 degrees of always.
+
+- THERE ARE EIGHT MARKS ON THE RING, four long ones at 90 and four short ones at 45,
+  like a clock face: they say where it will snap before you even try. They fade when
+  you leave the snapping zone, so it is obvious at a glance when you are free hand.
+
+- IT WORKS IN BOTH ROOMS, on the ring of the pieces in the plate and on the three
+  rings of the editor gizmo, with the same rule: moving from one to the other you
+  have nothing to relearn.
+
+- ZERO IS WHERE YOU GRAB, so the snap is on the rotation you are MAKING and not on
+  the absolute orientation: a piece already crooked, turned by 90, stays crooked by
+  90 more, which is what you expect.
+
+
+THE PRINT TIME ANNOUNCED BY THE MACHINE
+
+- A PRINTER ANNOUNCED TWELVE HOURS AND TWENTY FIVE where another slicer estimated
+  eight and twenty eight, with exactly the same exposure and wait times. Reported by
+  Mhoram, and the difference was real: not a wrong caption, but the plate moving
+  twice as much as necessary.
+
+- THE TWO STAGE LIFT ADDS UP, and the window did not say so. The four boxes are
+  called Bottom, Normal, Bottom 2 and Normal 2, and filling all four with the same
+  number is the natural reading of those names: except that eight plus eight makes
+  sixteen millimetres of travel per layer instead of eight. Over three thousand
+  layers that is four extra hours of movement alone.
+
+- THE WINDOW NOW DOES THE SUM, under the movement table and updating as you type: the
+  total travel up and back, and what a normal layer costs, split into exposure, waits
+  and travel. Anyone copying a profile from another program sees immediately whether
+  they have just doubled something.
+
+- AND THE TIME WRITTEN IN THE FILE NOW COUNTS THE TWO STAGES AT THEIR OWN SPEEDS. The
+  point of the double stage is a short slow first stretch to detach the piece from
+  the film and the rest quickly, but the calculation used the speed of the first
+  stretch for the whole travel: on a real lift, eight plus eight millimetres at 60 and
+  300 mm/min, it declared twenty one seconds instead of sixteen. Anyone not using the
+  second stage finds the usual time, to the hundredth of a second.
+
+
+THE PLATE CARRIES THE PRINT PARAMETERS WITH IT
+
+- AN .agsplate CARRIED THE PIECES AND THE LAYOUT, BUT NO PARAMETERS. Opening somebody
+  else's scene you saw their pieces with your own times, your own printer and your own
+  format: to understand why a file announced twelve hours you had to be told the
+  parameters out loud, one by one.
+
+- THE PLATE NOW CARRIES EVERYTHING: the printer with its resolution, its mirrors and
+  its format, and every box of the export window. Opening it you take on its
+  settings, and a line declares this, saying also what was there before.
+
+- CLEAR PLATE PUTS YOURS BACK. Opening somebody else's plate puts you in their shoes
+  for as long as that plate is open; emptying it is the gesture that brings you back
+  to your own, printer included. None of this touches the saved settings: closing the
+  program with somebody else's plate open does not leave their machine in place of
+  yours.
+- PLATES SAVED EARLIER OPEN AS BEFORE, with no warnings: they do not have those
+  fields and there is nothing to apply. For the parameters to travel, the plate has to
+  be saved again with this version.
+
+
+RESIN VOID FIXER: THE STARTING VALUES
+
+- THE STARTING VALUES WERE THE ONES THE TOOL WAS BORN WITH, and nobody started from
+  them. They are now Voxel Size 0.15 mm, Fine Tuning 0.18 mm and Smooth Iterations 10,
+  which are the ones that work almost always.
+
+- AND 0.15 CAN NOW BE CHOSEN: the Voxel Size slider started at 0.20, so the good value
+  had to be typed in by hand every time. It now goes down to 0.10.
+
+
+THE PRINT TIME CAN BE READ HERE TOO
+
+- THE ESTIMATE WAS ALREADY THERE, BUT ONLY THE PRINTER SAW IT: we wrote it inside the
+  file and it appeared nowhere in Runebrace, so anyone faced with a number on the
+  machine panel had nothing to compare it with. It now sits next to the layer count:
+  "About 2902 layers, roughly 12h 25m of printing".
+
+- IT IS THE SAME FORMULA THAT ENDS UP IN THE FILE, so the number here and the one the
+  machine announces are the same number. It changes with the chosen format, and it is
+  right that it should: a CTB v2 carries neither the second lift stage nor the wait
+  after the light, so that machine does not do them and does not wait for them.
+
+
+SOMEBODY ELSE'S PLATE DOES NOT CHANGE YOUR PRINTER
+
+- THE PARAMETERS THAT ARRIVE WITH A PLATE APPLY IN THE PLATE ROOM. Going back out to
+  the editor yours return, which are the ones you always use: working on a single
+  piece the print volume drawn around the model has to be that of your own machine,
+  not that of whoever sent the scene. Going back into the plate its own return, and
+  Clear Plate lets them go for good.
+
+
+PRINT FILES DECLARED THE WRONG MACHINE
+
+- A FILE FOR AN ELEGOO SATURN SAID IT WAS FOR A PHROZEN. Choosing a printer from the
+  menu made the fields on screen right, but the machine name, the native format and
+  the preview sizes stayed those of the printer you started from, and on restart they
+  came back round again. The printer is now saved whole.
+
+- AND FIXES TO THE STOCK PRINTERS DID NOT REACH THOSE WHO ALREADY HAD THEM. The
+  catalogue is written on first launch and from then on the existing entries were
+  never looked at again: an Elegoo Saturn saved some time ago still had the wrong
+  preview sizes, the ones that made a green square appear instead of the piece, and a
+  Sonic Mini 8K S did not know it could write the .prz. The fields that describe the
+  machine are now taken again from the program catalogue, while plate, height,
+  resolution and mirrors stay as you set them: if a printer has been tuned by hand,
+  that tuning is not touched.
+
+- THE MIRRORS ARE NOW REMEMBERED. They were the only thing about the machine that
+  lived only until the program closed: anyone unticking one because their piece came
+  out mirrored found it ticked again on the next start.
+
+
+SUPPORTS IN ORTHOGRAPHIC VIEW HAD BECOME BOXES
+
+- IN ORTHOGRAPHIC VIEW THE SUPPORTS APPEARED AS RECTANGULAR BOXES instead of cones and
+  cylinders, while in perspective they were right. Those flat faces were the
+  containers inside which each support is resolved: the drawing built the ray as if
+  the observer were always a point, and in orthographic view the observer is at
+  infinity and the rays are all parallel. Orthographic view now has its own rays, and
+  the supports look like what they are.
+
+
+A SUPPORT INSIDE THE NEIGHBOUR'S PIECE IS NOW SEEN
+
+- MOVING THE PIECES BY HAND, a support that ended up inside another piece's model was
+  not flagged in red. Two pieces like that come out of the printer stuck together. It
+  happened with the "Supports overlap" tick on: that tick is meant to say that supports
+  may graze each other, and instead it removed them from the check altogether, taking
+  with it the comparison between one piece's supports and the other's MODEL.
+
+- THE TICK NOW ALLOWS ONLY WHAT IT PROMISES: support against support and raft against
+  raft. The model is always defended, which is the one thing that must never be
+  touched. The automatic arrangement does not change its result: on the test scenes it
+  places the same pieces in the same places.
+
+
+SUPPORTS HOOKED ONTO A NEIGHBOUR NO LONGER GO BELOW THE RAFT
+
+- A SUPPORT RESTING ON A NEIGHBOUR could hook on so low that it ended up under the
+  slab, and the STL came out with that tip in mid air. There is nothing under the raft
+  to rest on, so that piece of support prints into the void.
+
+- THE HOOK POINT WAS NOT THE CULPRIT, the sphere around it was: in the measured case
+  the hook was half a millimetre above the plate, but the sphere at the end of the arm
+  had a radius larger than that distance and poked out below. The calculation now
+  includes the radius, and the hook rises just enough for the sphere to stay inside the
+  slab.
+
+- IT APPLIES ONLY TO ARMS THAT HOOK ONTO ANOTHER SUPPORT. Columns going to the ground
+  have to sink into the raft, and it is right that they do: those were not touched.
+
+
+SAVING THE PIECES OF A CUT NO LONGER LOSES THE PREVIOUS ONE
+
+- CUTTING THE SAME MODEL TWICE, the two pieces saved the first time were overwritten
+  without a word. There is now a warning, and it does not only say that something is
+  about to disappear: it NAMES the files, with how big they are and how long they have
+  been there. For someone who has cut the same model three times the name alone is not
+  enough; what you need to know is whether underneath there is this morning's good
+  version or a test from five minutes ago.
+
+- THE BUTTON THAT DELETES IS CALLED REPLACE, not OK, and it is not the selected one:
+  pressing enter by mistake throws nothing away.
+
+
+SUPPORTS WITH LONG INSETS ARE SELECTED WHERE THEY ARE SEEN
+
+- CLICKING THE LAST STRETCH OF A COLUMN with long insets selected nothing: you had to
+  aim further back, towards the centre. On screen the support was there, to the click
+  it was not.
+
+- THE INSET EXTENDS THE SUPPORT beyond its control points, and the drawing took that
+  into account while the click did not: it tested a cylinder shorter than the one you
+  see. The two now start from the same shape, so you can grab the support at any point
+  where you can see it.
+
+
+HOLES CENTRE THEMSELVES ON THE SURFACE
+
+- FINDING THE CENTRE OF A PEG BY EYE and then that of its seat is a job that repeats
+  at every coupling, and half a millimetre out means two magnets that do not sit
+  straight. Holding SPACE + H, moving over the model shows the area that would be
+  taken, and clicking puts the hole at its centre. H on its own still puts the hole
+  where you click, as always.
+
+- THE THRESHOLD SAYS HOW MUCH THE SURFACE MAY BEND and still be the same area: at one
+  degree it takes a flat face, raising it takes curved surfaces. You see the area grow
+  or shrink as you change it, so you adjust it before placing anything and not after.
+
+- CHANGING THE HOLE KEY changes this one too: it is always Space plus the key you
+  chose.
+
+
+A SELECTED HOLE IS DELETED WITH THE KEY
+
+- BEFORE YOU HAD TO GO AND FIND THE BUTTON. The same key that deletes supports now
+  applies, that is Delete, Backspace or X, including any you have remapped. On macOS it
+  matters, because there you delete with backspace.
+
+- AND IT CAN NOW BE UNDONE. The red button removed the hole and that was that, with no
+  undo: with a key that can be pressed by mistake that was no longer good enough.
+
+
+A PLATE CONTAINING A PRESUPPORTED PIECE REOPENS
+
+- A PLATE THAT CONTAINED AN ALREADY SUPPORTED STL saved without any problem and then
+  would not reopen: no piece came back, and an error appeared for each one. Anyone
+  working with presupported files, which is the normal Artisan Guild routine, could not
+  pick up a saved plate again.
+
+- THE FILES ALREADY SAVED HAVE LOST NOTHING. The models are inside the archive, intact:
+  from this version on those plates reopen as they are.
+
+
+THE ARRANGEMENT SPACING IS REMEMBERED
+
+- THE SPACE BETWEEN THE PIECES AND THE PLATE EDGE restarted from the factory values on
+  every launch. Anyone who had tuned them to their own way of filling the plate found
+  them reset, with nothing saying so. They now stay as you leave them.
+
+
+THE PRINT ROOM IS TOLD APART FROM THE EDITOR AT A GLANCE
+
+- THE TWO ROOMS LOOKED TOO ALIKE. The background of the print room was barely darker
+  than the editor's, a difference that anyone who does not distinguish hues well did
+  not see at all. The print room now goes almost to black, and the step between the two
+  reads by brightness even with the colours turned off.
+
+- AND THE PLATE SURFACE was the lightest thing in the scene, because it had a fixed
+  colour that ignored the chosen theme. It now takes the theme colour brought into the
+  dark band, and stays distinct from the background with every theme, even the darkest
+  of them all.
+
+
+THE PROGRAM NO LONGER DIES SUDDENLY ON LINUX WAYLAND
+
+- ON WAYLAND it disappeared without a word and without saving, at any random moment. It
+  had nothing to do with what you were doing: the auto save, which starts by itself
+  every five minutes, asked the system where on the screen the window is, and on
+  Wayland that question has no answer. It no longer asks it.
+
+- AND A GRAPHICS SYSTEM ERROR no longer brings the program down. Before, any one of
+  them was enough, the kind that mean "this particular thing cannot be done", and the
+  program aborted. It is now written to crash.log next to the settings and the work
+  goes on.
+
+
+THE PLATE SAYS IF YOU HAVE NOT SAVED IT
+
+- CLOSING THE PROGRAM with a plate composed and never saved, it asked nothing: the
+  plate went away in silence. It now warns, and says which of the two things is
+  unsaved, the scene or the plate.
+
+- AND IN THE PLATE PANEL it says when there are unsaved changes, with the name of the
+  file the plate comes from. A warning that appears only when you are leaving arrives
+  too late to do anything about it.
+
+
+ON WAYLAND, LEFT IN THE BACKGROUND, IT NO LONGER LOOKS FROZEN
+
+- THE DESKTOP SAID RUNEBRACE IS NOT RESPONDING when it was left behind another window,
+  and you had to press Wait. It was not frozen: it was waiting for permission to draw
+  from the compositor which, as long as nobody is looking, never comes. While it is in
+  the background it now stops waiting for it.
+
+- AND IN THE BACKGROUND IT DROPS TO FIVE FRAMES PER SECOND instead of sixty. It was
+  already written that it should, but nobody was doing it.
+A PIECE FROM THE PLATE CAN BE FIXED IN THE EDITOR AND SENT BACK
+
+- BEFORE, TO MOVE A SUPPORT on a miniature already placed on the plate you had to leave,
+  find the project again, fix it, save, come back in and put the piece back in its place
+  by hand. Now: right click the piece, Edit in editor. You fix it, press Back to print
+  room, and the piece returns in its pose.
+
+- THE SCENE YOU HAD OPEN IS NOT LOST, not even if it was unsaved: it is set aside and
+  comes back when you press Editor, which meanwhile carries its name. If you fix three
+  pieces in a row it is reloaded once at the end, not three times.
+
+- WHILE YOU ARE FIXING A PIECE FROM THE PLATE the editor background changes colour and
+  the buttons that would open another project disappear. It is not your editor at that
+  moment: it is working for the plate, and the only way out is to give the piece back.
+
+- IF THE SAME FILE IS ON THE PLATE IN SEVERAL COPIES they all change, and the panel says
+  so before opening it.
+
+- AND ON CLOSING THE PROGRAM the warning says which things are unsaved: the open scene,
+  the one set aside, the plate, or more than one.
+
+- THE FRAMING IS NO LONGER LOST moving from one room to the other. The plate remembers
+  where you were looking at it from and the editor remembers its own, instead of starting
+  from far away every time.
+
+
+SCROLLING THE LAYERS ON THE PLATE IS TEN TIMES FASTER
+
+- WITH MANY MINIATURES ON THE PLATE scrolling the layers to check the print was slow, and
+  low down, where all the supports are, it stalled. Reported by Mhoram.
+
+- THE TIME WAS ALL GOING INTO THE SUPPORTS, not the models: on a real 14 piece plate,
+  slicing four and a half million triangles costs one millisecond, the supports cost
+  twelve, with peaks over a hundred and fifty. They now cost one, and the worst peak is
+  eleven.
+
+- AT ANY GIVEN HEIGHT fewer than 3 percent of the supports are alive, and the program now
+  looks only at those. The rest of the gain comes from using all the processors instead
+  of one, as the model slicing and the drawing already do.
+
+- AND THE SLICE IS NO LONGER REALLOCATED on every click: the same texture is rewritten in
+  place. On a 12K printer that was sixty megabytes per click.
+
+
+F CENTRES THE VIEW IN THE PRINT ROOM TOO
+
+- THE SAME KEY AS THE EDITOR: point the mouse at a miniature, press F, and the camera
+  centres there. On a large plate it was the gesture that was missed most, because the
+  camera turns about the centre of the plate and to look closely at a piece in a corner
+  you had to move by hand every time.
+
+- AND PRESSING IT ON EMPTY SPACE centres you on the point of the plate under the mouse,
+  instead of doing nothing.
+
+
+EXPORTING A .SL1S FILE IS TWICE AS FAST
+
+- THE TEST PLATE with fourteen miniatures goes from 7.1 to 3.5 seconds. The time was
+  going almost entirely into the supports: they now cost a quarter of that.
+
+- AND THE SUPPORTS COME OUT MORE ACCURATE, not just faster. Before, their outline was
+  obtained by testing sixteen points inside every pixel and counting how many fell
+  inside; now how much of that pixel is actually covered is computed. The file grows by
+  5 percent.
+
+- THE MODEL DOES NOT CHANGE BY ONE PIXEL: only the edge of the supports changes, and it
+  changes for the better. On the test plates the amount of material per layer stays the
+  same to within 0.05 percent.
+
+- FOR NOW THIS APPLIES TO THE .SL1S. The .ctb, .goo and .pp1m formats write the layers a
+  different way and stay as they were: their turn comes next.
+
+
+WITH "RAFT OVERLAP" THE ARRANGED PIECES NO LONGER ALL TURN RED
+
+- ARRANGE PLACED THEM WELL and then the program flagged almost all of them as
+  overlapping, that is it called a defect what it had been asked to do. It happened with
+  the "Raft overlap" tick and neighbouring pieces: one piece's slab reaches under the
+  other's struts, and that was counted as a collision.
+
+- FUSING THERE IS NOT A PROBLEM: the raft is sacrificial material and the feet of the
+  supports are already inside their own raft. What must never be touched is the MODEL, and
+  that is still flagged as before.
+
+- ON THE SAME TEST PLATE, seven miniatures with one millimetre of distance and two tenths
+  of edge: eight red pairs before, none now.
+
+
+THE "SUPPORTS OVERLAP" TICK IS GONE
+
+- IT DID WHAT IT PROMISED, it brought the pieces closer, but then the program flagged the
+  resulting arrangement in red. A tick that does a good thing and then declares the result
+  broken is worse than a tick that does not exist.
+
+- "RAFT OVERLAP" STAYS and works well: that is the one worth two or three millimetres per
+  neighbour, and it is the one that is really needed.
+
+
+.CTB, .GOO AND .PP1M ALSO COME OUT FASTER
+
+- LAST ROUND it was the turn of the .sl1s. Now it is the turn of the three formats the
+  printers actually use: on the fourteen miniature test plate, the .ctb goes from 5.8 to
+  2.0 seconds and the .goo from 7.3 to 3.2. The supports cost fifty milliseconds per layer
+  and now cost fifteen.
+
+- IT IS THE SAME TREATMENT as before, taken where it was needed most: the outline of the
+  supports is computed instead of being sampled sixteen times per pixel. On a .ctb the
+  supports were eighty three percent of the time.
+
+- THE FILE GROWS A LITTLE: one and a half percent on the .ctb, two and a half on the .goo
+  and the .pp1m.
+
+- THE MODEL DOES NOT CHANGE BY ONE PIXEL. The layers with no supports come out identical
+  to before, byte for byte; on those that have them, the amount of material per layer
+  stays the same to within 0.04 percent.
+
+- THE .PP1M GAINS LESS, from 6.8 to 6.0 seconds, and not because the slicing is slower:
+  there the time goes almost entirely into packing and signing the archive, which is the
+  next piece to look at.
+
+
+THE WHITE SLICE SHOWS WHAT YOU SEE
+
+- HIDING SOME SUPPORTS left their sections drawn on the cutting line. On the plate you saw
+  white discs with nothing above them, and it was not clear whether they were a defect of
+  the piece or a leftover of the drawing.
+
+- THEY NOW DISAPPEAR WITH THE SUPPORTS, and immediately, without having to move the slice
+  cursor. It applies to the bracings too: hiding a support also removes the ones that
+  reach it, as the three dimensional scene already did.
+
+- AND WORKING IN VOXELS only the model stays on the slice. There you work on the shell,
+  and supports, bracings and raft are not even visible in the scene.
+
+- WHAT GETS PRINTED DOES NOT CHANGE. Hiding a support is a working convenience, not a
+  print decision: the hidden support ends up in the file as before.
+
+
+THE PROGRAM NO LONGER LEAVES GIGABYTES OF TEMPORARY FILES ON DISK
+
+- EVERY TIME A PLATE WAS OPENED the program extracted the projects of the pieces into a
+  temporary folder, and never deleted it again. On the development machine that was 258
+  folders and 28 gigabytes in a week, and the same was happening to anyone on the beta.
+
+- ON THE FIRST LAUNCH OF THIS VERSION all that is thrown away, and a line says how many
+  megabytes came back free. From here on it cleans itself every time the program opens.
+
+- IT CLEANS ON STARTUP AND NOT ON EXIT deliberately: if the program closes badly, a
+  cleanup on exit is exactly the one that does not run. And if you have two open at the
+  same time, neither touches the other's files.
+
+- AND THE INTERMEDIATE FILES NO LONGER APPEAR AMONG THE RECENT SCENES. The pieces lent to
+  the editor and the scenes set aside ended up there, with names you had not chosen. The
+  list you have now cleans itself.
+
+
+THE PLATE WARNS YOU IF YOU ARE ABOUT TO LOSE THE PRINT PARAMETERS
+
+- YOU CHANGED THE EXPOSURE OR THE LIFT in the print room, you left, and nobody told you.
+  The plate only noticed if you had moved pieces, not if you had changed the times, and
+  those numbers were lost.
+
+- AND LEAVING THE ROOM AND COMING BACK the ones from when you opened the plate returned.
+  Yours now stay, and on saving they end up in the file.
+
+- THE WARNING ON THE WAY OUT ALSO SAYS WHAT is not saved, the pieces or the print
+  parameters, instead of just the number of pieces.
+
+
+WINDOWS NO LONGER CUT OFF THEIR OWN BOTTOM
+
+- IN THE PLATE PANEL the Export button at the bottom stayed cut off by a few pixels when
+  the warnings list got longer, and the summary sat at the bottom of the window with a
+  gap in the middle instead of under the last thumbnail. The list now takes the space it
+  needs and the rest follows it.
+
+- IN THE EXPORT WINDOW the button and the completion message ended up below the fold and
+  you had to scroll to see them. They now stay in view.
+
+- AND WHEN THE EXPORT FINISHES it shows: the message turns green and says "Export
+  complete", red if the file did not pass the format check.
+
+- THE PRINTER WINDOW reopens as you left it, size and position, even after closing the
+  program.
+
+
+ANTI-ALIASING REACHES 4x ON 16K MACHINES TOO
+
+- ON A 16K IT STOPPED AT 2x and nobody said so: there was an internal limit kept a little
+  lower than necessary, and a 15360x8640 machine exceeded it by six percent. 4x can now be
+  chosen.
+
+- ON THE TEST PLATE at that resolution, 581 layers: with no anti-aliasing 5.8 seconds and
+  160 MB, at 4x 7.8 seconds and 254 MB.
+
+- AND THE EXPORT ASKS FOR LESS MEMORY on those machines, half a gigabyte less, because it
+  no longer prepares an image that on the .ctb, .goo and .pp1m formats was of no use to
+  anybody.
+
+
+THE UNIFORMATION GK3 IS SUPPORTED
+
+- THE GK3 DOES NOT READ OUR .CTB FILES. It accepts them from the stick and then does not
+  show them in the list, because it wants a more recent version of the format. Runebrace
+  now writes its native format, the .jxs, and the machine appears among the presets.
+
+- THE GK3 PIXEL IS NOT SQUARE, 14 microns horizontally and 19 vertically, and anyone
+  building the preset by hand starting from the plate size got the vertical scale wrong by
+  over a third without noticing. The numbers now come with the preset.
+
+- THE FORMAT WAS WORKED OUT from a file written by the manufacturer's own slicer that
+  that machine prints, and ours matches it field by field.
+
+
+THE EXPORT PROGRESS NO LONGER GOES BACKWARDS
+
+- THE LAYER COUNT reached the end and then you saw numbers scrolling on for another ten or
+  twenty layers. The layers are sliced on many threads together and the reports did not
+  arrive in order: the late ones are now discarded.
