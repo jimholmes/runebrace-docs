@@ -1,4 +1,4 @@
-# Getting Started
+# Getting Started {#GettingStarted}
 
 ## Downloading and Installing
 
@@ -7,6 +7,117 @@
 * Keyboard shortcuts
 
 ## UI Overview
+
+Runebrace's User Interface (UI) is shown below with the major functional areas called out.
+
+![Runebrace's main UI](../assets/img/GettingStarted/UIOverview.png){#fig:UIOverview}
+
+It's important to get used to the idea that Runebrace has no tooltips anywhere. This is intentional, as tooltips cover up the controls underneath. Controls clearly state their function on the control itself or nearby in the panel.
+
+### Functional Areas and Commands
+
+Below you can find short descriptions of each feature.
+
+#### Top Bar
+
+[Print]{#PrintButton}
+: Opens the export window (see [Printing and Slicing](#PrintingAndSlicing)
+
+[Mesh Repair]{#MeshRepair}
+: Opens the repair window (see [Mesh Repair](#MeshRepair))
+
+[New]
+: Creates a new empty scene
+
+[Revert]
+: Reloads the file from the last saved version, discarding changes
+
+[Load]
+: Opens a project or a model, with a Recent list
+
+[Save Project]
+: Saves in place; a menu also offers Save Project As
+
+[Export Mesh]
+: Opens the mesh export menu (see [Exporting Meshes](#ExportingMeshes))
+
+[About]
+: Displays the Runebrace version, the graphics card in use, important links, and a donation button
+
+There are two styles of file bar. Global Settings has a switch, "Use Standard File Buttons", that chooses between them.
+
+#### Left Toolbar
+
+This toolbar displays icons/buttons for different support tools.
+
+![The Left Toolbar](../assets/img/SupportingModels/LPanel.png)
+
+#### Right Panel
+
+The Right Panel holds features and controls for nearly all of Runebrace's editing functionality.
+
+![The Right Panel](../assets/img/GettingStarted/RightPanel.png)
+
+Most sections in the right panel are collapsible. Each area will be discussed later in this guide.
+
+#### Command List
+
+The Command List shows what mouse and keyboard actions are currently available. These change with the active tool.
+
+![The Command List](../assets/img/GettingStarted/CommandList.png)
+
+The Edit tab allows you to remap some commands to better suit your style and workflow.
+
+You can also find a list of keyboard and mouse shortcuts on the right panel under General Settings.
+
+#### Mode Status
+
+At the bottom are four icons that display current support modes.
+
+![The Mode Status display](../assets/img/GettingStarted/ModeStatus.png)
+
+* Branch to nearest candidate. Wheel to scroll through candidates.
+* Manually add branch via dragging
+* **NEED CONTENT**  
+* **NEED CONTENT**
+
+#### Island Panel
+
+The Island Panel allows you to detect, support, hide, and otherwise interact with islands.
+
+![The Island Panel](../assets/img/GettingStarted/IslandPanel.png)
+
+Controls on this panel are:
+
+[<-]
+: Move to previous island
+
+[Detect]
+: Detect islands on the model
+
+**NEED INFO ON '0'**
+
+[Add Supports]
+: Automatically add supports to islands. Some may be skipped due to mesh complexities.
+
+[Show]
+: Rotate model to show the current island
+
+[Hide]
+: Hide the current model from the display and count
+
+[+]
+: Add a support to the current island
+
+[->]
+: Move to next island
+
+WINDOW TITLE
+  Runebrace reports the outcome of an action in the window title, not in a popup.
+  "Holes applied", "31 supports shown", "Model swapped", errors, and timings all
+  appear there. A reader of the manual should be told to look at it, because
+  several actions give no other feedback.
+
 
 ### Scaling
 
