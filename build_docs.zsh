@@ -36,5 +36,8 @@ pandoc content/Index.md -o docs/Index.html \
 ## files in guides
 for f in content/guides/*.md; do
   pandoc "$f" -o "docs/guides/${f:t:r}.html" \
-    --standalone --lua-filter=md-links.lua
+    --standalone --lua-filter=md-links.lua \
+    --filter pandoc-crossref
 done
+
+
