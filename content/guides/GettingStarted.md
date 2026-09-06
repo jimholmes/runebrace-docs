@@ -50,13 +50,13 @@ There are two styles of file bar. Global Settings has a switch, "Use Standard Fi
 
 This toolbar displays icons/buttons for different support tools.
 
-![The Left Toolbar](../assets/img/SupportingModels/LPanel.png)
+![The Left Toolbar](../assets/img/SupportingModels/LPanel.png){#fig:LeftToolbar}
 
 #### Right Panel
 
 The Right Panel holds features and controls for nearly all of Runebrace's editing functionality.
 
-![The Right Panel](../assets/img/GettingStarted/RightPanel.png)
+![The Right Panel](../assets/img/GettingStarted/RightPanel.png){#fig:RightPanel}
 
 Most sections in the right panel are collapsible. Each area will be discussed later in this guide.
 
@@ -64,7 +64,7 @@ Most sections in the right panel are collapsible. Each area will be discussed la
 
 The Command List shows what mouse and keyboard actions are currently available. These change with the active tool.
 
-![The Command List](../assets/img/GettingStarted/CommandList.png)
+![The Command List](../assets/img/GettingStarted/CommandList.png){#fig:CommandList}
 
 The Edit tab allows you to remap some commands to better suit your style and workflow.
 
@@ -74,7 +74,7 @@ You can also find a list of keyboard and mouse shortcuts on the right panel unde
 
 At the bottom are four icons that display current support modes.
 
-![The Mode Status display](../assets/img/GettingStarted/ModeStatus.png)
+![The Mode Status display](../assets/img/GettingStarted/ModeStatus.png){#fig:ModeStatus}
 
 * Branch to nearest candidate. Wheel to scroll through candidates.
 * Manually add branch via dragging
@@ -85,7 +85,7 @@ At the bottom are four icons that display current support modes.
 
 The Island Panel allows you to detect, support, hide, and otherwise interact with islands.
 
-![The Island Panel](../assets/img/GettingStarted/IslandPanel.png)
+![The Island Panel](../assets/img/GettingStarted/IslandPanel.png){#fig:IslandPanel}
 
 Controls on this panel are:
 
