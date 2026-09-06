@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>SupportingModels</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+<h1 id="SupportingModels">Supporting Models</h1>
+<h2 id="supporting-overview">Supporting Overview</h2>
+<!--Don't write a tutorial. Point users elsewhere.-->
+<h2 id="basic-workflow">Basic Workflow</h2>
+<p><strong>CONTENT NEEDED</strong></p>
+<h2 id="features">Features</h2>
+<h3 id="support-basics">Support Basics</h3>
+<p>A support is a chain of control points with a radius at each one: the
+tip that touches the model, the top of the shaft, the middle, and the
+base on the plate. Between them are cones. Every diameter is
+editable.</p>
+<h4 id="support-variants">Support Variants</h4>
+<dl>
+<dt><span id="GroundedSupport">Grounded</span></dt>
+<dd>
+The support’s tip is on the model, and the base is on the plate
+</dd>
+<dt><span id="BranchingSupport">Branching</span></dt>
+<dd>
+The support joins another support instead of reaching the plate
+</dd>
+<dt><span id="ColumnSupport">Column</span></dt>
+<dd>
+A thick pillar with its own end diameter and height
+</dd>
+<dt><span id="DoubleTipSupport">Double Tip</span></dt>
+<dd>
+Connects two points of the model, mesh-to-mesh, with no base
+</dd>
+<dt><span id="ReinforcementSupport">Reinforcement</span></dt>
+<dd>
+A ground reinforcement added to an existing brace
+</dd>
+</dl>
+<p><span id="BracingSupport">Bracing</span> # : Lateral support between
+the mid-sections of supports</p>
+<p><strong>CONTENT NEEDED</strong></p>
+<ul>
+<li>Horizontal line of layers</li>
+</ul>
+<h4 id="manual-supports">Manual Supports</h4>
+<p><strong>CONTENT NEEDED</strong></p>
+<h4 id="left-toolbar-reword">Left Toolbar (REWORD)</h4>
+<p>The left toolbar controls many support options.</p>
+<figure id="fig:LPanel">
+<img src="../assets/img/SupportingModels/LPanel.png"
+alt="Left toolbar icons" />
+<figcaption aria-hidden="true">Left toolbar icons</figcaption>
+</figure>
+<h3 id="symmetry">Symmetry</h3>
+<p><strong>CONTENT NEEDED</strong></p>
+<h3 id="path-supports">Path Supports</h3>
+<p><a href="#path">Path</a> supports are created on a line between two
+or more supports. A path is drawn from the tip of each support in the
+order they were selected. (Use F3 + LMB when selecting multiple
+supports.)</p>
+<figure id="fig:InitialBaseExample">
+<img src="../assets/img/SupportingModels/RoundBase-3Supports.png"
+alt="Round Base with Three Supports" />
+<figcaption aria-hidden="true">Round Base with Three
+Supports</figcaption>
+</figure>
+<p>Settings controlling spacing of supports for the following features
+are located in the right panel under Advanced Placement =&gt; Line and
+Fill.</p>
+<figure>
+<img
+src="../assets/img/SupportingModels/RMenu-AdvancedPlacement-TopLevel.png"
+height="400" alt="right panel with line and fill highlighted" />
+<figcaption aria-hidden="true">right panel with line and fill
+highlighted</figcaption>
+</figure>
+<blockquote>
+<p><strong>Important Considerations</strong></p>
+</blockquote>
+<blockquote>
+<p>Settings in this section are not distances in millimeters; they are
+multipliers of the support diameter. Runebrace determines how many
+supports fit in the space between the selected supports, then spreads
+generated supports evenly along the segment.</p>
+</blockquote>
+<blockquote>
+<p>Very small values stop having an effect at some point, and are
+ignored.</p>
+</blockquote>
+<blockquote>
+<p>A segment too short to fit anything gets no supports.</p>
+</blockquote>
+<h4 id="line">Line</h4>
+<p>Adds support along a line between two and only two supports.</p>
+<p>Line placement is available through the right panel and the left
+toolbar (<span class="citation"
+data-cites="fig:LPanel">[@fig:LPanel]</span>).</p>
+<p>Spacing for supports along the line is controlled by the right panel
+under Advanced Placement =&gt; Line &amp; Fill =&gt; Line.</p>
+<figure>
+<img
+src="../assets/img/SupportingModels/RMenu-AdvancedPlacement-LineAndFill-Line.png"
+alt="Menu for adjusting Polygon Fill spacing" />
+<figcaption aria-hidden="true">Menu for adjusting Polygon Fill
+spacing</figcaption>
+</figure>
+<p>Selecting support #1, then #2, then creating Line supports results in
+this:</p>
+<figure>
+<img
+src="../assets/img/SupportingModels/RoundBase-2Supports-CreateLine.png"
+alt="Supports created via line" />
+<figcaption aria-hidden="true">Supports created via line</figcaption>
+</figure>
+<p>For more details on how lines work, see the <a
+href="#MoreAboutLines">deep dive on lines</a></p>
+<h4 id="arc">Arc</h4>
+<p>Using Arc adds supports along three selected supports—no more, no
+fewer.</p>
+<p>Arc placement is available through the right panel and the left
+toolbar (<span class="citation"
+data-cites="fig:LPanel">[@fig:LPanel]</span>).</p>
+<p>Configure using the settings in the right panel Advanced Placement
+=&gt; Line &amp; Fill =&gt; Arc.</p>
+<figure id="fig:ArcSettings">
+<img
+src="../assets/img/SupportingModels/RMenu-AdvancedPlacement-LineAndFill-Arc.png"
+alt="Settings for Arcs" />
+<figcaption aria-hidden="true">Settings for Arcs</figcaption>
+</figure>
+<p>Selecting support #1, then #2, then #3, then creating Arc supports
+results in this:</p>
+<figure>
+<img
+src="../assets/img/SupportingModels/RoundBase-3Supports-CreateArc.png"
+alt="Supports created via Arc" />
+<figcaption aria-hidden="true">Supports created via Arc</figcaption>
+</figure>
+<p>Note the double supports appearing at callout #2. This is due to the
+spacing along the arc, with one added support being in close proximity
+to the original #2.</p>
+<h4 id="circle">Circle</h4>
+<p>Using Circle adds supports along a circle path drawn through three
+supports—no more, no fewer.</p>
+<p>Circle placement is available <strong>only</strong> through the left
+toolbar (<span class="citation"
+data-cites="fig:LPanel">[@fig:LPanel]</span>).</p>
+<p>Configure using the settings in the right panel Advanced Placement
+=&gt; Line &amp; Fill =&gt; Arc as shown above in <span class="citation"
+data-cites="fig:ArcSettings">[@fig:ArcSettings]</span>.</p>
+<p>Selecting support #1, then #2, then #3, then creating Circle supports
+results in this:</p>
+<figure>
+<img
+src="../assets/img/SupportingModels/RoundBase-3Supports-CreateCircle.png"
+alt="Supports created via Circle" />
+<figcaption aria-hidden="true">Supports created via Circle</figcaption>
+</figure>
+<p>Again, note the doubled supports, this time at #2 and #3.</p>
+<h3 id="fill-basics">Fill Basics</h3>
+<p>Runebrace also provides area fill capabilities.</p>
+<p>We’ll start with a basic example, then show a more complex, practical
+example after. Triangle Painting and fills are covered separately
+below.</p>
+<p>Each feature below will show results starting from the above figure
+<span class="citation"
+data-cites="fig:InitialBaseExample">[@fig:InitialBaseExample]</span>, a
+round base with three supports selected in the order they’re
+labeled.</p>
+<h4 id="polygon-fill">Polygon Fill</h4>
+<p>Polygon Fill, commonly referred to as Poly Fill, fills an area
+defined by three or more supports. No rim support is created.</p>
+<p>Poly Fill is available through the Fill Space option in the right
+panel and the corresponding button on the left toolbar (<span
+class="citation" data-cites="fig:LPanel">[@fig:LPanel]</span>).</p>
+<p>You can also use the Fill Space button from the right panel (see
+below).</p>
+<p>Using Poly Fill/Fill Space from our starting point results in
+this:</p>
+<figure>
+<img
+src="../assets/img/SupportingModels/RoundBase-3Supports-PolyFill.png"
+alt="Poly fill" />
+<figcaption aria-hidden="true">Poly fill</figcaption>
+</figure>
+<p><strong>Why:</strong> EDIT: ADD USE CASE</p>
+<p>Adjust the spacing of the filled supports under right panel =&gt;
+Advanced Placement =&gt; Line and Fill =&gt; Fill Space</p>
+<figure>
+<img
+src="../assets/img/SupportingModels/RMenu-AdvancedPlacement-LineAndFill-FillSpace.png"
+height="200" alt="Menu for adjusting Polygon Fill spacing" />
+<figcaption aria-hidden="true">Menu for adjusting Polygon Fill
+spacing</figcaption>
+</figure>
+<h4 id="perimeter-and-fill">Perimeter and Fill</h4>
+<p>Perimeter &amp; Fill does the same as Poly Fill but also lays
+supports along the area’s bordering path itself. Note the menu button’s
+icon shows this via the yellow outline.</p>
+<p>Poly Fill is available <strong>only</strong> through the
+corresponding button on the left toolbar (<span class="citation"
+data-cites="fig:LPanel">[@fig:LPanel]</span>).</p>
+<p>Select three or more supports, then press the Perimeter and Fill
+button (there’s no alternative from the right panel). One action creates
+the perimeter and inside area supports.</p>
+<p>Using Perimeter and Fill from our starting point results in this:</p>
+<figure>
+<img
+src="../assets/img/SupportingModels/RoundBase-3Supports-PolyFillPerimeter.png"
+alt="Poly fill with Perimeter" />
+<figcaption aria-hidden="true">Poly fill with Perimeter</figcaption>
+</figure>
+<p>Perimeter and Fill has two separate adjustments:</p>
+<ul>
+<li><strong>Line:</strong> Spacing between supports on the lines of the
+outer perimeter</li>
+<li><strong>Fill Space:</strong> Spacing between supports in the grid
+that fills the area</li>
+</ul>
+<figure>
+<img
+src="../assets/img/SupportingModels/RMenu-AdvancedPlacement-LineAndFill-LineAndFillBoth.png"
+height="200"
+alt="Menu for adjusting both Polygon Fill and Line spacing" />
+<figcaption aria-hidden="true">Menu for adjusting both Polygon Fill and
+Line spacing</figcaption>
+</figure>
+<p>These settings are demonstrated in the example below. The perimeter
+supports are denoted by the red hash lines and were configured with a
+spacing of 5.0. The inside area was configured with a spacing of
+1.5.</p>
+<figure id="fig:PolyFillBelow">
+<img
+src="../assets/img/SupportingModels/RoundBase-3Supports-PolyFillPerimeter-Below.png"
+alt="Poly fill with perimeter as seen from underneath" />
+<figcaption aria-hidden="true">Poly fill with perimeter as seen from
+underneath</figcaption>
+</figure>
+<h4 id="circle-fill">Circle Fill</h4>
+<p>Circle Fill takes exactly three supports, builds a circular path that
+passes through their contact points, and fills that. No path supports
+are created.</p>
+<p>Circle Fill is available <strong>only</strong> through the
+corresponding button on the left toolbar (<span class="citation"
+data-cites="fig:LPanel">[@fig:LPanel]</span>).</p>
+<p>Using Circle Fill from our starting point results in this:</p>
+<figure>
+<img
+src="../assets/img/SupportingModels/RoundBase-3Supports-CircleFill.png"
+alt="Circle fill" />
+<figcaption aria-hidden="true">Circle fill</figcaption>
+</figure>
+<p>From below, the result looks like:</p>
+<figure>
+<img
+src="../assets/img/SupportingModels/RoundBase-3Supports-CircleFill-Below.png"
+alt="Circle fill viewed from below" />
+<figcaption aria-hidden="true">Circle fill viewed from
+below</figcaption>
+</figure>
+<h2 id="triangle-painting">Triangle Painting</h2>
+<p><a href="guides/Glossary.html#rim">Rim</a></p>
+<h2 id="deeper-dive-on-placement">Deeper Dive on Placement</h2>
+<p>The sections below provide a more advanced discussion of how specific
+placement features work.</p>
+<h3 id="MoreAboutLines">More About Lines</h3>
+<p>Drawing support lines or arcs actually simulates clicking on various
+points of the line. Those points depend on the distance set in the menu
+options. Runebrace then performs a <a href="#raycast">raycast</a> on the
+model.</p>
+<p>If the raycast hits the geometry, then a check is made on the
+impacted face at that point. If the face is not parallel to the build
+plate, or tilted upward, then a support is placed at that point.
+<strong>CONTENT NEEDED: why not parallel or upward?</strong></p>
+<p>Areas where the raycast misses the model mean a support can’t be
+placed there; there’s no intersecting geometry. Supports are skipped for
+those areas.</p>
+<p>Put differently: It’s not a matter of whether the surface is flat.
+The geometry must be under the ray and must be a valid point for a
+support.</p>
+<!--**lines**
+"What happens when you draw support lines or arcs is that it simulates a mouse clicking on various points along this line (depending on the set distance) and performs a mouse [raycast](#raycast) on the model. If the raycast hits the geometry and the face is not parallel to the build plate or tilted upwards, a support is placed. It is likely that there are some raycast misses, so the support cannot be placed and is skipped.  It's not a matter of whether the surface is flat... the geometry must be under the ray cast by the mouse and be a valid point for a support."-->
+<h3 id="MoreAboutPerimeters">More About Perimeters</h3>
+<h4 id="selection-order-impact-on-perimeters-and-areas">Selection Order
+Impact on Perimeters and Areas</h4>
+<p>Perimeters are always created in selection order. The loop is closed
+from the last support back to the first. This matters greatly as to how
+supports will be created.</p>
+<p>In this first example, supports were selected in order going
+counter-clockwise.</p>
+<figure>
+<img src="../assets/img/SupportingModels/RoundBase5SupportsVar-1.png"
+alt="Supports selected in order" />
+<figcaption aria-hidden="true">Supports selected in order</figcaption>
+</figure>
+<p>Using Perimeter and Fill, the result is</p>
+<figure>
+<img src="../assets/img/SupportingModels/RoundBase5SupportsResult-1.png"
+alt="Supports selected in order" />
+<figcaption aria-hidden="true">Supports selected in order</figcaption>
+</figure>
+<p>Now look at an example with a non-sequential selection:</p>
+<figure>
+<img src="../assets/img/SupportingModels/RoundBase5SupportsVar-2.png"
+alt="Supports selected in order" />
+<figcaption aria-hidden="true">Supports selected in order</figcaption>
+</figure>
+<p>Using Perimeter and Fill, the result is</p>
+<figure>
+<img src="../assets/img/SupportingModels/RoundBase5SupportsResult-2.png"
+alt="Supports selected in order" />
+<figcaption aria-hidden="true">Supports selected in order</figcaption>
+</figure>
+<p>It’s easy to see the area between supports 1 and 3, marked with the
+light red scribble, got no supports. This is because the rim path didn’t
+connect those supports, so there wasn’t an area to fill.</p>
+<h4 id="understanding-support-impacts-on-fill-planes">Understanding
+Support Impacts on Fill Planes</h4>
+<p>Area fills are performed on a planar basis. The plane is defined by
+the first three selected supports, not all selected supports. Additional
+supports are flattened onto the plane defined by the first.</p>
+<p>This results in selected areas not filling the way one might
+expect.</p>
+<p>This example shows a cloak with a surface that significantly changes
+orientation. Five supports are selected as noted.</p>
+<figure>
+<img src="../assets/img/SupportingModels/FillPlane-Selection.png"
+alt="Model with complex surface orientation and five supports" />
+<figcaption aria-hidden="true">Model with complex surface orientation
+and five supports</figcaption>
+</figure>
+<p>The Poly Fill results in a gap being left, despite that area being
+valid for additional supports as shown by the ability to place manual
+supports there—the white transparent support by the mouse cursor.</p>
+<figure>
+<img src="../assets/img/SupportingModels/FillPlane-Result.png"
+alt="Results with gaps after a fill" />
+<figcaption aria-hidden="true">Results with gaps after a
+fill</figcaption>
+</figure>
+<p>Runebrace creates a grid covering the bounding box of the polygon
+<em>in the plane defined by the first three supports</em>. That grid has
+two axes: the first defined by the line from the first support to the
+second, and the second axis perpendicular to the first. See the example
+<span class="citation"
+data-cites="fig:PolyFillBelow">[@fig:PolyFillBelow]</span> from earlier
+for a good visualization of this.</p>
+<p>All the selected supports have their tip directions averaged
+together. Then, each grid point is projected onto the model using that
+average direction, creating a raycast from each grid point in the
+average tip direction. This is used to help the fill follow the surface
+of the defined area.</p>
+<p>Each resulting raycast is used to check for intersections with the
+mesh for appropriate supportable surfaces, and if so, a support is
+placed. If the ray misses the mesh, then no support is placed, which is
+why gaps occur in fills.</p>
+<h4 id="understanding-line-and-fill-settings">Understanding Line and
+Fill Settings</h4>
+<p>Line and Fill Space settings are multipliers, not distances. Both tie
+to support diameters for the currently selected support type. Each ties
+to different parameters: Line ties to support base diameters, while Fill
+Space ties to a support’s Top (not tip!) diameter.</p>
+<p>As a result, the same setting on Line and Fill will result in
+different spacing depending on the targeted support type’s
+configuration.</p>
+<h4 id="undoing-fill-operations">Undoing Fill Operations</h4>
+<p>Note that Perimeter and Fill actions are recorded as separate undo
+operations. This means you’ll need to do two separate undo actions to
+back out that operation.</p>
+<!--
+**details**
+
+" Five details worth having in the docs. The perimeter walks the supports in selection order and closes the loop back to the first one, so the last segment is support N to support 1. 
+
+The fill plane is defined by the first three supports only, not by all of them: any support beyond the third is flattened onto that plane, so a selection that is not roughly planar will not fill the way it looks. The grid covers the bounding box of the polygon in that plane and keeps the points that fall inside it, with one axis along support 1 to support 2 and the other perpendicular to it. Each grid point is then projected onto the model along the average tip direction of the selected supports, so the fill follows the surface, and where that ray misses the mesh no support appears, which is why gaps show up over holes or steep overhangs. 
+
+
+Finally, Line and Fill Space are multipliers, not distances, and they multiply different reference diameters: Line multiplies the Base diameter, Fill Space multiplies the Top diameter. The same number on both sliders does not give the same spacing on the outline and on the fill. 
+
+One more practical note: the operation records two undo steps, the perimeter and the fill, so undoing it takes two presses."
+
+"very small values stop having an effect below a certain point, and a segment too short to fit anything simply gets no supports in between. Happy to give you the exact arithmetic if you want a footnote."
+-->
+<p><strong>Math on Determining Placement</strong> “step = Base diameter
+× Line (or Top diameter × Fill Space). Gaps = segment length ÷ step,
+rounded down. Supports added = gaps − 1, spread evenly, so the real
+spacing is segment length ÷ gaps. Because the count rounds down, the
+spacing is always at least the step and can reach almost double it.
+Yours: 26.73 mm ÷ 4 gaps = 6.68 mm, the 6.64 you measured.”</p>
+<h2 id="more-complex-examples">More Complex Examples</h2>
+<p>You should now understand the basics of creating supports with the
+various tools. The example above is very simplistic, so let’s use more
+complex</p>
+<h2 id="presets">Presets</h2>
+</body>
+</html>

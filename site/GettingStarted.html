@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>GettingStarted</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+<h1 id="GettingStarted">Getting Started</h1>
+<h2 id="downloading-and-installing">Downloading and Installing</h2>
+<h3 id="osplatform-differences">OS/Platform Differences</h3>
+<ul>
+<li>Keyboard shortcuts</li>
+</ul>
+<h2 id="ui-overview">UI Overview</h2>
+<p>Runebrace’s User Interface (UI) is shown below with the major
+functional areas called out.</p>
+<figure id="fig:UIOverview">
+<img src="../assets/img/GettingStarted/UIOverview.png"
+alt="Runebrace’s main UI" />
+<figcaption aria-hidden="true">Runebrace’s main UI</figcaption>
+</figure>
+<p>It’s important to get used to the idea that Runebrace has no tooltips
+anywhere. This is intentional, as tooltips cover up the controls
+underneath. Controls clearly state their function on the control itself
+or nearby in the panel.</p>
+<h3 id="functional-areas-and-commands">Functional Areas and
+Commands</h3>
+<p>Below you can find short descriptions of each feature.</p>
+<h4 id="top-bar">Top Bar</h4>
+<dl>
+<dt><span id="PrintButton">Print</span></dt>
+<dd>
+Opens the export window (see <a href="#PrintingAndSlicing">Printing and
+Slicing</a>
+</dd>
+<dt><span id="MeshRepair">Mesh Repair</span></dt>
+<dd>
+Opens the repair window (see <a href="#MeshRepair">Mesh Repair</a>)
+</dd>
+<dt>[New]</dt>
+<dd>
+Creates a new empty scene
+</dd>
+<dt>[Revert]</dt>
+<dd>
+Reloads the file from the last saved version, discarding changes
+</dd>
+<dt>[Load]</dt>
+<dd>
+Opens a project or a model, with a Recent list
+</dd>
+<dt>[Save Project]</dt>
+<dd>
+Saves in place; a menu also offers Save Project As
+</dd>
+<dt>[Export Mesh]</dt>
+<dd>
+Opens the mesh export menu (see <a href="#ExportingMeshes">Exporting
+Meshes</a>)
+</dd>
+<dt>[About]</dt>
+<dd>
+Displays the Runebrace version, the graphics card in use, important
+links, and a donation button
+</dd>
+</dl>
+<p>There are two styles of file bar. Global Settings has a switch, “Use
+Standard File Buttons”, that chooses between them.</p>
+<h4 id="left-toolbar">Left Toolbar</h4>
+<p>This toolbar displays icons/buttons for different support tools.</p>
+<figure>
+<img src="../assets/img/SupportingModels/LPanel.png"
+alt="The Left Toolbar" />
+<figcaption aria-hidden="true">The Left Toolbar</figcaption>
+</figure>
+<h4 id="right-panel">Right Panel</h4>
+<p>The Right Panel holds features and controls for nearly all of
+Runebrace’s editing functionality.</p>
+<figure>
+<img src="../assets/img/GettingStarted/RightPanel.png"
+alt="The Right Panel" />
+<figcaption aria-hidden="true">The Right Panel</figcaption>
+</figure>
+<p>Most sections in the right panel are collapsible. Each area will be
+discussed later in this guide.</p>
+<h4 id="command-list">Command List</h4>
+<p>The Command List shows what mouse and keyboard actions are currently
+available. These change with the active tool.</p>
+<figure>
+<img src="../assets/img/GettingStarted/CommandList.png"
+alt="The Command List" />
+<figcaption aria-hidden="true">The Command List</figcaption>
+</figure>
+<p>The Edit tab allows you to remap some commands to better suit your
+style and workflow.</p>
+<p>You can also find a list of keyboard and mouse shortcuts on the right
+panel under General Settings.</p>
+<h4 id="mode-status">Mode Status</h4>
+<p>At the bottom are four icons that display current support modes.</p>
+<figure>
+<img src="../assets/img/GettingStarted/ModeStatus.png"
+alt="The Mode Status display" />
+<figcaption aria-hidden="true">The Mode Status display</figcaption>
+</figure>
+<ul>
+<li>Branch to nearest candidate. Wheel to scroll through
+candidates.</li>
+<li>Manually add branch via dragging</li>
+<li><strong>NEED CONTENT</strong><br />
+</li>
+<li><strong>NEED CONTENT</strong></li>
+</ul>
+<h4 id="island-panel">Island Panel</h4>
+<p>The Island Panel allows you to detect, support, hide, and otherwise
+interact with islands.</p>
+<figure>
+<img src="../assets/img/GettingStarted/IslandPanel.png"
+alt="The Island Panel" />
+<figcaption aria-hidden="true">The Island Panel</figcaption>
+</figure>
+<p>Controls on this panel are:</p>
+<dl>
+<dt>[&lt;-]</dt>
+<dd>
+Move to previous island
+</dd>
+<dt>[Detect]</dt>
+<dd>
+Detect islands on the model
+</dd>
+<dt>[Island Filter]</dt>
+<dd>
+Filters islands below this size in pixels from being displayed, counted,
+or resolved by the “Add Supports” command. <strong>Islands are not
+eliminated, just hidden.</strong>
+</dd>
+<dt>[Add Supports]</dt>
+<dd>
+Automatically add supports to islands. Some may be skipped due to mesh
+complexities.
+</dd>
+<dt>[Show]</dt>
+<dd>
+Rotate model to show the current island
+</dd>
+<dt>[Hide]</dt>
+<dd>
+Hide the current island from the display and count
+</dd>
+<dt>[+]</dt>
+<dd>
+Add a support to the current island
+</dd>
+<dt>[-&gt;]</dt>
+<dd>
+Move to next island
+</dd>
+</dl>
+<p>The scroll area below the buttons displays a current count of the
+number of islands, as well as an index of which island you’re currently
+working on. Next and Previous increment/decrement that count as
+expected. You can also drag the scroll marker to move quickly through
+supports.</p>
+<p>WINDOW TITLE Runebrace reports the outcome of an action in the window
+title, not in a popup. “Holes applied”, “31 supports shown”, “Model
+swapped”, errors, and timings all appear there. A reader of the manual
+should be told to look at it, because several actions give no other
+feedback.</p>
+<h3 id="a-note-on-display-scaling">A Note on Display Scaling</h3>
+<p>Runebrace’s entire UI scales with the window width, starting from a
+3840 pixel reference. I.e., a 3840-wide window renders at a scale of
+1.0, while a window 1280 wide renders at one third.</p>
+<p>Fonts and every aspect of the display scales as well, with nothing
+being tied to the display DPI.</p>
+<p>If you work in a small window, raise the UI Scale and Font Scale
+settings under Right Panel =&gt; General Settings =&gt; Global Settings.
+Both of these multiply on top of the automatic factor.</p>
+<h2 id="your-first-project">Your First Project</h2>
+<h2 id="understanding-file-types">Understanding File Types</h2>
+</body>
+</html>
