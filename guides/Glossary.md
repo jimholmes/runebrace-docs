@@ -1,4 +1,4 @@
-# Glossary
+# Glossary {#Glossary}
 
 Here are common terms and phrases used in Runebrace.
 
