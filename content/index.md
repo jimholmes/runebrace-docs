@@ -1,4 +1,14 @@
-# Index
+# Runebrace User Manual
+
+![](assets/img/common/Runebrace.jpg){height="200"}
+
+## What is Runebrace?
+
+Runebrace helps you take a 3D model from its initial mesh state to a ready-to-print file for your resin printer.
+
+Runebrace provides unique, powerful features in a smooth workflow to help users quickly accomplish support work. It's engineered by professional modelers and supporters to create perfect prints.
+
+## Index
 
 1. [Overview](guides/Overview.md#Overview)
 	
