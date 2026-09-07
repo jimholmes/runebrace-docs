@@ -21,27 +21,27 @@ Below you can find short descriptions of each feature.
 #### Top Bar
 
 [Print]{#PrintButton}
-: Opens the export window (see [Printing and Slicing](#PrintingAndSlicing)
+: Opens the Print Room (see [Printing and Slicing](#PrintingAndSlicing)
 
 [Mesh Repair]{#MeshRepair}
 : Opens the repair window (see [Mesh Repair](#MeshRepair))
 
-[New]
+[New]{#NewScene}
 : Creates a new empty scene
 
-[Revert]
+[Revert]{#RevertScene}
 : Reloads the file from the last saved version, discarding changes
 
-[Load]
+[Load]{#LoadScene}
 : Opens a project or a model, with a Recent list
 
-[Save Project]
+[Save Project]{#SaveProject}
 : Saves in place; a menu also offers Save Project As
 
-[Export Mesh]
+[Export Mesh]{#ExportMesh}
 : Opens the mesh export menu (see [Exporting Meshes](#ExportingMeshes))
 
-[About]
+[About]{#AboutRunebrace}
 : Displays the Runebrace version, the graphics card in use, important links, and a donation button
 
 There are two styles of file bar. Global Settings has a switch, "Use Standard File Buttons", that chooses between them.

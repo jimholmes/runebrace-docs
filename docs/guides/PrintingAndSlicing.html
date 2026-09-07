@@ -175,5 +175,118 @@
 </head>
 <body>
 <h1 id="PrintingAndSlicing">Printing and Slicing</h1>
+<p>The Print Room offers features to prepare and export models to a
+binary file for a printer.</p>
+<p>Print project files (.agsplate) hold everything needed to print a
+file: printer presets and parameters, plus the complete model. This
+means you can hand off the .agsplate to someone else to work on with no
+issues around linked models, parameters, etc.</p>
+<p>The Print Room has no undo functionality for actions. This is a
+deliberate choice, not an omission.</p>
+<p>Slicing preview by layer works across all models on the plate.</p>
+<figure id="fig:PrintRoomMain">
+<img src="../assets/img/PrintingAndSlicing/PrintRoomMain.png"
+alt="Figure 1: The Print Room’s main window" />
+<figcaption aria-hidden="true">Figure 1: The Print Room’s main
+window</figcaption>
+</figure>
+<h2 id="print-menu">Print Menu</h2>
+<dl>
+<dt><span id="PrintEditor">Editor</span></dt>
+<dd>
+Return to the Edit Room
+</dd>
+<dt><span id="PrintAddPiece">Add Piece</span></dt>
+<dd>
+Opens a file dialog to browse to and add a model to the plate
+</dd>
+<dt><span id="PrintAddCurrent">Add Current</span></dt>
+<dd>
+Puts the piece currently in the editor onto the plate
+</dd>
+<dt><span id="PlateArrange">Arrange</span></dt>
+<dd>
+Lays the pieces out automatically. Affected by the <a
+href="@PrintSetupLetArrangeRotate">Let Arrange rotate pieces</a> setting
+on the Print Setup Menu.
+</dd>
+<dt><span id="PrintClearPlate">Clear Plate</span></dt>
+<dd>
+Empties the current plate. Does not create a new plate project.
+</dd>
+<dt><span id="PrintSetupResetView">Reset View</span></dt>
+<dd>
+Re-frames the print plate view to front, centered, and above
+</dd>
+<dt><span id="PrintSavePlate">Save Plate</span></dt>
+<dd>
+Saves the current plate using the current name
+</dd>
+<dt><span id="PrintSaveAs">Save As</span></dt>
+<dd>
+Opens the Save As dialog to save the current plate with a new name
+</dd>
+<dt><span id="PrintRecentPlates">Recent Plates</span></dt>
+<dd>
+Lists the last plates opened
+</dd>
+<dt><span id="PrintOpenPlate">Open Plate</span></dt>
+<dd>
+Opens a plate file
+</dd>
+<dt><span id="PrintPrinter">Printer</span></dt>
+<dd>
+Opens the <a href="@Printer">Printer configuration dialog</a>
+</dd>
+<dt><span id="PrintAbout">About</span></dt>
+<dd>
+Opens the <a href="@GettingStarted#AboutRunebrace">About window</a>
+</dd>
+</dl>
+<h2 id="Printer">Printer</h2>
+<p>The Printer window allows you to work with printer configuration. A
+list of presets of pre-configured printers are available, or you can
+build and save your own custom preset.</p>
+<p>Changing any of the editable parameters will require saving to a new
+Printer Preset if you want to maintain the changes.</p>
+<figure id="fig:PrinterWindow">
+<img src="../assets/img/PrintingAndSlicing/Printer.png"
+alt="Figure 2: Printer configuration window" />
+<figcaption aria-hidden="true">Figure 2: Printer configuration
+window</figcaption>
+</figure>
+<dl>
+<dt><span id="PrintPrinterPresets">Printer Presets</span></dt>
+<dd>
+Shows a dropdown list of available printers. Click to select.
+</dd>
+<dt><span id="PrintPlateSize">Plate Size (XY)</span></dt>
+<dd>
+The size of the print plate in mm. Editable.
+</dd>
+</dl>
+<h2 id="print-setup-menu">Print Setup Menu</h2>
+<dl>
+<dt><span id="PrintSetupLetArrangeRotate">Let Arrange rotate
+pieces</span></dt>
+<dd>
+Allows Arrange to turn pieces to fit more in
+</dd>
+<dt><span id="PrintSetupRaftOverlap">Raft overlap</span></dt>
+<dd>
+Allows rafts to overlap
+</dd>
+<dt><span id="PrintSetupExport">Export Print File</span></dt>
+<dd>
+Slices everything on the plate into one file
+Edit the piece sends one piece back to the editor to be changed, and
+Back to print room returns it, so a fix does not mean rebuilding the
+plate.
+A plate carries its own printer preset and its own print parameters,
+valid inside that room only. Leaving the room gives you back the ones
+you had.
+The slice preview works here as well, over all the pieces at once.
+</dd>
+</dl>
 </body>
 </html>

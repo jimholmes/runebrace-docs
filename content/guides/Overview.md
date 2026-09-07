@@ -39,7 +39,7 @@ Runebrace offers compelling reasons to choose it over competitors. Both professi
 > I'm a hobbyist modeler, not a professional support guy. Runebrace helps me quickly get solid supports created in minimal time so that I can focus on printing and painting. I don't have to fight the software, unlike other tools.
 >     &mdash;J.H.
 
-All users laud Runebrace's fast speed, whether it's detecting islands or slicing models for printing.
+All users laud Runebrace's blistering speed, whether it's detecting islands or slicing models for printing.
 
 Perhaps most importantly, there's a very active community with great feedback, and the engineers building Runebrace listen and rapidly add features based on real-world usage.
 

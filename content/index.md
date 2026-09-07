@@ -35,7 +35,7 @@ Runebrace provides unique, powerful features in a smooth workflow to help users 
 	* Cutting a Mesh
 	
 5. [Hollowing](guides/Hollowing.md#Hollowing)
-6. [Printing and Slicing](guides/PrintingAndSlicing#PrintingAndSlicing)
+6. [Printing and Slicing](guides/PrintingAndSlicing.md#PrintingAndSlicing)
 
 # Glossary
 See the [Glossary](guides/Glossary.md#Glossary) for a list of commonly used terms and definitions.
