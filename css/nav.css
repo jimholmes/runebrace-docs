@@ -1,0 +1,4 @@
+.sidebar .h2 { margin-left: 0.75rem; }
+.sidebar .h3 { margin-left: 1.5rem; }
+.sidebar .h4 { margin-left: 2.25rem; }
+.sidebar a.active { font-weight: 700; }

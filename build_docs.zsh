@@ -23,19 +23,31 @@ cd ~/workspaces/runebrace-docs
 ##### Build HTML
 
 # purge existing to ensure clean build
-rm -rf docs/*
+rm -rf docs/guides/*
 
 # copy assets to docs folder
 rsync -a content/assets docs
 
+# copy CSS
+cp css/* docs/css/
+
 # create HTML, use lua filters for fixing links
 ## Root index file
 pandoc content/Index.md -o docs/index.html \
-    --standalone --lua-filter=md-links.lua
+    --css=css/nav.css \
+    --css=css/docs.css \
+    --include-before-body=docs/nav.html \
+    --include-after-body=snippets/after.html \
+    --standalone --lua-filter=md-links.lua \
+    --filter pandoc-crossref
 
 ## files in guides
 for f in content/guides/*.md; do
   pandoc "$f" -o "docs/guides/${f:t:r}.html" \
+    --css=../css/nav.css \
+    --css=../css/docs.css \
+    --include-before-body=docs/nav.html \
+    --include-after-body=snippets/after.html \
     --standalone --lua-filter=md-links.lua \
     --filter pandoc-crossref
 done
