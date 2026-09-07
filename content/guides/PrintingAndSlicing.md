@@ -60,10 +60,34 @@ Changing any of the editable parameters will require saving to a new Printer Pre
 [Printer Presets]{#PrintPrinterPresets}
 : Shows a dropdown list of available printers. Click to select.
 
-[Plate Size (XY)]{#PrintPlateSize}
-: The size of the print plate in mm. Editable.
+[Plate Size (XY)]{#PrintPrinterSize}
+: The size of the print plate width (X) and depth(Y) in mm. Editable.
+
+[Height]{#PrintPrinterHeight}
+: The vertical height of the print plate's volume in mm. Editable.
+
+[Layer Height (mm)]{#PrintPrinterLayerHeight}
+: Height of each layer in mm. Editable.
+
+[Layer Effect Strength]{#PrintPrinterLayerEffectStrength}
+: The strength of each layer **REWORD**. Editable.
+
+[Pixels (X, Y)]{#PrintPrinterPixels}
+: The pixel resolution of the print plate in width (X) and depth (Y). Editable. These figures together with plate size generate the numbers for the Pixel size field below this parameter.
+
+[Add to Presets]{PrintPrinterAddToPresets}
+: Opens a new dialog allowing you to save the current settings as a new preset.
+
+[Delete Presets]{PrintPrinterDeletePreset}
+: Deletes the currently active preset. Spawns a confirmation dialog.
+
+[Request support for my printer]{PrintPrinterRequestSupport}
+: Opens a new dialog enabling you to request support for your printer. Based on the active preset, which means you will have needed to create a new preset if your printer isn't already supported.
+
 
 ## Print Setup Menu
+
+
 [Let Arrange rotate pieces]{#PrintSetupLetArrangeRotate}
 : Allows Arrange to turn pieces to fit more in
   
