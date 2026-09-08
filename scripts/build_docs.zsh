@@ -5,6 +5,13 @@ export PATH="/Library/TeX/texbin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:
 # Project root
 ROOT=${0:A:h:h}
 
+# Can grab from Git, but not useful for docs
+# VERSION=$(git describe --tags --always)
+VERSION="1.8.9x"
+DATE=$(date -u +%Y-%m-%d)
+print -r -- "<footer>Version ${VERSION} · Published ${DATE}</footer>" > $ROOT/snippets/footer.html
+
+
 ##### Build PDF
 # pandoc Index.md \
 #   guides/Overview.md \
@@ -43,6 +50,9 @@ pandoc $ROOT/content/Index.md -o $ROOT/docs/index.html \
     --css=css/nav.css \
     --css=css/docs.css \
     --standalone --lua-filter=$ROOT/scripts/md-links.lua \
+    --variable=version:"$VERSION" \
+    --variable=date:"$DATE" \
+    --include-after-body=$ROOT/snippets/footer.html \
     --filter pandoc-crossref
 
 ## MD files to process
@@ -75,6 +85,9 @@ for f in $files; do
     --standalone --lua-filter=$ROOT/scripts/md-links.lua \
     --css=../css/nav.css \
     --css=../css/docs.css \
+    --variable=version:"$VERSION" \
+    --variable=date:"$DATE" \
+    --include-after-body=$ROOT/snippets/footer.html \
     --filter pandoc-crossref
 
 done
