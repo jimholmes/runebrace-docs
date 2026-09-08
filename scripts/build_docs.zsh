@@ -26,22 +26,8 @@ if [[ "$mode" == "deployed" ]]; then
   args+=(--docs)
 fi
 
+# Build the nav.html file with specified deployment target
 python3 build_nav.py "${args[@]}"
-
-##### Build PDF
-# pandoc Index.md \
-#   guides/Overview.md \
-#   guides/GettingStarted.md \
-#   guides/SupportingModels.md \
-#   guides/WorkingWithMeshes.md \
-#   guides/Hollowing.md \
-#   guides/PrintingAndSlicing.md \
-#   guides/Glossary.md \
-# -F pandoc-crossref \
-# -H header.tex \
-# -o output/RuneBraceManual.pdf \
-# --pdf-engine=/Library/TeX/texbin/pdflatex \
-# --resource-path=.:./assets/img:./guides
 
 
 ##### Build HTML
