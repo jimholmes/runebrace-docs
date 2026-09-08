@@ -3,7 +3,7 @@ from pathlib import Path
 import html
 import re
 
-BASE = ""  # local: ""   GH Pages: "/runebrace-docs"
+BASE = "/runebrace-docs"  # local: ""   GH Pages: "/runebrace-docs"
 
 ROOT = Path(__file__).resolve().parents[1]
 CONTENT = ROOT / "content"

@@ -9,151 +9,6 @@
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
     */
-    html {
-      color: #1a1a1a;
-      background-color: #fdfdfd;
-    }
-    body {
-      margin: 0 auto;
-      max-width: 36em;
-      padding-left: 50px;
-      padding-right: 50px;
-      padding-top: 50px;
-      padding-bottom: 50px;
-      hyphens: auto;
-      overflow-wrap: break-word;
-      text-rendering: optimizeLegibility;
-      font-kerning: normal;
-    }
-    @media (max-width: 600px) {
-      body {
-        font-size: 0.9em;
-        padding: 12px;
-      }
-      h1 {
-        font-size: 1.8em;
-      }
-    }
-    @media print {
-      html {
-        background-color: white;
-      }
-      body {
-        background-color: transparent;
-        color: black;
-      }
-      p, h2, h3 {
-        orphans: 3;
-        widows: 3;
-      }
-      h2, h3, h4 {
-        page-break-after: avoid;
-      }
-    }
-    p {
-      margin: 1em 0;
-    }
-    a {
-      color: #1a1a1a;
-    }
-    a:visited {
-      color: #1a1a1a;
-    }
-    img {
-      max-width: 100%;
-    }
-    svg {
-      height: auto;
-      max-width: 100%;
-    }
-    h1, h2, h3, h4, h5, h6 {
-      margin-top: 1.4em;
-    }
-    h5, h6 {
-      font-size: 1em;
-      font-style: italic;
-    }
-    h6 {
-      font-weight: normal;
-    }
-    ol, ul {
-      padding-left: 1.7em;
-      margin-top: 1em;
-    }
-    li > ol, li > ul {
-      margin-top: 0;
-    }
-    blockquote {
-      margin: 1em 0 1em 1.7em;
-      padding-left: 1em;
-      border-left: 2px solid #e6e6e6;
-      color: #606060;
-    }
-    code {
-      white-space: pre-wrap;
-      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
-      font-size: 85%;
-      margin: 0;
-      hyphens: manual;
-    }
-    pre {
-      margin: 1em 0;
-      overflow: auto;
-    }
-    pre code {
-      padding: 0;
-      overflow: visible;
-      overflow-wrap: normal;
-    }
-    .sourceCode {
-     background-color: transparent;
-     overflow: visible;
-    }
-    hr {
-      border: none;
-      border-top: 1px solid #1a1a1a;
-      height: 1px;
-      margin: 1em 0;
-    }
-    table {
-      margin: 1em 0;
-      border-collapse: collapse;
-      width: 100%;
-      overflow-x: auto;
-      display: block;
-      font-variant-numeric: lining-nums tabular-nums;
-    }
-    table caption {
-      margin-bottom: 0.75em;
-    }
-    tbody {
-      margin-top: 0.5em;
-      border-top: 1px solid #1a1a1a;
-      border-bottom: 1px solid #1a1a1a;
-    }
-    th {
-      border-top: 1px solid #1a1a1a;
-      padding: 0.25em 0.5em 0.25em 0.5em;
-    }
-    td {
-      padding: 0.125em 0.5em 0.25em 0.5em;
-    }
-    header {
-      margin-bottom: 4em;
-      text-align: center;
-    }
-    #TOC li {
-      list-style: none;
-    }
-    #TOC ul {
-      padding-left: 1.3em;
-    }
-    #TOC > ul {
-      padding-left: 0;
-    }
-    #TOC a:not(:hover) {
-      text-decoration: none;
-    }
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: 1.5em;}
     div.column{flex: auto;}
@@ -172,8 +27,71 @@
       vertical-align: middle;
     }
   </style>
+  <link rel="stylesheet" href="../css/nav.css" />
+  <link rel="stylesheet" href="../css/docs.css" />
 </head>
 <body>
+<div class="layout">
+<nav class="sidebar">
+  <ul>
+    <li class="h1"><a href="/runebrace-docs/guides/Overview.html">Introduction To Runebrace</a></li>
+        <li class="h3"><a href="/runebrace-docs/guides/Overview.html#key-features">Key Features</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/Overview.html#why-runebrace">Why Runebrace</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/Overview.html#getting-help">Getting Help</a></li>
+    <li class="h1"><a href="/runebrace-docs/guides/GettingStarted.html">Getting Started</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/GettingStarted.html#downloading-and-installing">Downloading and Installing</a></li>
+        <li class="h3"><a href="/runebrace-docs/guides/GettingStarted.html#osplatform-differences">OS/Platform Differences</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/GettingStarted.html#ui-overview">UI Overview</a></li>
+        <li class="h3"><a href="/runebrace-docs/guides/GettingStarted.html#functional-areas-and-commands">Functional Areas and Commands</a></li>
+          <li class="h4"><a href="/runebrace-docs/guides/GettingStarted.html#top-bar">Top Bar</a></li>
+          <li class="h4"><a href="/runebrace-docs/guides/GettingStarted.html#left-toolbar">Left Toolbar</a></li>
+          <li class="h4"><a href="/runebrace-docs/guides/GettingStarted.html#right-panel">Right Panel</a></li>
+          <li class="h4"><a href="/runebrace-docs/guides/GettingStarted.html#command-list">Command List</a></li>
+          <li class="h4"><a href="/runebrace-docs/guides/GettingStarted.html#mode-status">Mode Status</a></li>
+          <li class="h4"><a href="/runebrace-docs/guides/GettingStarted.html#island-panel">Island Panel</a></li>
+        <li class="h3"><a href="/runebrace-docs/guides/GettingStarted.html#a-note-on-display-scaling">A Note on Display Scaling</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/GettingStarted.html#your-first-project">Your First Project</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/GettingStarted.html#understanding-file-types">Understanding File Types</a></li>
+    <li class="h1"><a href="/runebrace-docs/guides/SupportingModels.html">Supporting Models</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/SupportingModels.html#supporting-overview">Supporting Overview</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/SupportingModels.html#basic-workflow">Basic Workflow</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/SupportingModels.html#features">Features</a></li>
+        <li class="h3"><a href="/runebrace-docs/guides/SupportingModels.html#support-basics">Support Basics</a></li>
+          <li class="h4"><a href="/runebrace-docs/guides/SupportingModels.html#support-variants">Support Variants</a></li>
+    <li class="h1"><a href="/runebrace-docs/guides/SupportingModels.html">: Lateral support between the mid-sections of supports</a></li>
+          <li class="h4"><a href="/runebrace-docs/guides/SupportingModels.html#manual-supports">Manual Supports</a></li>
+          <li class="h4"><a href="/runebrace-docs/guides/SupportingModels.html#left-toolbar-reword">Left Toolbar (REWORD)</a></li>
+        <li class="h3"><a href="/runebrace-docs/guides/SupportingModels.html#symmetry">Symmetry</a></li>
+        <li class="h3"><a href="/runebrace-docs/guides/SupportingModels.html#path-supports">Path Supports</a></li>
+          <li class="h4"><a href="/runebrace-docs/guides/SupportingModels.html#line">Line</a></li>
+          <li class="h4"><a href="/runebrace-docs/guides/SupportingModels.html#arc">Arc</a></li>
+          <li class="h4"><a href="/runebrace-docs/guides/SupportingModels.html#circle">Circle</a></li>
+        <li class="h3"><a href="/runebrace-docs/guides/SupportingModels.html#fill-basics">Fill Basics</a></li>
+          <li class="h4"><a href="/runebrace-docs/guides/SupportingModels.html#polygon-fill">Polygon Fill</a></li>
+          <li class="h4"><a href="/runebrace-docs/guides/SupportingModels.html#perimeter-and-fill">Perimeter and Fill</a></li>
+          <li class="h4"><a href="/runebrace-docs/guides/SupportingModels.html#circle-fill">Circle Fill</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/SupportingModels.html#triangle-painting">Triangle Painting</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/SupportingModels.html#deeper-dive-on-placement">Deeper Dive on Placement</a></li>
+        <li class="h3"><a href="/runebrace-docs/guides/SupportingModels.html#MoreAboutLines">More About Lines</a></li>
+        <li class="h3"><a href="/runebrace-docs/guides/SupportingModels.html#MoreAboutPerimeters">More About Perimeters</a></li>
+          <li class="h4"><a href="/runebrace-docs/guides/SupportingModels.html#selection-order-impact-on-perimeters-and-areas">Selection Order Impact on Perimeters and Areas</a></li>
+          <li class="h4"><a href="/runebrace-docs/guides/SupportingModels.html#understanding-support-impacts-on-fill-planes">Understanding Support Impacts on Fill Planes</a></li>
+          <li class="h4"><a href="/runebrace-docs/guides/SupportingModels.html#understanding-line-and-fill-settings">Understanding Line and Fill Settings</a></li>
+          <li class="h4"><a href="/runebrace-docs/guides/SupportingModels.html#undoing-fill-operations">Undoing Fill Operations</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/SupportingModels.html#more-complex-examples">More Complex Examples</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/SupportingModels.html#presets">Presets</a></li>
+    <li class="h1"><a href="/runebrace-docs/guides/WorkingWithMeshes.html">Working with Meshes</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/WorkingWithMeshes.html#ExportingMeshes">Exporting Meshes</a></li>
+    <li class="h1"><a href="/runebrace-docs/guides/Hollowing.html">Hollowing</a></li>
+    <li class="h1"><a href="/runebrace-docs/guides/PrintingAndSlicing.html">Printing and Slicing</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/PrintingAndSlicing.html#print-menu">Print Menu</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/PrintingAndSlicing.html#Printer">Printer</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/PrintingAndSlicing.html#print-setup-menu">Print Setup Menu</a></li>
+    <li class="h1"><a href="/runebrace-docs/guides/Glossary.html">Glossary</a></li>
+  </ul>
+</nav>
+<main class="content">
+
 <h1 id="GettingStarted">Getting Started</h1>
 <h2 id="downloading-and-installing">Downloading and Installing</h2>
 <h3 id="osplatform-differences">OS/Platform Differences</h3>
@@ -348,5 +266,7 @@ settings under Right Panel =&gt; General Settings =&gt; Global Settings.
 Both of these multiply on top of the automatic factor.</p>
 <h2 id="your-first-project">Your First Project</h2>
 <h2 id="understanding-file-types">Understanding File Types</h2>
+</main>
+</div>
 </body>
 </html>
