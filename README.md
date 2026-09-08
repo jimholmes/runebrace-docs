@@ -33,7 +33,9 @@ At the moment this is built locally on a Mac. The script and tools all have Wind
 
     `brew install --cask mactex`
 
-* **build_pdf.zsh**: Zshell script that executes pandoc with all the required library stuff. You may need to edit this based on your system's env variables and particular Latex package you have.
+* **build_nav.py** CALLED FROM BUILD_DOCS.ZSH. Python script to build nav.html based on headings in all the Markdown files. Invoke with "--docs" for setting BASE of the URL for deployment to GH Pages. Invoke with an empty to create for localhost deployment.
+
+* **build_docs.zsh**: Zshell script that invokes build_nav.py, copies resource files to target, then executes pandoc with all the required library stuff. You may need to edit this based on your system's env variables and particular Latex package you have.
 
 ## Project Structure
 
@@ -41,14 +43,22 @@ At the moment this is built locally on a Mac. The script and tools all have Wind
         --assets
            --files : any support files needed
            --img : images. Duh.
+        --css : css source files
         --guides : Markdown text files
         --output : Generated PDF
-        --docs : HTML files
+        --docs : output for web hosting. index.html is at this level
+            --assets
+               --img
+               --files
+            --css
+            --guides: Converted HTML
+        --scripts : zsh, py scripts, also ORDERED_FILE_LIST.txt
+        --snippets : HTML 
   
   
 ## Authoring Content
 
-These docs are written in Markdown. There are also several bits specific to pandoc and Latex formatting.
+These docs are written in Markdown. There are also several bits specific to pandoc and Latex formatting, for example:
 
     {height:} : specifies height of images
     H4 elements ("####") :  Configured in Latex to act 
@@ -56,7 +66,9 @@ These docs are written in Markdown. There are also several bits specific to pand
 
 Note that these pandoc/Latex specific features may not render properly in your Markdown editor. Only make changes to pandoc or Latex configurations based on issues identified in the output, ***not*** your editor!
 
-Index.md in the root and lists all chapter guides, which live in the "guides" folder. build_pdf.zsh consolidates each separate file in the guides folder. Edit the script to add any new Markdown files **IN ORDER**.
+ORDERED_FILE_LIST holds a list of all Markdown files to be processed. *Exception:* index.md is handled separately due to its location.
+
+Edit this file list to add new Markdown files. Files must be added in the order you want them appearing in the nav, TOC, etc.
 
 ### Examples
 
@@ -78,6 +90,8 @@ Reference a term here the first time it's used in the docs. This will create a l
 Use standard Markdown image elements. Add an ID tag following the markup to create a reference, e.g.
 
     ![caption](image_path){#fig:ID_TAG}
+    
+ID tags are also required to generate "Figure <x>:" text as a caption.
     
 Link to that figure as desired:
 
