@@ -12,6 +12,22 @@ DATE=$(date -u +%Y-%m-%d)
 print -r -- "<footer>Version ${VERSION} · Published ${DATE}</footer>" > $ROOT/snippets/footer.html
 
 
+# Read command line arg for deployment target
+#   takes "local" or "deployed" before invoking build_nav.py
+mode="${1:-}"
+
+if [[ "$mode" != "local" && "$mode" != "deployed" ]]; then
+  echo "Usage: $0 local|deployed" >&2
+  exit 1
+fi
+
+args=()
+if [[ "$mode" == "deployed" ]]; then
+  args+=(--docs)
+fi
+
+python3 build_nav.py "${args[@]}"
+
 ##### Build PDF
 # pandoc Index.md \
 #   guides/Overview.md \

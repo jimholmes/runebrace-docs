@@ -10,7 +10,7 @@ BASE = ""
 #  "" for localhost
 #  "/runebrace-docs" for GH Pages
 # Set via arg when invoked
-DEPLOYED_ROOT = "/runebrace-docs"
+DEPLOYED_ROOT = "/runebrace-docs/docs"
 
 ROOT = Path(__file__).resolve().parents[1]
 CONTENT = ROOT / "content"
@@ -34,6 +34,7 @@ def set_base_from_args() -> None:
     )
     args = parser.parse_args()
     BASE = DEPLOYED_ROOT  if args.docs else ""
+    print(f"BASE set to {BASE}")
 
 def slugify(text: str) -> str:
     text = EXPLICIT_ID.sub("", text)
@@ -137,4 +138,5 @@ def build():
     print(f"Wrote {OUT}")
 
 if __name__ == "__main__":
+    set_base_from_args()
     build()
