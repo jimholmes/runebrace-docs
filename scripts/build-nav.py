@@ -4,7 +4,7 @@ import re
 import html
 
 ROOT = Path(__file__).resolve().parents[1]
-DOCS = ROOT / "content"
+#DOCS = ROOT / "content"
 OUT = ROOT / "docs" / "nav.html"   # or ROOT / "nav.html"
 
 HEADING_RE = re.compile(r"^(#{1,4})\s+(.+?)\s*$")
@@ -29,6 +29,7 @@ def strip_front_matter(lines):
     return lines
 
 def headings(path: Path):
+    print("Path: " , path)
     lines = strip_front_matter(path.read_text(encoding="utf-8").splitlines())
     in_fence = False
     for line in lines:
@@ -49,7 +50,13 @@ def headings(path: Path):
         yield level, title, hid
 
 def md_to_html(md: Path) -> str:
-    rel = md.relative_to(DOCS).with_suffix(".html")
+    if not md.is_absolute():
+        md = ROOT / md
+    md = md.resolve()
+    content = (ROOT / "content").resolve()
+    rel = md.relative_to(content).with_suffix(".html")
+    if rel.name == "Index.html":
+        rel = rel.with_name("index.html")
     return rel.as_posix()
 
 def sorted_docs():
@@ -59,7 +66,8 @@ def sorted_docs():
             line = line.strip()
             if not line or line.startswith("#"):
                 continue
-            files.append(Path(line))
+            files.append((ROOT / line).resolve())
+            print(files)
     return files
 
 def build():
