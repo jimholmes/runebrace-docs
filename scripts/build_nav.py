@@ -2,8 +2,15 @@
 from pathlib import Path
 import html
 import re
+import argparse
 
-BASE = "/runebrace-docs"  # local: ""   GH Pages: "/runebrace-docs"
+
+BASE = ""
+# root where docs will be deployed to
+#  "" for localhost
+#  "/runebrace-docs" for GH Pages
+# Set via arg when invoked
+DEPLOYED_ROOT = "/runebrace-docs"
 
 ROOT = Path(__file__).resolve().parents[1]
 CONTENT = ROOT / "content"
@@ -16,6 +23,17 @@ FENCE_RE = re.compile(r"^```")
 IMAGE_RE = re.compile(r"!\[([^\]]*)\]\([^)]+\)")
 LINK_RE = re.compile(r"\[([^\]]+)\]\([^)]+\)")
 EMPH_RE = re.compile(r"[*_`]+")
+
+def set_base_from_args() -> None:
+    global BASE
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--docs",
+        action="store_true",
+        help='Set BASE to $DEPLOYED_ROOT',
+    )
+    args = parser.parse_args()
+    BASE = DEPLOYED_ROOT  if args.docs else ""
 
 def slugify(text: str) -> str:
     text = EXPLICIT_ID.sub("", text)
