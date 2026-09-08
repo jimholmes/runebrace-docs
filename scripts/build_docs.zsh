@@ -27,7 +27,7 @@ ROOT=${0:A:h:h}
 rm -rf $ROOT/docs/guides/*
 
 # copy assets to docs folder
-rsync -a $ROOT/content/assets docs
+rsync -a $ROOT/content/assets $ROOT/docs
 
 # copy CSS
 cp $ROOT/css/* $ROOT/docs/css/
@@ -42,17 +42,18 @@ pandoc $ROOT/content/Index.md -o $ROOT/docs/index.html \
     --standalone --lua-filter=$ROOT/scripts/md-links.lua \
     --filter pandoc-crossref
 
-## files in guides
+## MD files to process
 list=$ROOT/scripts/ORDERED_FILE_LIST.txt
+
 # Read the file into an array, one path per line.
 # Empty lines and lines starting with # are skipped.
 files=()
-
 while IFS= read -r line || [[ -n $line ]]; do
   line=${line%%$'\r'}          # strip CR if the list is CRLF
   [[ -z $line || $line == \#* ]] && continue
-  files+=("$line")
+  files+=("$ROOT/$line")
 done < "$list"
+
 
 for f in $files; do
   # trim CR, leading/trailing whitespace
@@ -65,7 +66,7 @@ for f in $files; do
     continue
   fi
 
-  pandoc "$f" -o "docs/guides/${f:t:r}.html" \
+  pandoc "$f" -o "$ROOT/docs/guides/${f:t:r}.html" \
     --css=$ROOT/css/nav.css \
     --css=$ROOT/css/docs.css \
     --include-before-body=$ROOT/docs/nav.html \
