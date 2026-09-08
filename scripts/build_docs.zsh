@@ -43,8 +43,6 @@ cp $ROOT/css/* $ROOT/docs/css/
 
 # create HTML, use lua filters for fixing links
 
-print "$ROOT/css/nav.css "
-
 ## Root index file
 pandoc $ROOT/content/Index.md -o $ROOT/docs/index.html \
     --include-before-body=$ROOT/docs/nav.html \
