@@ -1,24 +1,38 @@
 #!/usr/bin/env python3
 from pathlib import Path
-import re
 import html
+import re
+
+BASE = ""  # local: ""   GH Pages: "/runebrace-docs"
 
 ROOT = Path(__file__).resolve().parents[1]
-#DOCS = ROOT / "content"
-OUT = ROOT / "docs" / "nav.html"   # or ROOT / "nav.html"
+CONTENT = ROOT / "content"
+OUT = ROOT / "docs" / "nav.html"
+ORDERED_LIST = ROOT / "scripts" / "ORDERED_FILE_LIST.txt"
 
 HEADING_RE = re.compile(r"^(#{1,4})\s+(.+?)\s*$")
 EXPLICIT_ID = re.compile(r"\s*\{#([^}]+)\}\s*$")
 FENCE_RE = re.compile(r"^```")
+IMAGE_RE = re.compile(r"!\[([^\]]*)\]\([^)]+\)")
+LINK_RE = re.compile(r"\[([^\]]+)\]\([^)]+\)")
+EMPH_RE = re.compile(r"[*_`]+")
 
 def slugify(text: str) -> str:
     text = EXPLICIT_ID.sub("", text)
-    text = re.sub(r"[*_`]+", "", text)
-    text = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", text)
+    text = IMAGE_RE.sub(r"\1", text)
+    text = LINK_RE.sub(r"\1", text)
+    text = EMPH_RE.sub("", text)
     text = text.lower()
     text = re.sub(r"[^\w\s.\-]", "", text, flags=re.UNICODE)
     text = re.sub(r"\s+", "-", text.strip())
     return text or "section"
+
+def visible_title(raw: str) -> str:
+    text = EXPLICIT_ID.sub("", raw)
+    text = IMAGE_RE.sub(r"\1", text)   # ![Alt](../assets/img/x.png) -> Alt
+    text = LINK_RE.sub(r"\1", text)
+    text = EMPH_RE.sub("", text)
+    return re.sub(r"\s+", " ", text).strip()
 
 def strip_front_matter(lines):
     if not lines or lines[0].strip() != "---":
@@ -29,9 +43,9 @@ def strip_front_matter(lines):
     return lines
 
 def headings(path: Path):
-    print("Path: " , path)
     lines = strip_front_matter(path.read_text(encoding="utf-8").splitlines())
     in_fence = False
+    seen = {}
     for line in lines:
         if FENCE_RE.match(line.strip()):
             in_fence = not in_fence
@@ -45,29 +59,34 @@ def headings(path: Path):
         raw = m.group(2).strip()
         idm = EXPLICIT_ID.search(raw)
         hid = idm.group(1) if idm else slugify(raw)
-        title = EXPLICIT_ID.sub("", raw).strip()
-        title = re.sub(r"[*_`]+", "", title)
-        yield level, title, hid
+        if hid in seen:
+            seen[hid] += 1
+            hid = f"{hid}-{seen[hid]}"
+        else:
+            seen[hid] = 0
+        yield level, visible_title(raw), hid
 
 def md_to_html(md: Path) -> str:
-    if not md.is_absolute():
-        md = ROOT / md
-    md = md.resolve()
-    content = (ROOT / "content").resolve()
-    rel = md.relative_to(content).with_suffix(".html")
+    rel = md.relative_to(CONTENT.resolve()).with_suffix(".html")
     if rel.name == "Index.html":
         rel = rel.with_name("index.html")
-    return rel.as_posix()
+    return f"{BASE}/{rel.as_posix()}".replace("//", "/")
 
 def sorted_docs():
     files = []
-    with open("ORDERED_FILE_LIST.txt", encoding="utf-8") as fh:
+    with ORDERED_LIST.open(encoding="utf-8") as fh:
         for line in fh:
             line = line.strip()
             if not line or line.startswith("#"):
                 continue
-            files.append((ROOT / line).resolve())
-            print(files)
+            path = Path(line)
+            if not path.is_absolute():
+                path = ROOT / path
+            path = path.resolve()
+            if not path.is_file():
+                print(f"skipping missing file: {line}")
+                continue
+            files.append(path)
     return files
 
 def build():
@@ -96,7 +115,7 @@ def build():
         "",
     ]
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text("\n".join(lines), encoding="utf-8")
+    OUT.write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"Wrote {OUT}")
 
 if __name__ == "__main__":

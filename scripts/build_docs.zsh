@@ -33,12 +33,15 @@ rsync -a $ROOT/content/assets $ROOT/docs
 cp $ROOT/css/* $ROOT/docs/css/
 
 # create HTML, use lua filters for fixing links
+
+print "$ROOT/css/nav.css "
+
 ## Root index file
 pandoc $ROOT/content/Index.md -o $ROOT/docs/index.html \
-    --css=$ROOT/css/nav.css \
-    --css=$ROOT/css/docs.css \
     --include-before-body=$ROOT/docs/nav.html \
     --include-after-body=$ROOT/snippets/after.html \
+    --css=css/nav.css \
+    --css=css/docs.css \
     --standalone --lua-filter=$ROOT/scripts/md-links.lua \
     --filter pandoc-crossref
 
@@ -67,11 +70,11 @@ for f in $files; do
   fi
 
   pandoc "$f" -o "$ROOT/docs/guides/${f:t:r}.html" \
-    --css=$ROOT/css/nav.css \
-    --css=$ROOT/css/docs.css \
     --include-before-body=$ROOT/docs/nav.html \
     --include-after-body=$ROOT/snippets/after.html \
     --standalone --lua-filter=$ROOT/scripts/md-links.lua \
+    --css=../css/nav.css \
+    --css=../css/docs.css \
     --filter pandoc-crossref
 
 done
