@@ -53,12 +53,14 @@ def md_to_html(md: Path) -> str:
     return rel.as_posix()
 
 def sorted_docs():
-    files = list(DOCS.rglob("*.md"))
-    def key(p: Path):
-        rel = p.relative_to(DOCS).as_posix()
-        # index.md first in each folder
-        return rel.replace("index.md", "\x00index.md")
-    return sorted(files, key=key)
+    files = []
+    with open("ORDERED_FILE_LIST.txt", encoding="utf-8") as fh:
+        for line in fh:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            files.append(Path(line))
+    return files
 
 def build():
     lines = [

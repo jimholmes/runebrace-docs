@@ -2,7 +2,8 @@
 
 export PATH="/Library/TeX/texbin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
 
-cd ~/workspaces/runebrace-docs
+# Project root
+ROOT=${0:A:h:h}
 
 ##### Build PDF
 # pandoc Index.md \
@@ -23,33 +24,53 @@ cd ~/workspaces/runebrace-docs
 ##### Build HTML
 
 # purge existing to ensure clean build
-rm -rf docs/guides/*
+rm -rf $ROOT/docs/guides/*
 
 # copy assets to docs folder
-rsync -a content/assets docs
+rsync -a $ROOT/content/assets docs
 
 # copy CSS
-cp css/* docs/css/
+cp $ROOT/css/* $ROOT/docs/css/
 
 # create HTML, use lua filters for fixing links
 ## Root index file
-pandoc content/Index.md -o docs/index.html \
-    --css=css/nav.css \
-    --css=css/docs.css \
-    --include-before-body=docs/nav.html \
-    --include-after-body=snippets/after.html \
-    --standalone --lua-filter=md-links.lua \
+pandoc $ROOT/content/Index.md -o $ROOT/docs/index.html \
+    --css=$ROOT/css/nav.css \
+    --css=$ROOT/css/docs.css \
+    --include-before-body=$ROOT/docs/nav.html \
+    --include-after-body=$ROOT/snippets/after.html \
+    --standalone --lua-filter=$ROOT/scripts/md-links.lua \
     --filter pandoc-crossref
 
 ## files in guides
-for f in content/guides/*.md; do
+list=$ROOT/scripts/ORDERED_FILE_LIST.txt
+# Read the file into an array, one path per line.
+# Empty lines and lines starting with # are skipped.
+files=()
+
+while IFS= read -r line || [[ -n $line ]]; do
+  line=${line%%$'\r'}          # strip CR if the list is CRLF
+  [[ -z $line || $line == \#* ]] && continue
+  files+=("$line")
+done < "$list"
+
+for f in $files; do
+  # trim CR, leading/trailing whitespace
+  f=${f%%$'\r'}
+  f=${f##[[:space:]]#}
+  f=${f%%[[:space:]]#}
+
+  if [[ ! -f $f ]]; then
+    print -u2 "skipping missing file: $f"
+    continue
+  fi
+
   pandoc "$f" -o "docs/guides/${f:t:r}.html" \
-    --css=../css/nav.css \
-    --css=../css/docs.css \
-    --include-before-body=docs/nav.html \
-    --include-after-body=snippets/after.html \
-    --standalone --lua-filter=md-links.lua \
+    --css=$ROOT/css/nav.css \
+    --css=$ROOT/css/docs.css \
+    --include-before-body=$ROOT/docs/nav.html \
+    --include-after-body=$ROOT/snippets/after.html \
+    --standalone --lua-filter=$ROOT/scripts/md-links.lua \
     --filter pandoc-crossref
+
 done
-
-

@@ -1,0 +1,12 @@
+# Path to files to process in the order listed.
+#  Path is from the root of the project.
+#  Consumers of this file are responsible for setting project root.
+#  Consumers are also responsible for trimming leading/trailing whitespace
+#    and/or CR etc.
+content/guides/Overview.md
+content/guides/GettingStarted.md
+content/guides/SupportingModels.md
+content/guides/WorkingWithMeshes.md
+content/guides/Hollowing.md
+content/guides/PrintingAndSlicing.md
+content/guides/Glossary.md
