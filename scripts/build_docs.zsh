@@ -2,18 +2,23 @@
 
 export PATH="/Library/TeX/texbin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
 
-# Project root
+# Set root to parent folder from this script
 ROOT=${0:A:h:h}
 
+##### Write footer.html for later inclusion
+# Write version and date tags to footer file
 # Can grab from Git, but not useful for docs
 # VERSION=$(git describe --tags --always)
 VERSION="1.8.9x"
 DATE=$(date -u +%Y-%m-%d)
 print -r -- "<footer>Version ${VERSION} · Published ${DATE}</footer>" > $ROOT/snippets/footer.html
 
-
+##### Build nav.html
 # Read command line arg for deployment target
 #   takes "local" or "deployed" before invoking build_nav.py
+# Note this is *NOT* for physical file locations. It's for 
+#   reference links like href, img, etc. that are in
+#   the HTML files
 mode="${1:-}"
 
 if [[ "$mode" != "local" && "$mode" != "deployed" ]]; then
@@ -30,8 +35,7 @@ fi
 python3 build_nav.py "${args[@]}"
 
 
-##### Build HTML
-
+##### Convert Markdown to HTML in output dirs
 # purge existing to ensure clean build
 rm -rf $ROOT/docs/guides/*
 
@@ -55,7 +59,7 @@ pandoc $ROOT/content/Index.md -o $ROOT/docs/index.html \
     --include-after-body=$ROOT/snippets/footer.html \
     --filter pandoc-crossref
 
-## MD files to process
+## Read MD files to process
 list=$ROOT/scripts/ORDERED_FILE_LIST.txt
 
 # Read the file into an array, one path per line.
