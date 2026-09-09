@@ -32,7 +32,7 @@ A support is a chain of control points with a radius at each one: the tip that t
 : A ground reinforcement added to an existing brace
 
 [Bracing]{#BracingSupport}
-# : Lateral support between the mid-sections of supports
+: Lateral support between the mid-sections of supports
 
 **CONTENT NEEDED**
 
