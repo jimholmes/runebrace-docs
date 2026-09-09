@@ -10,7 +10,7 @@ BASE = ""
 #  "" for localhost
 #  "/runebrace-docs" for GH Pages
 # Set via arg when invoked
-DEPLOYED_ROOT = "/runebrace-docs/docs"
+DEPLOYED_ROOT = "/runebrace-docs"
 
 ROOT = Path(__file__).resolve().parents[1]
 CONTENT = ROOT / "content"
