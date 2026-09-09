@@ -3,7 +3,6 @@
 #  Consumers of this file are responsible for setting project root.
 #  Consumers are also responsible for trimming leading/trailing whitespace
 #    and/or CR etc.
-content/guides/Overview.md
 content/guides/GettingStarted.md
 content/guides/SupportingModels.md
 content/guides/WorkingWithMeshes.md

@@ -86,6 +86,7 @@ def headings(path: Path):
         yield level, visible_title(raw), hid
 
 def md_to_html(md: Path) -> str:
+    print(f"Path: {md}")
     rel = md.relative_to(CONTENT.resolve()).with_suffix(".html")
     if rel.name == "Index.html":
         rel = rel.with_name("index.html")
@@ -93,6 +94,14 @@ def md_to_html(md: Path) -> str:
 
 def sorted_docs():
     files = []
+    path = Path("content/index.md")
+    if not path.is_absolute():
+        path = ROOT / path
+    path = path.resolve()
+    if not path.is_file():
+        print(f"skipping missing file: {path}")
+    files.append(path)
+
     with ORDERED_LIST.open(encoding="utf-8") as fh:
         for line in fh:
             line = line.strip()
