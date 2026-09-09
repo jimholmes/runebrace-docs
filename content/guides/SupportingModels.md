@@ -48,7 +48,7 @@ A support is a chain of control points with a radius at each one: the tip that t
 
 The left toolbar controls many support options.
 
-![Left toolbar icons](../assets/img/SupportingModels/LPanel.png){#fig:LPanel}
+![Left toolbar icons](../assets/img/SupportingModels/LPanel.png){#fig:LPanel .doc-img}
 
 ### Symmetry
 
@@ -58,11 +58,11 @@ The left toolbar controls many support options.
 
 [Path](#path) supports are created on a line between two or more supports. A path is drawn from the tip of each support in the order they were selected. (Use F3 + LMB when selecting multiple supports.)
 
-![Round Base with Three Supports](../assets/img/SupportingModels/RoundBase-3Supports.png){#fig:InitialBaseExample}
+![Round Base with Three Supports](../assets/img/SupportingModels/RoundBase-3Supports.png){#fig:InitialBaseExample .doc-img}
 
 Settings controlling spacing of supports for the following features are located in the right panel under Advanced Placement => Line and Fill.
 
-![right panel with line and fill highlighted](../assets/img/SupportingModels/RMenu-AdvancedPlacement-TopLevel.png){#fig:RPanelAdvPlacement height="400"}
+![right panel with line and fill highlighted](../assets/img/SupportingModels/RMenu-AdvancedPlacement-TopLevel.png){#fig:RPanelAdvPlacement height="400" .doc-img}
 
 > **Important Considerations**
 
@@ -80,11 +80,11 @@ Line placement is available through the right panel and the left toolbar ([@fig:
 
 Spacing for supports along the line is controlled by the right panel under Advanced Placement => Line & Fill => Line.
 
-![Menu for adjusting Polygon Fill spacing](../assets/img/SupportingModels/RMenu-AdvancedPlacement-LineAndFill-Line.png){#fig:RPanelAdvPlacementLine}
+![Menu for adjusting Polygon Fill spacing](../assets/img/SupportingModels/RMenu-AdvancedPlacement-LineAndFill-Line.png){#fig:RPanelAdvPlacementLine .doc-img}
 
 Selecting support #1, then #2, then creating Line supports results in this:
 
-![Supports created via line](../assets/img/SupportingModels/RoundBase-2Supports-CreateLine.png){#fig:RoundExampleCreateLine}
+![Supports created via line](../assets/img/SupportingModels/RoundBase-2Supports-CreateLine.png){#fig:RoundExampleCreateLine .doc-img}
 
 For more details on how lines work, see the [deep dive on lines](#MoreAboutLines)
 
@@ -96,11 +96,11 @@ Arc placement is available through the right panel and the left toolbar ([@fig:L
 
 Configure using the settings in the right panel Advanced Placement => Line & Fill => Arc.
 
-![Settings for Arcs](../assets/img/SupportingModels/RMenu-AdvancedPlacement-LineAndFill-Arc.png){#fig:ArcSettings}
+![Settings for Arcs](../assets/img/SupportingModels/RMenu-AdvancedPlacement-LineAndFill-Arc.png){#fig:ArcSettings .doc-img}
 
 Selecting support #1, then #2, then #3, then creating Arc supports results in this:
 
-![Supports created via Arc](../assets/img/SupportingModels/RoundBase-3Supports-CreateArc.png){#fig:RoundExampleCreateArc}
+![Supports created via Arc](../assets/img/SupportingModels/RoundBase-3Supports-CreateArc.png){#fig:RoundExampleCreateArc .doc-img}
 
 Note the double supports appearing at callout #2. This is due to the spacing along the arc, with one added support being in close proximity to the original #2.
 
@@ -115,7 +115,7 @@ Configure using the settings in the right panel Advanced Placement => Line & Fil
 
 Selecting support #1, then #2, then #3, then creating Circle supports results in this:
 
-![Supports created via Circle](../assets/img/SupportingModels/RoundBase-3Supports-CreateCircle.png){#fig:RoundExampleCreateCircle}
+![Supports created via Circle](../assets/img/SupportingModels/RoundBase-3Supports-CreateCircle.png){#fig:RoundExampleCreateCircle .doc-img}
 
 Again, note the doubled supports, this time at #2 and #3.
 
@@ -138,13 +138,13 @@ You can also use the Fill Space button from the right panel (see below).
 
 Using Poly Fill/Fill Space from our starting point results in this:
 
-![Poly fill](../assets/img/SupportingModels/RoundBase-3Supports-PolyFill.png){#fig:RoundExamplePolyFill}
+![Poly fill](../assets/img/SupportingModels/RoundBase-3Supports-PolyFill.png){#fig:RoundExamplePolyFill .doc-img}
 
 **Why:** EDIT: ADD USE CASE
 
 Adjust the spacing of the filled supports under right panel => Advanced Placement => Line and Fill => Fill Space
 
-![Menu for adjusting Polygon Fill spacing](../assets/img/SupportingModels/RMenu-AdvancedPlacement-LineAndFill-FillSpace.png){#fig:RPanelFillSpace height="200"}
+![Menu for adjusting Polygon Fill spacing](../assets/img/SupportingModels/RMenu-AdvancedPlacement-LineAndFill-FillSpace.png){#fig:RPanelFillSpace height="200" .doc-img}
 
 #### Perimeter and Fill
 
@@ -156,18 +156,18 @@ Select three or more supports, then press the Perimeter and Fill button (there's
 
 Using Perimeter and Fill from our starting point results in this:
 
-![Poly fill with Perimeter](../assets/img/SupportingModels/RoundBase-3Supports-PolyFillPerimeter.png){#fig:RoundExamplePolyFillPerim}
+![Poly fill with Perimeter](../assets/img/SupportingModels/RoundBase-3Supports-PolyFillPerimeter.png){#fig:RoundExamplePolyFillPerim .doc-img}
 
 Perimeter and Fill has two separate adjustments:
 
 * **Line:** Spacing between supports on the lines of the outer perimeter
 * **Fill Space:** Spacing between supports in the grid that fills the area
 
-![Menu for adjusting both Polygon Fill and Line spacing](../assets/img/SupportingModels/RMenu-AdvancedPlacement-LineAndFill-LineAndFillBoth.png){#fig:RPanelAdvPlaceLineAndFill height="200"}
+![Menu for adjusting both Polygon Fill and Line spacing](../assets/img/SupportingModels/RMenu-AdvancedPlacement-LineAndFill-LineAndFillBoth.png){#fig:RPanelAdvPlaceLineAndFill height="200" .doc-img}
 
 These settings are demonstrated in the example below. The perimeter supports are denoted by the red hash lines and were configured with a spacing of 5.0. The inside area was configured with a spacing of 1.5.
 
-![Poly fill with perimeter as seen from underneath](../assets/img/SupportingModels/RoundBase-3Supports-PolyFillPerimeter-Below.png){#fig:PolyFillBelow}
+![Poly fill with perimeter as seen from underneath](../assets/img/SupportingModels/RoundBase-3Supports-PolyFillPerimeter-Below.png){#fig:PolyFillBelow .doc-img}
 
 #### Circle Fill
 Circle Fill takes exactly three supports, builds a circular path that passes through their contact points, and fills that. No path supports are created.
@@ -177,11 +177,11 @@ Circle Fill is available **only** through the corresponding button on the left t
 
 Using Circle Fill from our starting point results in this:
 
-![Circle fill](../assets/img/SupportingModels/RoundBase-3Supports-CircleFill.png){#fig:RoundExampleCircleFill}
+![Circle fill](../assets/img/SupportingModels/RoundBase-3Supports-CircleFill.png){#fig:RoundExampleCircleFill .doc-img}
 
 From below, the result looks like:
 
-![Circle fill viewed from below](../assets/img/SupportingModels/RoundBase-3Supports-CircleFill-Below.png){#fig:RoundExampleCircleFillBelow}
+![Circle fill viewed from below](../assets/img/SupportingModels/RoundBase-3Supports-CircleFill-Below.png){#fig:RoundExampleCircleFillBelow .doc-img}
 
 ## Triangle Painting
 
@@ -212,19 +212,19 @@ Perimeters are always created in selection order. The loop is closed from the la
 
 In this first example, supports were selected in order going counter-clockwise.
 
-![Supports selected in order](../assets/img/SupportingModels/RoundBase5SupportsVar-1.png){#fig:5SupportV1}
+![Supports selected in order](../assets/img/SupportingModels/RoundBase5SupportsVar-1.png){#fig:5SupportV1 .doc-img}
 
 Using Perimeter and Fill, the result is
 
-![Supports selected in order](../assets/img/SupportingModels/RoundBase5SupportsResult-1.png){#fig:5SupportV1Result}
+![Supports selected in order](../assets/img/SupportingModels/RoundBase5SupportsResult-1.png){#fig:5SupportV1Result .doc-img}
 
 Now look at an example with a non-sequential selection:
 
-![Supports selected in order](../assets/img/SupportingModels/RoundBase5SupportsVar-2.png){#fig:5SupportV2}
+![Supports selected in order](../assets/img/SupportingModels/RoundBase5SupportsVar-2.png){#fig:5SupportV2 .doc-img}
 
 Using Perimeter and Fill, the result is
 
-![Supports selected in order](../assets/img/SupportingModels/RoundBase5SupportsResult-2.png){#fig:5SupportV2Results}
+![Supports selected in order](../assets/img/SupportingModels/RoundBase5SupportsResult-2.png){#fig:5SupportV2Results .doc-img}
 
 It's easy to see the area between supports 1 and 3, marked with the light red scribble, got no supports. This is because the rim path didn't connect those supports, so there wasn't an area to fill.
 
@@ -235,11 +235,11 @@ This results in selected areas not filling the way one might expect.
 
 This example shows a cloak with a surface that significantly changes orientation. Five supports are selected as noted.
 
-![Model with complex surface orientation and five supports](../assets/img/SupportingModels/FillPlane-Selection.png){#fig:FillPlaneExample}
+![Model with complex surface orientation and five supports](../assets/img/SupportingModels/FillPlane-Selection.png){#fig:FillPlaneExample .doc-img}
 
 The Poly Fill results in a gap being left, despite that area being valid for additional supports as shown by the ability to place manual supports there&mdash;the white transparent support by the mouse cursor.
 
-![Results with gaps after a fill](../assets/img/SupportingModels/FillPlane-Result.png){#fig:FillPlaneExampleResult}
+![Results with gaps after a fill](../assets/img/SupportingModels/FillPlane-Result.png){#fig:FillPlaneExampleResult .doc-img}
 
 Runebrace creates a grid covering the bounding box of the polygon *in the plane defined by the first three supports*. That grid has two axes: the first defined by the line from the first support to the second, and the second axis perpendicular to the first. See the example [@fig:PolyFillBelow] from earlier for a good visualization of this.
 

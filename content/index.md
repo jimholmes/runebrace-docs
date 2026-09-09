@@ -33,17 +33,18 @@ Runebrace provides unique, powerful features in a smooth workflow to help users 
 
 People involved in 3D printing have a wealth of options for tooling.
 
-Runebrace offers compelling reasons to choose it over competitors. Both professional and hobby-level modelers choose Runebrace **REWORD**
+Runebrace offers compelling reasons to choose it over competitors. Both professional and hobby-level modelers choose Runebrace because of its powerful feature set, speed, and smooth workflow.
 
 > Runebrace is the fastest, most comfortable, and convenient software. The banks of presets are powerful, and the numerous features like auto-orientation, interior view, and hollowing make it easy to get work done
 >    &mdash;R.S.
 > 
 > Runebrace stands above the rest in terms of speed
-> and efficiency in supporting and slicing 3D models. It is truly user focused, allowing individuals to adjust the software to best work with their own workflow, rather than adjust their workflow to work with the software.
+> and efficiency in supporting and slicing 3D models. It is truly user-focused, allowing individuals to adjust the software to best work with their own workflow, rather than adjust their workflow to work with the software.
 >     &mdash;I.M.
 > 
 > I'm a hobbyist modeler, not a professional support guy. Runebrace helps me quickly get solid supports created in minimal time so that I can focus on printing and painting. I don't have to fight the software, unlike other tools.
 >     &mdash;J.H.
+> 
 > Artisan Guild models have always had the best supports. Their move to Runebrace drove my move as well. I knew Runebrace would align with their habits and practices, and therefore help me improve my own support workflows. Circle, line, and poly fills are incredibly powerful, and the constant evolution of Runebrace makes everything better!
 >     &mdash;P.
 

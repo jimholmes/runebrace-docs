@@ -8,7 +8,7 @@ The Print Room has no undo functionality for actions. This is a deliberate choic
 
 Slicing preview by layer works across all models on the plate.
 
-![The Print Room's main window](../assets/img/PrintingAndSlicing/PrintRoomMain.png){#fig:PrintRoomMain}
+![The Print Room's main window](../assets/img/PrintingAndSlicing/PrintRoomMain.png){#fig:PrintRoomMain .doc-img}
 
 
 ## Print Menu
@@ -55,7 +55,7 @@ The Printer window allows you to work with printer configuration. A list of pres
 
 Changing any of the editable parameters will require saving to a new Printer Preset if you want to maintain the changes.
 
-![Printer configuration window](../assets/img/PrintingAndSlicing/Printer.png){#fig:PrinterWindow}
+![Printer configuration window](../assets/img/PrintingAndSlicing/Printer.png){#fig:PrinterWindow .doc-img}
 
 [Printer Presets]{#PrintPrinterPresets}
 : Shows a dropdown list of available printers. Click to select.

@@ -10,7 +10,7 @@
 
 Runebrace's User Interface (UI) is shown below with the major functional areas called out.
 
-![Runebrace's main UI](../assets/img/GettingStarted/UIOverview.png){#fig:UIOverview}
+![Runebrace's main UI](../assets/img/GettingStarted/UIOverview.png){#fig:UIOverview  .doc-img}
 
 It's important to get used to the idea that Runebrace has no tooltips anywhere. This is intentional, as tooltips cover up the controls underneath. Controls clearly state their function on the control itself or nearby in the panel.
 
@@ -50,13 +50,13 @@ There are two styles of file bar. Global Settings has a switch, "Use Standard Fi
 
 This toolbar displays icons/buttons for different support tools.
 
-![The Left Toolbar](../assets/img/SupportingModels/LPanel.png){#fig:LeftToolbar}
+![The Left Toolbar](../assets/img/SupportingModels/LPanel.png){#fig:LeftToolbar .doc-img}
 
 #### Right Panel
 
 The Right Panel holds features and controls for nearly all of Runebrace's editing functionality.
 
-![The Right Panel](../assets/img/GettingStarted/RightPanel.png){#fig:RightPanel}
+![The Right Panel](../assets/img/GettingStarted/RightPanel.png){#fig:RightPanel .doc-img}
 
 Most sections in the right panel are collapsible. Each area will be discussed later in this guide.
 
@@ -64,7 +64,7 @@ Most sections in the right panel are collapsible. Each area will be discussed la
 
 The Command List shows what mouse and keyboard actions are currently available. These change with the active tool.
 
-![The Command List](../assets/img/GettingStarted/CommandList.png){#fig:CommandList}
+![The Command List](../assets/img/GettingStarted/CommandList.png){#fig:CommandList .doc-img}
 
 The Edit tab allows you to remap some commands to better suit your style and workflow.
 
@@ -74,7 +74,7 @@ You can also find a list of keyboard and mouse shortcuts on the right panel unde
 
 At the bottom are four icons that display current support modes.
 
-![The Mode Status display](../assets/img/GettingStarted/ModeStatus.png){#fig:ModeStatus}
+![The Mode Status display](../assets/img/GettingStarted/ModeStatus.png){#fig:ModeStatus .doc-img}
 
 * Branch to nearest candidate. Wheel to scroll through candidates.
 * Manually add branch via dragging
@@ -85,7 +85,7 @@ At the bottom are four icons that display current support modes.
 
 The Island Panel allows you to detect, support, hide, and otherwise interact with islands.
 
-![The Island Panel](../assets/img/GettingStarted/IslandPanel.png){#fig:IslandPanel}
+![The Island Panel](../assets/img/GettingStarted/IslandPanel.png){#fig:IslandPanel .doc-img}
 
 Controls on this panel are:
 
