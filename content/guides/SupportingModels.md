@@ -6,11 +6,6 @@ Supporting your models well is critical for printing success. Proper supports en
 
 This manual isn't a tutorial for supporting. There are great resources available in many places.
 
-Once in a Six Side's [Complete Guide to Supporting Miniatures for 3D Printing](https://www.youtube.com/watch?v=GN4Xa-t0zno)
-
-Getting a properly calibrated printer is a critical part of making good, appropriate supports too. One great process for calibrating is the Cones of Calibration walkthrough on the TableFlip Foundry Discord server.
-
-TableFlip Foundry's [Cones of Calibration walkthrough](https://discord.com/channels/854702263214145556/937467521777430579/1331051848110575719).
 
 ### What's a Support?
 
