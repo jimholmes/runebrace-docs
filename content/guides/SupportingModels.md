@@ -1,8 +1,27 @@
 # Supporting Models {#SupportingModels}
 
+Supporting your models well is critical for printing success. Proper supports ensure your model doesn't completely separate from the plate during printing, and it also ensures details don't break away or deform.
+
 ## Supporting Overview
 
-<!--Don't write a tutorial. Point users elsewhere.-->
+This manual isn't a tutorial for supporting. There are great resources available in many places.
+
+Once in a Six Side's [Complete Guide to Supporting Miniatures for 3D Printing](https://www.youtube.com/watch?v=GN4Xa-t0zno)
+
+Getting a properly calibrated printer is a critical part of making good, appropriate supports too. One great process for calibrating is the Cones of Calibration walkthrough on the TableFlip Foundry Discord server.
+
+TableFlip Foundry's [Cones of Calibration walkthrough](https://discord.com/channels/854702263214145556/937467521777430579/1331051848110575719).
+
+### What's a Support?
+
+A support is a structure added to your model to prevent peeling or deformation. In its most basic form, a support looks like a vertical shaft with a cone-like "tip" that touches a point on the model, then descends and attaches to a raft under the model.
+
+Very generally speaking, supports are needed in three different scenarios:
+
+* **Islands**
+* **Overhangs**
+* **Peel surfaces**
+
 
 ## Basic Workflow
 
@@ -13,6 +32,8 @@
 ### Support Basics
 
 A support is a chain of control points with a radius at each one: the tip that touches the model, the top of the shaft, the middle, and the base on the plate. Between them are cones. Every diameter is editable.
+
+Each of those sections has a control point that can be manipulated. Each section's control point has cones between them. Diameters and lengths for each section can be edited. A number of these settings can be saved to [support presets](#SupportPresets).
 
 #### Support Variants
 
@@ -34,9 +55,11 @@ A support is a chain of control points with a radius at each one: the tip that t
 [Bracing]{#BracingSupport}
 : Lateral support between the mid-sections of supports
 
+#### Support Presets {#SupportPresets}
+
+
 **CONTENT NEEDED**
 
-* Horizontal line of layers
 
 
 
@@ -233,11 +256,11 @@ Area fills are performed on a planar basis. The plane is defined by the first th
 
 This results in selected areas not filling the way one might expect.
 
-This example shows a cloak with a surface that significantly changes orientation. Five supports are selected as noted.
+This example shows the base of a model with a surface that significantly changes orientation. Five supports are selected as noted.
 
 ![Model with complex surface orientation and five supports](../assets/img/SupportingModels/FillPlane-Selection.png){#fig:FillPlaneExample .doc-img}
 
-The Poly Fill results in a gap being left, despite that area being valid for additional supports as shown by the ability to place manual supports there&mdash;the white transparent support by the mouse cursor.
+The Poly Fill results in a gap being left as marked by the red zone. This is despite that area being valid for additional supports, as shown by the ability to place manual supports there&mdash;the white transparent support by the mouse cursor.
 
 ![Results with gaps after a fill](../assets/img/SupportingModels/FillPlane-Result.png){#fig:FillPlaneExampleResult .doc-img}
 
@@ -257,28 +280,21 @@ As a result, the same setting on Line and Fill will result in different spacing 
 
 Note that Perimeter and Fill actions are recorded as separate undo operations. This means you'll need to do two separate undo actions to back out that operation.
 
-<!--
-**details**
 
-" Five details worth having in the docs. The perimeter walks the supports in selection order and closes the loop back to the first one, so the last segment is support N to support 1. 
+#### Understanding the Math for Determining Support Placement
 
-The fill plane is defined by the first three supports only, not by all of them: any support beyond the third is flattened onto that plane, so a selection that is not roughly planar will not fill the way it looks. The grid covers the bounding box of the polygon in that plane and keeps the points that fall inside it, with one axis along support 1 to support 2 and the other perpendicular to it. Each grid point is then projected onto the model along the average tip direction of the selected supports, so the fill follows the surface, and where that ray misses the mesh no support appears, which is why gaps show up over holes or steep overhangs. 
+The following formula is used when determining how supports are placed along a line.
 
-
-Finally, Line and Fill Space are multipliers, not distances, and they multiply different reference diameters: Line multiplies the Base diameter, Fill Space multiplies the Top diameter. The same number on both sliders does not give the same spacing on the outline and on the fill. 
-
-One more practical note: the operation records two undo steps, the perimeter and the fill, so undoing it takes two presses."
-
-"very small values stop having an effect below a certain point, and a segment too short to fit anything simply gets no supports in between. Happy to give you the exact arithmetic if you want a footnote."
--->
-
-**Math on Determining Placement**
-"step = Base diameter × Line (or Top diameter × Fill Space). Gaps = segment length ÷ step, rounded down. Supports added = gaps − 1, spread evenly, so the real spacing is segment length ÷ gaps. Because the count rounds down, the spacing is always at least the step and can reach almost double it. Yours: 26.73 mm ÷ 4 gaps = 6.68 mm, the 6.64 you measured."
+> Step = Base diameter × Line (or Top diameter × Fill Space) 
+> 
+> Gaps = segment length ÷ step, rounded down 
+> 
+> Supports added = gaps − 1, spread evenly, so the real spacing is segment length ÷ gaps. 
+> 
+> Because the count rounds down, the spacing is always at least the step and can reach almost double it.
 
 
-## More Complex Examples
-
-You should now understand the basics of creating supports with the various tools. The example above is very simplistic, so let's use more complex 
+## Support Presets
 
 
-## Presets
+Each tip can be configured 
