@@ -60,7 +60,7 @@ figcaption {
 blockquote {
 	margin-top: 1.5em;
 	margin-left: 1rem;
-	color: var(--light);
+	color: var(--sidebartan);
 }
 
 blockquote p { 
