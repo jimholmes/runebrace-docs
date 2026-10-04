@@ -10,6 +10,15 @@ Slicing preview by layer works across all models on the plate.
 
 ![The Print Room's main window](../assets/img/PrintingAndSlicing/PrintRoomMain.png){#fig:PrintRoomMain .doc-img}
 
+## AGS versus STL
+
+<!--
+Are there advantages to using AGS versus STL?
+
+Yes, quite a few. In an .ags the supports are parametric: tips, shafts and arms with their sizes, sliced exactly as shapes. An STL brings them as a mesh, usually hundreds of overlapping shells crossing each other and the model, and that is where slicers get into trouble: holes, missing or filled areas in the layers, heavy files to repair. The .ags also keeps model, raft and supports separate (an STL has to be split, and presupported files made of a single body can't be), and a piece can go back to the editor to fix a support and return to its plate. So if you supported it in Runebrace, add the .ags.
+
+-->
+
 
 ## Print Menu
 
@@ -108,3 +117,14 @@ Changing any of the editable parameters will require saving to a new Printer Pre
   The slice preview works here as well, over all the pieces at once.
 
 
+### Peel Force 
+
+## Print Export
+
+<!--
+
+Bottom + Transition == 1st normal layer
+  Bottom: 5
+  Transition: 5
+  1st normal layer will be 11th
+-->

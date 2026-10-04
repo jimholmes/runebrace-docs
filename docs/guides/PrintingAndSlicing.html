@@ -75,6 +75,9 @@
           <li class="h4"><a href="/runebrace-docs/guides/SupportingModels.html#perimeter-and-fill">Perimeter and Fill</a></li>
           <li class="h4"><a href="/runebrace-docs/guides/SupportingModels.html#circle-fill">Circle Fill</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/SupportingModels.html#triangle-painting">Triangle Painting</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/SupportingModels.html#preventing-peel-failures">Preventing Peel Failures</a></li>
+        <li class="h3"><a href="/runebrace-docs/guides/SupportingModels.html#PeelZones">Peel Zones Report</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/SupportingModels.html#Islands">Working With Islands</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/SupportingModels.html#deeper-dive-on-placement">Deeper Dive on Placement</a></li>
         <li class="h3"><a href="/runebrace-docs/guides/SupportingModels.html#MoreAboutLines">More About Lines</a></li>
         <li class="h3"><a href="/runebrace-docs/guides/SupportingModels.html#MoreAboutPerimeters">More About Perimeters</a></li>
@@ -85,12 +88,16 @@
           <li class="h4"><a href="/runebrace-docs/guides/SupportingModels.html#understanding-the-math-for-determining-support-placement">Understanding the Math for Determining Support Placement</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/SupportingModels.html#support-presets">Support Presets</a></li>
     <li class="h1"><a href="/runebrace-docs/guides/WorkingWithMeshes.html">Working with Meshes</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/WorkingWithMeshes.html#cutting-your-model">Cutting Your Model</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/WorkingWithMeshes.html#ExportingMeshes">Exporting Meshes</a></li>
     <li class="h1"><a href="/runebrace-docs/guides/Hollowing.html">Hollowing</a></li>
     <li class="h1"><a href="/runebrace-docs/guides/PrintingAndSlicing.html">Printing and Slicing</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/PrintingAndSlicing.html#ags-versus-stl">AGS versus STL</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/PrintingAndSlicing.html#print-menu">Print Menu</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/PrintingAndSlicing.html#Printer">Printer</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/PrintingAndSlicing.html#print-setup-menu">Print Setup Menu</a></li>
+        <li class="h3"><a href="/runebrace-docs/guides/PrintingAndSlicing.html#peel-force">Peel Force</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/PrintingAndSlicing.html#print-export">Print Export</a></li>
     <li class="h1"><a href="/runebrace-docs/guides/Glossary.html">Glossary</a></li>
   </ul>
 </nav>
@@ -112,6 +119,13 @@ class="doc-img" alt="Figure 1: The Print Room’s main window" />
 <figcaption aria-hidden="true">Figure 1: The Print Room’s main
 window</figcaption>
 </figure>
+<h2 id="ags-versus-stl">AGS versus STL</h2>
+<!--
+Are there advantages to using AGS versus STL?
+
+Yes, quite a few. In an .ags the supports are parametric: tips, shafts and arms with their sizes, sliced exactly as shapes. An STL brings them as a mesh, usually hundreds of overlapping shells crossing each other and the model, and that is where slicers get into trouble: holes, missing or filled areas in the layers, heavy files to repair. The .ags also keeps model, raft and supports separate (an STL has to be split, and presupported files made of a single body can't be), and a piece can go back to the editor to fix a support and return to its plate. So if you supported it in Runebrace, add the .ags.
+
+-->
 <h2 id="print-menu">Print Menu</h2>
 <dl>
 <dt><span id="PrintEditor">Editor</span></dt>
@@ -244,8 +258,17 @@ you had.
 The slice preview works here as well, over all the pieces at once.
 </dd>
 </dl>
+<h3 id="peel-force">Peel Force</h3>
+<h2 id="print-export">Print Export</h2>
+<!--
+
+Bottom + Transition == 1st normal layer
+  Bottom: 5
+  Transition: 5
+  1st normal layer will be 11th
+-->
 </main>
 </div>
-<footer>Version 1.8.9x · Published 2026-09-15</footer>
+<footer>Version 1.8.9x · Published 2026-10-04</footer>
 </body>
 </html>

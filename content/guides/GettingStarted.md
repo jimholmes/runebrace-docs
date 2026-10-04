@@ -90,7 +90,7 @@ The Island Panel allows you to detect, support, hide, and otherwise interact wit
 Controls on this panel are:
 
 [<-]
-: Move to previous island
+: Move to the previous island
 
 [Detect]
 : Detect islands on the model
@@ -111,7 +111,7 @@ Controls on this panel are:
 : Add a support to the current island
 
 [->]
-: Move to next island
+: Move to the next island
 
 The scroll area below the buttons displays a current count of the number of islands, as well as an index of which island you're currently working on. Next and Previous increment/decrement that count as expected. You can also drag the scroll marker to move quickly through supports.
 
@@ -126,7 +126,7 @@ WINDOW TITLE
 
 Runebrace's entire UI scales with the window width, starting from a 3840 pixel reference. I.e., a 3840-wide window renders at a scale of 1.0, while a window 1280 wide renders at one third.
 
-Fonts and every aspect of the display scales as well, with nothing being tied to the display DPI.
+Fonts and every aspect of the display scales as well, with nothing tied to the display DPI.
 
 If you work in a small window, raise the UI Scale and Font Scale settings under Right Panel => General Settings => Global Settings. Both of these multiply on top of the automatic factor.
 

@@ -13,9 +13,9 @@ A support is a structure added to your model to prevent peeling or deformation. 
 
 Very generally speaking, supports are needed in three different scenarios:
 
-* **Islands**
-* **Overhangs**
-* **Peel surfaces**
+* **Islands** Islands are areas of one or more pixels that don't connect to any other part of the model at a particular layer. During a print, islands, particularly larger ones, may stick to the print and cause failures. In most cases, islands need a support to prevent them from sticking to the printer's FEP. See [Islands](#Islands) to learn how to detect and support them.
+* **Overhangs** Overhangs are exactly that: a part of the model that hangs out horizontally, or cantilevers, with nothing below it. Larger overhangs may fail during printing without appropriate support.
+* **Peel Forces** Large surfaces on the print plate require extra support to ensure those layers successfully peel off the printer's FEP as the plate retracts before printing the next layer. See [Peel Zones](#PeelZones) for more information.
 
 
 ## Basic Workflow
@@ -205,6 +205,12 @@ From below, the result looks like:
 
 [Rim](guides/Glossary.md#rim)
 
+## Preventing Peel Failures
+
+### Peel Zones Report {#PeelZones}
+
+## Working With Islands {#Islands}
+
 ## Deeper Dive on Placement
 
 The sections below provide a more advanced discussion of how specific placement features work.
@@ -219,8 +225,6 @@ Areas where the raycast misses the model mean a support can't be placed there; t
 
 Put differently: It's not a matter of whether the surface is flat. The geometry must be under the ray and must be a valid point for a support.
 
-<!--**lines**
-"What happens when you draw support lines or arcs is that it simulates a mouse clicking on various points along this line (depending on the set distance) and performs a mouse [raycast](#raycast) on the model. If the raycast hits the geometry and the face is not parallel to the build plate or tilted upwards, a support is placed. It is likely that there are some raycast misses, so the support cannot be placed and is skipped.  It's not a matter of whether the surface is flat... the geometry must be under the ray cast by the mouse and be a valid point for a support."-->
 
 ### More About Perimeters {#MoreAboutPerimeters}
 

@@ -75,6 +75,9 @@
           <li class="h4"><a href="/runebrace-docs/guides/SupportingModels.html#perimeter-and-fill">Perimeter and Fill</a></li>
           <li class="h4"><a href="/runebrace-docs/guides/SupportingModels.html#circle-fill">Circle Fill</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/SupportingModels.html#triangle-painting">Triangle Painting</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/SupportingModels.html#preventing-peel-failures">Preventing Peel Failures</a></li>
+        <li class="h3"><a href="/runebrace-docs/guides/SupportingModels.html#PeelZones">Peel Zones Report</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/SupportingModels.html#Islands">Working With Islands</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/SupportingModels.html#deeper-dive-on-placement">Deeper Dive on Placement</a></li>
         <li class="h3"><a href="/runebrace-docs/guides/SupportingModels.html#MoreAboutLines">More About Lines</a></li>
         <li class="h3"><a href="/runebrace-docs/guides/SupportingModels.html#MoreAboutPerimeters">More About Perimeters</a></li>
@@ -85,12 +88,16 @@
           <li class="h4"><a href="/runebrace-docs/guides/SupportingModels.html#understanding-the-math-for-determining-support-placement">Understanding the Math for Determining Support Placement</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/SupportingModels.html#support-presets">Support Presets</a></li>
     <li class="h1"><a href="/runebrace-docs/guides/WorkingWithMeshes.html">Working with Meshes</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/WorkingWithMeshes.html#cutting-your-model">Cutting Your Model</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/WorkingWithMeshes.html#ExportingMeshes">Exporting Meshes</a></li>
     <li class="h1"><a href="/runebrace-docs/guides/Hollowing.html">Hollowing</a></li>
     <li class="h1"><a href="/runebrace-docs/guides/PrintingAndSlicing.html">Printing and Slicing</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/PrintingAndSlicing.html#ags-versus-stl">AGS versus STL</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/PrintingAndSlicing.html#print-menu">Print Menu</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/PrintingAndSlicing.html#Printer">Printer</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/PrintingAndSlicing.html#print-setup-menu">Print Setup Menu</a></li>
+        <li class="h3"><a href="/runebrace-docs/guides/PrintingAndSlicing.html#peel-force">Peel Force</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/PrintingAndSlicing.html#print-export">Print Export</a></li>
     <li class="h1"><a href="/runebrace-docs/guides/Glossary.html">Glossary</a></li>
   </ul>
 </nav>
@@ -112,9 +119,21 @@ descends and attaches to a raft under the model.</p>
 <p>Very generally speaking, supports are needed in three different
 scenarios:</p>
 <ul>
-<li><strong>Islands</strong></li>
-<li><strong>Overhangs</strong></li>
-<li><strong>Peel surfaces</strong></li>
+<li><strong>Islands</strong> Islands are areas of one or more pixels
+that don’t connect to any other part of the model at a particular layer.
+During a print, islands, particularly larger ones, may stick to the
+print and cause failures. In most cases, islands need a support to
+prevent them from sticking to the printer’s FEP. See <a
+href="#Islands">Islands</a> to learn how to detect and support
+them.</li>
+<li><strong>Overhangs</strong> Overhangs are exactly that: a part of the
+model that hangs out horizontally, or cantilevers, with nothing below
+it. Larger overhangs may fail during printing without appropriate
+support.</li>
+<li><strong>Peel Forces</strong> Large surfaces on the print plate
+require extra support to ensure those layers successfully peel off the
+printer’s FEP as the plate retracts before printing the next layer. See
+<a href="#PeelZones">Peel Zones</a> for more information.</li>
 </ul>
 <h2 id="basic-workflow">Basic Workflow</h2>
 <p><strong>CONTENT NEEDED</strong></p>
@@ -374,6 +393,9 @@ below</figcaption>
 </figure>
 <h2 id="triangle-painting">Triangle Painting</h2>
 <p><a href="guides/Glossary.html#rim">Rim</a></p>
+<h2 id="preventing-peel-failures">Preventing Peel Failures</h2>
+<h3 id="PeelZones">Peel Zones Report</h3>
+<h2 id="Islands">Working With Islands</h2>
 <h2 id="deeper-dive-on-placement">Deeper Dive on Placement</h2>
 <p>The sections below provide a more advanced discussion of how specific
 placement features work.</p>
@@ -392,8 +414,6 @@ those areas.</p>
 <p>Put differently: It’s not a matter of whether the surface is flat.
 The geometry must be under the ray and must be a valid point for a
 support.</p>
-<!--**lines**
-"What happens when you draw support lines or arcs is that it simulates a mouse clicking on various points along this line (depending on the set distance) and performs a mouse [raycast](#raycast) on the model. If the raycast hits the geometry and the face is not parallel to the build plate or tilted upwards, a support is placed. It is likely that there are some raycast misses, so the support cannot be placed and is skipped.  It's not a matter of whether the surface is flat... the geometry must be under the ray cast by the mouse and be a valid point for a support."-->
 <h3 id="MoreAboutPerimeters">More About Perimeters</h3>
 <h4 id="selection-order-impact-on-perimeters-and-areas">Selection Order
 Impact on Perimeters and Areas</h4>
@@ -503,6 +523,6 @@ step and can reach almost double it.</p>
 <p>Each tip can be configured</p>
 </main>
 </div>
-<footer>Version 1.8.9x · Published 2026-09-15</footer>
+<footer>Version 1.8.9x · Published 2026-10-04</footer>
 </body>
 </html>
