@@ -57,3 +57,12 @@ figcaption {
   text-align: center;
 }
 
+blockquote {
+	margin-top: 1.5em;
+	margin-left: 1rem;
+	color: var(--light);
+}
+
+blockquote p { 
+	margin-bottom: 1.5em;
+}
