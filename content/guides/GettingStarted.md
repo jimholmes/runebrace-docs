@@ -20,23 +20,20 @@ Below you can find short descriptions of each feature.
 
 #### Top Bar
 
-[Print]{#PrintButton}
-: Opens the Print Room (see [Printing and Slicing](#PrintingAndSlicing)
-
 [Mesh Repair]{#MeshRepair}
 : Opens the repair window (see [Mesh Repair](#MeshRepair))
 
 [New]{#NewScene}
 : Creates a new empty scene
 
-[Revert]{#RevertScene}
-: Reloads the file from the last saved version, discarding changes
+[Recent]{#RecentScene}
+: Opens a list of recent projects
 
 [Load]{#LoadScene}
 : Opens a project or a model, with a Recent list
 
 [Save Project]{#SaveProject}
-: Saves in place; a menu also offers Save Project As
+: Saves in place; Setting "Use Standard File Buttons" under General Settings will also show "Save Project As"
 
 [Export Mesh]{#ExportMesh}
 : Opens the mesh export menu (see [Exporting Meshes](#ExportingMeshes))
@@ -44,7 +41,7 @@ Below you can find short descriptions of each feature.
 [About]{#AboutRunebrace}
 : Displays the Runebrace version, the graphics card in use, important links, and a donation button
 
-There are two styles of file bar. Global Settings has a switch, "Use Standard File Buttons", that chooses between them.
+There are two styles of file bar. Global Settings has an option, "Use Standard File Buttons", that switches between them.
 
 #### Left Toolbar
 
@@ -58,11 +55,20 @@ The Right Panel holds features and controls for nearly all of Runebrace's editin
 
 ![The Right Panel](../assets/img/GettingStarted/RightPanel.png){#fig:RightPanel .doc-img}
 
-Most sections in the right panel are collapsible. Each area will be discussed later in this guide.
+Most sections in the right panel are collapsible. The General Settings section opens into a separate panel. Each of these areas will be discussed later in this guide.
+
+
+#### General Settings
+
+Clicking the General Settings on the Right Panel will open a new dialog showing the General Settings.
+
+![The General Settings Dialog](../assets/img/GettingStarted/GeneralSettings.png){#fig:RightPanel .doc-img}
+
 
 #### Command List
 
 The Command List shows what mouse and keyboard actions are currently available. These change with the active tool.
+
 
 ![The Command List](../assets/img/GettingStarted/CommandList.png){#fig:CommandList .doc-img}
 
@@ -80,6 +86,24 @@ At the bottom are four icons that display current support modes.
 * Manually add branch via dragging
 * **NEED CONTENT**  
 * **NEED CONTENT**
+
+#### Print Room and Machine Control
+
+To the right of the Mode Status icons are the Print Room and Machine Control buttons.
+
+![Print Room and Machine Control](../assets/img/GettingStarted/PrintRoomMachine.png){#fig:PrintRoomMachine .doc-img}
+
+[Print]{#PrintButton}
+: Opens the Print Room (see [Printing and Slicing](#PrintingAndSlicing)
+
+[Machine]{#MachineButton}
+: Opens a dialog to select, edit parameters for, and save presets for printers. Also allows editing of a visual theme for printers.
+
+![Machine Dialog](../assets/img/GettingStarted/MachineDialog.png)
+
+The Machine dialog also offers a button to open a form for requesting support for unlisted printers.
+
+
 
 #### Island Panel
 
