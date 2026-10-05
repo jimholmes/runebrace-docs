@@ -60,7 +60,6 @@ figcaption {
 blockquote {
 	margin-top: 1.5em;
 	margin-left: 1rem;
-	background-color: rgba(0, 0, 0, 0.06) !important;
 	color: var(--sidebartan);
 }
 

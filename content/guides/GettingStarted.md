@@ -62,7 +62,7 @@ Most sections in the right panel are collapsible. The General Settings section o
 
 Clicking the General Settings on the Right Panel will open a new dialog showing the General Settings.
 
-![The General Settings Dialog](../assets/img/GettingStarted/GeneralSettings.png){#fig:RightPanel .doc-img}
+![The General Settings Dialog](../assets/img/GettingStarted/GeneralSettings.png){#fig:GeneralSettings .doc-img}
 
 
 #### Command List
