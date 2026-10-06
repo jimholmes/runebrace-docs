@@ -9,7 +9,7 @@ ROOT=${0:A:h:h}
 # Write version and date tags to footer file
 # Can grab from Git, but not useful for docs
 # VERSION=$(git describe --tags --always)
-VERSION="1.8.9x"
+VERSION="1.9.x"
 DATE=$(date -u +%Y-%m-%d)
 print -r -- "<footer>Version ${VERSION} · Published ${DATE}</footer>" > $ROOT/snippets/footer.html
 
