@@ -44,6 +44,7 @@
     <li class="h1"><a href="/runebrace-docs/guides/GettingStarted.html">Getting Started</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/GettingStarted.html#downloading-and-installing">Downloading and Installing</a></li>
         <li class="h3"><a href="/runebrace-docs/guides/GettingStarted.html#osplatform-differences">OS/Platform Differences</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/GettingStarted.html#basic-workflow">Basic Workflow</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/GettingStarted.html#ui-overview">UI Overview</a></li>
         <li class="h3"><a href="/runebrace-docs/guides/GettingStarted.html#functional-areas-and-commands">Functional Areas and Commands</a></li>
           <li class="h4"><a href="/runebrace-docs/guides/GettingStarted.html#top-bar">Top Bar</a></li>
@@ -60,7 +61,6 @@
     <li class="h1"><a href="/runebrace-docs/guides/SupportingModels.html">Supporting Models</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/SupportingModels.html#supporting-overview">Supporting Overview</a></li>
         <li class="h3"><a href="/runebrace-docs/guides/SupportingModels.html#whats-a-support">What&#x27;s a Support?</a></li>
-      <li class="h2"><a href="/runebrace-docs/guides/SupportingModels.html#basic-workflow">Basic Workflow</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/SupportingModels.html#features">Features</a></li>
         <li class="h3"><a href="/runebrace-docs/guides/SupportingModels.html#support-basics">Support Basics</a></li>
           <li class="h4"><a href="/runebrace-docs/guides/SupportingModels.html#support-variants">Support Variants</a></li>
@@ -95,6 +95,7 @@
     <li class="h1"><a href="/runebrace-docs/guides/Hollowing.html">Hollowing</a></li>
     <li class="h1"><a href="/runebrace-docs/guides/PrintingAndSlicing.html">Printing and Slicing</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/PrintingAndSlicing.html#ags-versus-stl">AGS versus STL</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/PrintingAndSlicing.html#understanding-settings">Understanding Settings</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/PrintingAndSlicing.html#print-menu">Print Menu</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/PrintingAndSlicing.html#Printer">Printer</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/PrintingAndSlicing.html#print-setup-menu">Print Setup Menu</a></li>
@@ -111,6 +112,99 @@
 <ul>
 <li>Keyboard shortcuts</li>
 </ul>
+<h2 id="basic-workflow">Basic Workflow</h2>
+<p>Runebrace gives you the flexibility to do your work however you
+prefer. Users have different preferences, and sometimes there are very
+different goals for different situations.</p>
+<p>One workflow that’s common among users in the Runebrace Discord
+server is:</p>
+<!--
+I use the smoothbrush while supporting the model from the first island to the last one
+
+If I encounter an island that is better to smooth instead of placing a support because the result is cleaner I use the smoothbrush
+
+The Cut is done before rotation if you need to split a big piece into 2 parts to fit the printer
+
+Hollowing and Hole are created when the model is oriented after the island check returns the fewest number of islands
+
+Resin void can be done at the start sometimes I do that when supporting I encounter a void inside some parts
+
+Suction cups are generally removed in voxels hollow mode with the lasso
+
+Add Supports is ok
+
+Sanity check is better to do at the start to work with a clean mesh otherwise hollow can fail
+
+Grid Optimization or cluster optimization in my case is done at the end some use grid to support the model but in my case it is not needed
+
+The print section is good
+
+Runkel
+Repair a model in 3dB
+Drag the repaired model into RB
+Stitch or drop mesh issues 
+Hollowing 
+Island detection
+Holes
+suction cup detection 
+Internal supports / lattice 
+External supports
+Make sure the scaffolding doesn't have weak points 
+
+Save n export 
+
+I hardly ever need smoothing, cutting, mesh repair only if drilling holes fails or results in a bad mesh happens when a lot of intersections are present, which aren't fixed by 3Db 
+
+-->
+<ul>
+<li>Load the model
+<ul>
+<li>Mesh Check scan runs, resolve issues as desired</li>
+</ul></li>
+<li>Run Mesh Repair analysis, resolve issues as desired</li>
+<li>If needed, use Organic Cut to separate the model</li>
+<li>Orient model (manually or auto-orient)</li>
+<li>Detect Islands
+<ul>
+<li>Some users do this later in the flow to point out areas they may
+have missed</li>
+</ul></li>
+<li>Alter the model as needed
+<ul>
+<li>Smoothing tool
+<ul>
+<li>Use to smooth out and remove smaller islands</li>
+<li>Smooth surfaces as needed</li>
+</ul></li>
+<li>Add hollowing and holes as needed</li>
+<li>Detect and resolve suction cup detection</li>
+<li>Detect and resolve resin voids</li>
+</ul></li>
+<li>Add Supports
+<ul>
+<li>Internal first if hollowed, then external</li>
+<li>Repeat island detection, add more supports where needed</li>
+</ul></li>
+<li>Evaluate overall satisfaction with the model
+<ul>
+<li>Is mesh quality OK?</li>
+<li>Are islands and overhangs supported?</li>
+<li>Are potential peel forces acceptable?</li>
+</ul></li>
+<li>Optimize supports
+<ul>
+<li>Grid optimization <strong>OR</strong></li>
+<li>Cluster optimization</li>
+</ul></li>
+<li>Print
+<ul>
+<li>Check peel stats, return to editor if needed
+<ul>
+<li>Diff between return to edit room vs. RMB =&gt; Edit</li>
+</ul></li>
+</ul></li>
+</ul>
+<p>Let’s move on to how to accomplish this in Runebrace.</p>
 <h2 id="ui-overview">UI Overview</h2>
 <p>Runebrace’s User Interface (UI) is shown below with the major
 functional areas called out.</p>
@@ -182,7 +276,7 @@ alt="Figure 3: The Right Panel" />
 Settings section opens into a separate panel. Each of these areas will
 be discussed later in this guide.</p>
 <h4 id="general-settings">General Settings</h4>
-<p>Clicking the General Settings on the Right Panel will open a new
+<p>Clicking the General Settings in the Right Panel will open a new
 dialog showing the General Settings.</p>
 <figure id="fig:GeneralSettings">
 <img src="../assets/img/GettingStarted/GeneralSettings.png"
@@ -316,6 +410,6 @@ Both of these multiply on top of the automatic factor.</p>
 <h2 id="understanding-file-types">Understanding File Types</h2>
 </main>
 </div>
-<footer>Version 1.8.9x · Published 2026-10-05</footer>
+<footer>Version 1.8.9x · Published 2026-10-06</footer>
 </body>
 </html>

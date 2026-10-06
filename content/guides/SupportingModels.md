@@ -18,10 +18,6 @@ Very generally speaking, supports are needed in three different scenarios:
 * **Peel Forces** Large surfaces on the print plate require extra support to ensure those layers successfully peel off the printer's FEP as the plate retracts before printing the next layer. See [Peel Zones](#PeelZones) for more information.
 
 
-## Basic Workflow
-
-**CONTENT NEEDED**
-
 ## Features
 
 ### Support Basics

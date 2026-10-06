@@ -66,3 +66,12 @@ blockquote {
 blockquote p { 
 	margin-bottom: 1.5em;
 }
+
+:is(ul, ol) {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+li > :is(ul, ol) {
+  margin-top: 0.25em;
+}

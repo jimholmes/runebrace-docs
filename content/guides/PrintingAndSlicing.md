@@ -19,6 +19,25 @@ Yes, quite a few. In an .ags the supports are parametric: tips, shafts and arms 
 
 -->
 
+## Understanding Settings
+
+Settings in preset vs. plates
+
+<!--
+
+Renalto: The preset does save Bottom 2 and Normal 2. What you see comes from the plate: a saved plate carries the print settings it was saved with, and opening it applies them, as the orange line says (lift 4 mm there, 4+4 in yours). Pick your preset again, or New Project, and the 4+4 comes back. 
+
+Me:
+
+Settings are saved in presets
+Changes to a plate are saved with those changes
+Plate settings override presets
+
+Reload a preset to reload preset's values
+Save the changes to the plate
+
+-->
+
 
 ## Print Menu
 

@@ -44,6 +44,7 @@
     <li class="h1"><a href="/runebrace-docs/guides/GettingStarted.html">Getting Started</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/GettingStarted.html#downloading-and-installing">Downloading and Installing</a></li>
         <li class="h3"><a href="/runebrace-docs/guides/GettingStarted.html#osplatform-differences">OS/Platform Differences</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/GettingStarted.html#basic-workflow">Basic Workflow</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/GettingStarted.html#ui-overview">UI Overview</a></li>
         <li class="h3"><a href="/runebrace-docs/guides/GettingStarted.html#functional-areas-and-commands">Functional Areas and Commands</a></li>
           <li class="h4"><a href="/runebrace-docs/guides/GettingStarted.html#top-bar">Top Bar</a></li>
@@ -60,7 +61,6 @@
     <li class="h1"><a href="/runebrace-docs/guides/SupportingModels.html">Supporting Models</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/SupportingModels.html#supporting-overview">Supporting Overview</a></li>
         <li class="h3"><a href="/runebrace-docs/guides/SupportingModels.html#whats-a-support">What&#x27;s a Support?</a></li>
-      <li class="h2"><a href="/runebrace-docs/guides/SupportingModels.html#basic-workflow">Basic Workflow</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/SupportingModels.html#features">Features</a></li>
         <li class="h3"><a href="/runebrace-docs/guides/SupportingModels.html#support-basics">Support Basics</a></li>
           <li class="h4"><a href="/runebrace-docs/guides/SupportingModels.html#support-variants">Support Variants</a></li>
@@ -95,6 +95,7 @@
     <li class="h1"><a href="/runebrace-docs/guides/Hollowing.html">Hollowing</a></li>
     <li class="h1"><a href="/runebrace-docs/guides/PrintingAndSlicing.html">Printing and Slicing</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/PrintingAndSlicing.html#ags-versus-stl">AGS versus STL</a></li>
+      <li class="h2"><a href="/runebrace-docs/guides/PrintingAndSlicing.html#understanding-settings">Understanding Settings</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/PrintingAndSlicing.html#print-menu">Print Menu</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/PrintingAndSlicing.html#Printer">Printer</a></li>
       <li class="h2"><a href="/runebrace-docs/guides/PrintingAndSlicing.html#print-setup-menu">Print Setup Menu</a></li>
@@ -126,6 +127,22 @@ window</figcaption>
 Are there advantages to using AGS versus STL?
 
 Yes, quite a few. In an .ags the supports are parametric: tips, shafts and arms with their sizes, sliced exactly as shapes. An STL brings them as a mesh, usually hundreds of overlapping shells crossing each other and the model, and that is where slicers get into trouble: holes, missing or filled areas in the layers, heavy files to repair. The .ags also keeps model, raft and supports separate (an STL has to be split, and presupported files made of a single body can't be), and a piece can go back to the editor to fix a support and return to its plate. So if you supported it in Runebrace, add the .ags.
+
+-->
+<h2 id="understanding-settings">Understanding Settings</h2>
+<p>Settings in preset vs. plates</p>
+<!--
+
+Renalto: The preset does save Bottom 2 and Normal 2. What you see comes from the plate: a saved plate carries the print settings it was saved with, and opening it applies them, as the orange line says (lift 4 mm there, 4+4 in yours). Pick your preset again, or New Project, and the 4+4 comes back. 
+
+Me:
+
+Settings are saved in presets
+Changes to a plate are saved with those changes
+Plate settings override presets
+
+Reload a preset to reload preset's values
+Save the changes to the plate
 
 -->
 <h2 id="print-menu">Print Menu</h2>
@@ -271,6 +288,6 @@ Bottom + Transition == 1st normal layer
 -->
 </main>
 </div>
-<footer>Version 1.8.9x · Published 2026-10-05</footer>
+<footer>Version 1.8.9x · Published 2026-10-06</footer>
 </body>
 </html>
