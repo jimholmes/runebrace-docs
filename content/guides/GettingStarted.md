@@ -155,7 +155,7 @@ You can also find a list of keyboard and mouse shortcuts on the right panel unde
 
 At the bottom are four icons that display current support modes.
 
-![The Mode Status display](../assets/img/GettingStarted/ModeStatus.png){#fig:ModeStatus .doc-img}
+![The Mode Status display](../assets/img/GettingStarted/ModeStatus.png){#fig:ModeStatus .doc-img style="width: 250px;" }
 
 * Branch to nearest candidate. Wheel to scroll through candidates.
 * Manually add branch via dragging
@@ -166,7 +166,7 @@ At the bottom are four icons that display current support modes.
 
 To the right of the Mode Status icons are the Print Room and Machine Control buttons.
 
-![Print Room and Machine Control](../assets/img/GettingStarted/PrintRoomMachine.png){#fig:PrintRoomMachine .doc-img}
+![Print Room and Machine Control](../assets/img/GettingStarted/PrintRoomMachine.png){#fig:PrintRoomMachine .doc-img style="width: 250px;"}
 
 [Print]{#PrintButton}
 : Opens the Print Room (see [Printing and Slicing](#PrintingAndSlicing)
@@ -174,9 +174,9 @@ To the right of the Mode Status icons are the Print Room and Machine Control but
 [Machine]{#MachineButton}
 : Opens a dialog to select, edit parameters for, and save presets for printers. Also allows editing of a visual theme for printers.
 
-![Machine Dialog](../assets/img/GettingStarted/MachineDialog.png)
+![Machine Dialog](../assets/img/GettingStarted/MachineDialog.png){#fig:MachineDialog .doc-img style="width: 250px;"}
 
-The Machine dialog also offers a button to open a form for requesting support for unlisted printers.
+The Machine dialog also offers a button to open a form to request support for unlisted printers.
 
 
 
@@ -229,8 +229,34 @@ Fonts and every aspect of the display scales as well, with nothing tied to the d
 
 If you work in a small window, raise the UI Scale and Font Scale settings under Right Panel => General Settings => Global Settings. Both of these multiply on top of the automatic factor.
 
+## Understanding File Types
+
+Runebrace generates and works with multiple file types. Below is a list of different types.
+
+### AGS
+AGS files are Runebrace's project file. It carries the mesh/model file inside of it, which means you can move the AGS file to another computer and the mesh will be included. The AGS also stores all information about supports, hollowing, holes, voxel masks, organic cuts, printer presets, and print parameters.
+
+### Models (STL, OBJ, 3MF)
+
+Runebrace supports importing STL, OBJ, and 3MF mesh models. Upon import, Runebrace will run a [Mesh Check](#MeshCheck) and report on the state of the model. You're provided with options to resolve potential issues.
+
+Runebrace can export several different formats:
+
+* STL, OBJ, 3MF
+	* Exports the scene as is. Includes the model, all mesh changes, supports, bracings, hollowing, holes, internal lattices, and the raft
+* Split STL
+	* Writes three separate files: The mesh, the supports and bracings, and the raft
+* Modified STL, OBJ, 3MF (Right Panel => Import/Export & Tools)
+	* Exports only the model with mesh changes: Smoothing, mesh repairs/fixes, hollowing, holes, and internal lattice. Supports and rafts are **NOT** exported.
+
+### Print Files
+
+Runebrace stores print projects in AGSPLATE files. These print project files hold all models and settings, which means you can copy the file to another computer and all models and settings will travel along.
+
+Runebrace slices to several different outputs based on the selected printer type:  .sl1s, .ctb, .goo, .prz, .pp1m, .pwsz, and .jxs.
+
 
 ## Your First Project
 
-## Understanding File Types
+
 
