@@ -110,6 +110,9 @@
 <main class="content">
 
 <h1 id="GettingStarted">Getting Started</h1>
+<p>To get started with Runebrace, you’ll first need to download and
+install it. After that, familiarize yourself with the basic workflow and
+the high-level UI</p>
 <h2 id="downloading-and-installing">Downloading and Installing</h2>
 <h3 id="osplatform-differences">OS/Platform Differences</h3>
 <ul>
@@ -117,70 +120,29 @@
 </ul>
 <h2 id="basic-workflow">Basic Workflow</h2>
 <p>Runebrace gives you the flexibility to do your work however you
-prefer. Users have different preferences, and sometimes there are very
-different goals for different situations.</p>
+prefer. Users have different preferences, and sometimes workflows vary
+because there are different goals for different situations.</p>
 <p>One workflow that’s common among users in the Runebrace Discord
 server is:</p>
-<!--
-I use the smoothbrush while supporting the model from the first island to the last one
-
-If I encounter an island that is better to smooth instead of placing a support because the result is cleaner I use the smoothbrush
-
-The Cut is done before rotation if you need to split a big piece into 2 parts to fit the printer
-
-Hollowing and Hole are created when the model is oriented after the island check returns the fewest number of islands
-
-Resin void can be done at the start sometimes I do that when supporting I encounter a void inside some parts
-
-Suction cups are generally removed in voxels hollow mode with the lasso
-
-Add Supports is ok
-
-Sanity check is better to do at the start to work with a clean mesh otherwise hollow can fail
-
-Grid Optimization or cluster optimization in my case is done at the end some use grid to support the model but in my case it is not needed
-
-The print section is good
-
-Runkel
-Repair a model in 3dB
-Drag the repaired model into RB
-Stitch or drop mesh issues 
-Hollowing 
-Island detection
-Holes
-suction cup detection 
-Internal supports / lattice 
-External supports
-Make sure the scaffolding doesn't have weak points 
-
-Save n export 
-
-I hardly ever need smoothing, cutting, mesh repair only if drilling holes fails or results in a bad mesh happens when a lot of intersections are present, which aren't fixed by 3Db 
-
--->
 <ul>
 <li>Load the model
 <ul>
 <li>Mesh Check scan runs, resolve issues as desired</li>
 </ul></li>
 <li>Run Mesh Repair analysis, resolve issues as desired</li>
-<li>If needed, use Organic Cut to separate the model</li>
-<li>Orient model (manually or auto-orient)</li>
-<li>Detect Islands
+<li>Use Organic Cut to separate the model if needed</li>
+<li>Orient the model (manually or auto-orient)</li>
+<li>Detect Islands to show areas in need of support
 <ul>
 <li>Some users do this later in the flow to point out areas they may
 have missed</li>
 </ul></li>
-<li>Alter the model as needed
+<li>Alter the model’s mesh as needed
 <ul>
-<li>Smoothing tool
-<ul>
-<li>Use to smooth out and remove smaller islands</li>
-<li>Smooth surfaces as needed</li>
-</ul></li>
+<li>Use the Smoothing tool to smooth out and remove smaller islands,
+and/or to smooth surfaces as needed</li>
 <li>Add hollowing and holes as needed</li>
-<li>Detect and resolve suction cup detection</li>
+<li>Detect and resolve suction cups</li>
 <li>Detect and resolve resin voids</li>
 </ul></li>
 <li>Add Supports
@@ -414,13 +376,13 @@ Both of these multiply on top of the automatic factor.</p>
 <p>Runebrace generates and works with multiple file types. Below is a
 list of different types.</p>
 <h3 id="ags">AGS</h3>
-<p>AGS files are Runebrace’s project file. It carries the mesh/model
-file inside of it, which means you can move the AGS file to another
-computer and the mesh will be included. The AGS also stores all
+<p>.ags files are Runebrace’s project file. It carries the mesh/model
+file inside of it, which means you can move the .ags file to another
+computer and the mesh will be included. The .ags also stores all
 information about supports, hollowing, holes, voxel masks, organic cuts,
 printer presets, and print parameters.</p>
 <h3 id="models-stl-obj-3mf">Models (STL, OBJ, 3MF)</h3>
-<p>Runebrace supports importing STL, OBJ, and 3MF mesh models. Upon
+<p>Runebrace supports importing stl, obj, and 3MF mesh models. Upon
 import, Runebrace will run a <a href="#MeshCheck">Mesh Check</a> and
 report on the state of the model. You’re provided with options to
 resolve potential issues.</p>
@@ -434,8 +396,8 @@ raft</li>
 </ul></li>
 <li>Split STL
 <ul>
-<li>Writes three separate files: The mesh, the supports and bracings,
-and the raft</li>
+<li>Writes four separate files: The mesh, the supports and bracings, the
+raft, and internal lattices <em>if</em> the model has them</li>
 </ul></li>
 <li>Modified STL, OBJ, 3MF (Right Panel =&gt; Import/Export &amp; Tools)
 <ul>
@@ -445,7 +407,7 @@ rafts are <strong>NOT</strong> exported.</li>
 </ul></li>
 </ul>
 <h3 id="print-files">Print Files</h3>
-<p>Runebrace stores print projects in AGSPLATE files. These print
+<p>Runebrace stores print projects in .agsplate files. These print
 project files hold all models and settings, which means you can copy the
 file to another computer and all models and settings will travel
 along.</p>

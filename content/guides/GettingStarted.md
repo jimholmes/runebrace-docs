@@ -1,5 +1,7 @@
 # Getting Started {#GettingStarted}
 
+To get started with Runebrace, you'll first need to download and install it. After that, familiarize yourself with the basic workflow and the high-level UI 
+
 ## Downloading and Installing
 
 ### OS/Platform Differences
@@ -8,62 +10,21 @@
 
 ## Basic Workflow
 
-Runebrace gives you the flexibility to do your work however you prefer. Users have different preferences, and sometimes there are very different goals for different situations.
+Runebrace gives you the flexibility to do your work however you prefer. Users have different preferences, and sometimes workflows vary because there are different goals for different situations.
 
 One workflow that's common among users in the Runebrace Discord server is:
-
-<!--
-I use the smoothbrush while supporting the model from the first island to the last one
-
-If I encounter an island that is better to smooth instead of placing a support because the result is cleaner I use the smoothbrush
-
-The Cut is done before rotation if you need to split a big piece into 2 parts to fit the printer
-
-Hollowing and Hole are created when the model is oriented after the island check returns the fewest number of islands
-
-Resin void can be done at the start sometimes I do that when supporting I encounter a void inside some parts
-
-Suction cups are generally removed in voxels hollow mode with the lasso
-
-Add Supports is ok
-
-Sanity check is better to do at the start to work with a clean mesh otherwise hollow can fail
-
-Grid Optimization or cluster optimization in my case is done at the end some use grid to support the model but in my case it is not needed
-
-The print section is good
-
-Runkel
-Repair a model in 3dB
-Drag the repaired model into RB
-Stitch or drop mesh issues 
-Hollowing 
-Island detection
-Holes
-suction cup detection 
-Internal supports / lattice 
-External supports
-Make sure the scaffolding doesn't have weak points 
-
-Save n export 
-
-I hardly ever need smoothing, cutting, mesh repair only if drilling holes fails or results in a bad mesh happens when a lot of intersections are present, which aren't fixed by 3Db 
-
--->
 
 * Load the model
 	* Mesh Check scan runs, resolve issues as desired
 * Run Mesh Repair analysis, resolve issues as desired
-* If needed, use Organic Cut to separate the model
-* Orient model (manually or auto-orient)
-* Detect Islands
+* Use Organic Cut to separate the model if needed
+* Orient the model (manually or auto-orient)
+* Detect Islands to show areas in need of support
 	* Some users do this later in the flow to point out areas they may have missed
-* Alter the model as needed
-	* Smoothing tool
-		* Use to smooth out and remove smaller islands
-		* Smooth surfaces as needed
+* Alter the model's mesh as needed
+	* Use the Smoothing tool to smooth out and remove smaller islands, and/or to smooth surfaces as needed
 	* Add hollowing and holes as needed
-	* Detect and resolve suction cup detection
+	* Detect and resolve suction cups
 	* Detect and resolve resin voids
 * Add Supports
 	* Internal first if hollowed, then external
@@ -234,24 +195,24 @@ If you work in a small window, raise the UI Scale and Font Scale settings under 
 Runebrace generates and works with multiple file types. Below is a list of different types.
 
 ### AGS
-AGS files are Runebrace's project file. It carries the mesh/model file inside of it, which means you can move the AGS file to another computer and the mesh will be included. The AGS also stores all information about supports, hollowing, holes, voxel masks, organic cuts, printer presets, and print parameters.
+.ags files are Runebrace's project file. It carries the mesh/model file inside of it, which means you can move the .ags file to another computer and the mesh will be included. The .ags also stores all information about supports, hollowing, holes, voxel masks, organic cuts, printer presets, and print parameters.
 
 ### Models (STL, OBJ, 3MF)
 
-Runebrace supports importing STL, OBJ, and 3MF mesh models. Upon import, Runebrace will run a [Mesh Check](#MeshCheck) and report on the state of the model. You're provided with options to resolve potential issues.
+Runebrace supports importing stl, obj, and 3MF mesh models. Upon import, Runebrace will run a [Mesh Check](#MeshCheck) and report on the state of the model. You're provided with options to resolve potential issues.
 
 Runebrace can export several different formats:
 
 * STL, OBJ, 3MF
 	* Exports the scene as is. Includes the model, all mesh changes, supports, bracings, hollowing, holes, internal lattices, and the raft
 * Split STL
-	* Writes three separate files: The mesh, the supports and bracings, and the raft
+	* Writes four separate files: The mesh, the supports and bracings, the raft, and internal lattices *if* the model has them
 * Modified STL, OBJ, 3MF (Right Panel => Import/Export & Tools)
 	* Exports only the model with mesh changes: Smoothing, mesh repairs/fixes, hollowing, holes, and internal lattice. Supports and rafts are **NOT** exported.
 
 ### Print Files
 
-Runebrace stores print projects in AGSPLATE files. These print project files hold all models and settings, which means you can copy the file to another computer and all models and settings will travel along.
+Runebrace stores print projects in .agsplate files. These print project files hold all models and settings, which means you can copy the file to another computer and all models and settings will travel along.
 
 Runebrace slices to several different outputs based on the selected printer type:  .sl1s, .ctb, .goo, .prz, .pp1m, .pwsz, and .jxs.
 
