@@ -123,7 +123,7 @@ At the bottom are four icons that display current support modes.
 * Branch to the nearest candidate. Wheel to scroll through candidates.
 * Manually add a branch via dragging
 * Pull a support tip off onto its own column
-* Allow a tip to be placed in non-perpendicular situations. See [Tip Inclination](#TipInclination)
+* Allow a tip to be placed in non-perpendicular situations. See [Tip Inclination](SupportingModels.md#TipInclination)
 
 #### Print Room and Machine Control
 
@@ -132,7 +132,7 @@ To the right of the Mode Status icons are the Print Room and Machine Control but
 ![Print Room and Machine Control](../assets/img/GettingStarted/PrintRoomMachine.png){#fig:PrintRoomMachine .doc-img style="width: 250px;"}
 
 [Print]{#PrintButton}
-: Opens the Print Room (see [Printing and Slicing](#PrintingAndSlicing)
+: Opens the Print Room (see [Printing and Slicing](PrintingAndSlicing.md#PrintingAndSlicing)
 
 [Machine]{#MachineButton}
 : Opens a dialog to select, edit parameters for, and save presets for printers. Also allows editing of a visual theme for printers.
@@ -201,7 +201,7 @@ Runebrace generates and works with multiple file types. Below is a list of diffe
 
 ### Models (STL, OBJ, 3MF)
 
-Runebrace supports importing stl, obj, and 3MF mesh models. Upon import, Runebrace will run a [Mesh Check](#MeshCheck) and report on the state of the model. You're provided with options to resolve potential issues.
+Runebrace supports importing stl, obj, and 3MF mesh models. Upon import, Runebrace will run a [Mesh Check](WorkingWithMeshes.md#MeshCheck) and report on the state of the model. You're provided with options to resolve potential issues.
 
 Runebrace can export several different formats:
 
