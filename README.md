@@ -13,9 +13,9 @@ Contributions to the documentation are welcome. Feel free to submit a pull reque
 
 ## Building the Docs
 
-At the moment, HTML is the primary target, but as of the current commit, it's quite rough.
+At the moment, HTML is the primary target. 
 
-A consolidated PDF can also be generated. (See the build script.)
+PDFs can also be generated. Look back in commit history to see how this was done for the first few versions.
 
 **Tools**
 
@@ -35,7 +35,7 @@ At the moment this is built locally on a Mac. The script and tools all have Wind
 
 * **build_nav.py** CALLED FROM BUILD_DOCS.ZSH. Python script to build nav.html based on headings in all the Markdown files. Invoke with "--docs" for setting BASE of the URL for deployment to GH Pages. Invoke with an empty to create for localhost deployment.
 
-* **build_docs.zsh**: Zshell script that invokes build_nav.py, copies resource files to target, then executes pandoc with all the required library stuff. You may need to edit this based on your system's env variables and particular Latex package you have.
+* **build_docs.zsh**: Zshell script to build the docs. Invoke with either "local" or "deployed" to create links as appropriate.  The script invokes build_nav.py to build the sidebar nav, copies resource files to target folders, then executes pandoc with all the required library stuff. You may need to edit this based on your system's env variables and particular Latex package you have.
 
 ## Project Structure
 
@@ -53,7 +53,7 @@ At the moment this is built locally on a Mac. The script and tools all have Wind
             --css
             --guides: Converted HTML
         --scripts : zsh, py scripts, also ORDERED_FILE_LIST.txt
-        --snippets : HTML 
+        --snippets : HTML snippet files for footer, after, etc.
   
   
 ## Authoring Content
@@ -69,6 +69,10 @@ Note that these pandoc/Latex specific features may not render properly in your M
 ORDERED_FILE_LIST holds a list of all Markdown files to be processed. *Exception:* index.md is handled separately due to its location.
 
 Edit this file list to add new Markdown files. Files must be added in the order you want them appearing in the nav, TOC, etc.
+
+### Version and Date for Footer
+
+Edit the build_doc.zsh script and update the VERSION and DATE variables at the top as needed. Right now VERSION is static; however, you could pull the version from git if desired.
 
 ### Examples
 
