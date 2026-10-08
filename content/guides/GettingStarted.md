@@ -22,6 +22,7 @@ One workflow that's common among users in the Runebrace Discord server is:
 * Detect Islands to show areas in need of support
 	* Some users do this later in the flow to point out areas they may have missed
 * Alter the model's mesh as needed
+	* Scale the model as desired
 	* Use the Smoothing tool to smooth out and remove smaller islands, and/or to smooth surfaces as needed
 	* Add hollowing and holes as needed
 	* Detect and resolve suction cups
@@ -35,12 +36,13 @@ One workflow that's common among users in the Runebrace Discord server is:
 	* Are potential peel forces acceptable?
 * Optimize supports
 	* Grid optimization **OR**
-	* Cluster optimization
+	* Cluster optimization 
 * Print
 	* Check peel stats, return to editor if needed
-		* Diff between return to edit room vs. RMB => Edit
+		* **IMPORTANT!** Using RMB-> Edit changes the mesh on the print plate. It does **not** change the original model from the AGS project.
+		* Changes made to the original AGS in the Editor will require you to delete the model on the plate, then re-add it to the plate
 
-Let's move on to how to accomplish this in Runebrace.
+
 
 ## UI Overview
 
@@ -118,10 +120,10 @@ At the bottom are four icons that display current support modes.
 
 ![The Mode Status display](../assets/img/GettingStarted/ModeStatus.png){#fig:ModeStatus .doc-img style="width: 250px;" }
 
-* Branch to nearest candidate. Wheel to scroll through candidates.
-* Manually add branch via dragging
-* **NEED CONTENT**  
-* **NEED CONTENT**
+* Branch to the nearest candidate. Wheel to scroll through candidates.
+* Manually add a branch via dragging
+* Pull a support tip off onto its own column
+* Allow a tip to be placed in non-perpendicular situations. See [Tip Inclination](#TipInclination)
 
 #### Print Room and Machine Control
 

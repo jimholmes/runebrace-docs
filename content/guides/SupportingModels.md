@@ -54,11 +54,30 @@ Each of those sections has a control point that can be manipulated. Each section
 
 
 
-#### Manual Supports
+### Working With Manual Supports
 
 **CONTENT NEEDED**
 
-#### Left Toolbar (REWORD)
+Show basics here. 
+
+### Advanced Manual Supports
+
+#### Mode Status
+
+[Auto-Branch]{#AutoBranch}
+: **F1** Add auto-branch to nearest candidate. Scrollwheel to move through candidates.
+
+[Add Branch]
+: **F2 + Drag** Manually drag branch to another support
+
+[Separate Branch]
+: Select one or more branches, click to move branches into their own separate trunks
+
+[Tip Inclination]{#TipInclination}
+: Select to allow support *tips* to be placed non-perpendicularly. This allows support tips, not trunks or bases, to be placed where they might otherwise impact the model. No hotkey by default. Assign via hotkey list.
+
+
+### Left Toolbar (REWORD)
 
 The left toolbar controls many support options.
 
